@@ -1,18 +1,49 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function Footer() {
+  const wordmarkRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLElement>(null);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Wordmark clip-reveal on scroll
+      if (wordmarkRef.current) {
+        gsap.fromTo(
+          wordmarkRef.current,
+          { clipPath: "inset(0 100% 0 0)", opacity: 0.5 },
+          {
+            clipPath: "inset(0 0% 0 0)",
+            opacity: 1,
+            scrollTrigger: {
+              trigger: wordmarkRef.current,
+              start: "top 90%",
+              end: "top 50%",
+              scrub: 0.6,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      }
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <footer
-      className="relative bg-[#000000] text-white pt-24 sm:pt-32 pb-12 px-6 sm:px-10 lg:px-16 overflow-hidden select-none"
+      ref={footerRef}
+      className="relative bg-black text-white pt-24 sm:pt-32 pb-12 px-6 sm:px-10 lg:px-16 overflow-hidden select-none"
       aria-label="Footer"
     >
       <div className="max-w-7xl mx-auto">
@@ -55,32 +86,32 @@ export default function Footer() {
             </span>
             <ul className="space-y-3 font-mono text-xs uppercase tracking-wider text-white/70">
               <li>
-                <a href="#about" className="hover:text-white transition-colors">
+                <a href="#about" className="hover:text-white transition-colors editorial-link">
                   About Agency
                 </a>
               </li>
               <li>
-                <a href="#services" className="hover:text-white transition-colors">
+                <a href="#services" className="hover:text-white transition-colors editorial-link">
                   Capabilities
                 </a>
               </li>
               <li>
-                <a href="#work" className="hover:text-white transition-colors">
+                <a href="#work" className="hover:text-white transition-colors editorial-link">
                   Selected Work
                 </a>
               </li>
               <li>
-                <a href="#process" className="hover:text-white transition-colors">
+                <a href="#process" className="hover:text-white transition-colors editorial-link">
                   The Methodology
                 </a>
               </li>
               <li>
-                <a href="#blog" className="hover:text-white transition-colors">
+                <a href="#blog" className="hover:text-white transition-colors editorial-link">
                   Insights & Blog
                 </a>
               </li>
               <li>
-                <a href="#faqs" className="hover:text-white transition-colors">
+                <a href="#faqs" className="hover:text-white transition-colors editorial-link">
                   FAQ
                 </a>
               </li>
@@ -96,7 +127,7 @@ export default function Footer() {
               <p>
                 <a
                   href="mailto:info@mightbemedia.in"
-                  className="hover:text-white transition-colors block text-sm font-sans"
+                  className="hover:text-white transition-colors block text-sm font-sans editorial-link"
                 >
                   info@mightbemedia.in
                 </a>
@@ -104,7 +135,7 @@ export default function Footer() {
               <p>
                 <a
                   href="tel:+918851872245"
-                  className="hover:text-white transition-colors block text-sm font-sans"
+                  className="hover:text-white transition-colors block text-sm font-sans editorial-link"
                 >
                   +91 88518 72245
                 </a>
@@ -116,9 +147,16 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Giant Monolithic Wordmark */}
-        <div className="py-12 sm:py-16 overflow-hidden">
-          <div className="font-display font-black text-[13vw] leading-none uppercase tracking-tighter text-white/10 select-none text-center whitespace-nowrap">
+        {/* Giant Monolithic Wordmark — responsive with clamp() */}
+        <div ref={wordmarkRef} className="py-12 sm:py-16 overflow-hidden">
+          <div
+            className="font-display font-black uppercase tracking-tighter text-white/[0.07] select-none text-center whitespace-nowrap"
+            style={{
+              fontSize: "clamp(2rem, 10vw, 13rem)",
+              lineHeight: 1,
+              letterSpacing: "-0.03em",
+            }}
+          >
             MIGHTBEMEDIA
           </div>
         </div>

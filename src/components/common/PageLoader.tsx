@@ -3,34 +3,39 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
+// Module-level flag prevents double-render in React StrictMode (dev)
+let loaderHasRun = false;
+
 interface PageLoaderProps {
   onComplete?: () => void;
 }
 
+type LoaderStage = "BUILD" | "CONVERT" | "SCALE" | "EXIT" | "DONE";
+
 export default function PageLoader({ onComplete }: PageLoaderProps) {
-  const [stage, setStage] = useState<"BUILD" | "CONVERT" | "SCALE" | "EXIT" | "DONE">("BUILD");
+  // Guard: only run once per page load
+  const [shouldRender] = useState(() => {
+    if (loaderHasRun) return false;
+    loaderHasRun = true;
+    return true;
+  });
+
+  const [stage, setStage] = useState<LoaderStage>("BUILD");
 
   useEffect(() => {
-    // Stage 1: BUILD (starts immediately)
-    const t1 = setTimeout(() => {
-      setStage("CONVERT");
-    }, 320);
+    if (!shouldRender) {
+      onComplete?.();
+      return;
+    }
 
-    // Stage 2: CONVERT
-    const t2 = setTimeout(() => {
-      setStage("SCALE");
-    }, 650);
-
-    // Stage 3: EXIT curtain
-    const t3 = setTimeout(() => {
-      setStage("EXIT");
-    }, 980);
-
-    // Stage 4: DONE
+    // Staggered word reveal: BUILD → CONVERT → SCALE → EXIT → DONE
+    const t1 = setTimeout(() => setStage("CONVERT"), 350);
+    const t2 = setTimeout(() => setStage("SCALE"), 700);
+    const t3 = setTimeout(() => setStage("EXIT"), 1050);
     const t4 = setTimeout(() => {
       setStage("DONE");
-      if (onComplete) onComplete();
-    }, 1450);
+      onComplete?.();
+    }, 1500);
 
     return () => {
       clearTimeout(t1);
@@ -38,22 +43,28 @@ export default function PageLoader({ onComplete }: PageLoaderProps) {
       clearTimeout(t3);
       clearTimeout(t4);
     };
-  }, [onComplete]);
+  }, [shouldRender, onComplete]);
 
-  if (stage === "DONE") return null;
+  if (!shouldRender || stage === "DONE") return null;
 
   return (
     <div
-      className={`fixed inset-0 z-1000 bg-[#000000] flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.85,0,0.15,1)] ${
+      className={`fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center transition-all duration-[600ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${
         stage === "EXIT"
-          ? "-translate-y-full opacity-90 pointer-events-none"
-          : "translate-y-0 opacity-100"
+          ? "opacity-0 scale-[1.02] pointer-events-none"
+          : "opacity-100 scale-100"
       }`}
       aria-hidden="true"
     >
-      <div className="flex flex-col items-center gap-6">
-        {/* MBM Authentic Icon */}
-        <div className="relative w-16 h-16 sm:w-20 sm:h-20 transition-transform duration-500 transform hover:scale-105">
+      <div className="flex flex-col items-center gap-8">
+        {/* MBM Logo */}
+        <div
+          className={`relative w-14 h-14 sm:w-18 sm:h-18 transition-all duration-500 ${
+            stage === "BUILD"
+              ? "opacity-0 scale-75"
+              : "opacity-100 scale-100"
+          }`}
+        >
           <Image
             src="/logos/MightBeMedia_ICONNEW.png"
             alt="MightBeMedia"
@@ -63,25 +74,34 @@ export default function PageLoader({ onComplete }: PageLoaderProps) {
           />
         </div>
 
-        {/* Sequential Words: BUILD • CONVERT • SCALE */}
-        <div className="h-8 overflow-hidden flex items-center justify-center">
-          <div className="font-display font-bold text-lg sm:text-xl tracking-[0.3em] uppercase text-white transition-all duration-300">
-            {stage === "BUILD" && (
-              <span className="inline-block animate-pulse">BUILD</span>
-            )}
-            {stage === "CONVERT" && (
-              <span className="inline-block tracking-[0.35em] text-white">CONVERT</span>
-            )}
-            {(stage === "SCALE" || stage === "EXIT") && (
-              <span className="inline-block tracking-[0.4em] text-white">SCALE</span>
-            )}
+        {/* Sequential Words with staggered fade-scale */}
+        <div className="h-9 overflow-hidden flex items-center justify-center">
+          <div className="relative">
+            {(["BUILD", "CONVERT", "SCALE"] as const).map((word) => {
+              const isActive =
+                stage === word ||
+                (word === "SCALE" && stage === "EXIT");
+              return (
+                <span
+                  key={word}
+                  className={`absolute inset-0 flex items-center justify-center font-display font-bold text-lg sm:text-xl tracking-[0.3em] uppercase text-white transition-all duration-300 ease-out ${
+                    isActive
+                      ? "opacity-100 scale-100 translate-y-0"
+                      : "opacity-0 scale-90 translate-y-2"
+                  }`}
+                  style={{ position: word === "BUILD" ? "relative" : "absolute" }}
+                >
+                  {word}
+                </span>
+              );
+            })}
           </div>
         </div>
 
-        {/* Minimal Progress Line */}
-        <div className="w-24 h-[1px] bg-white/10 overflow-hidden relative mt-1">
+        {/* Progress Line */}
+        <div className="w-20 h-px bg-white/10 overflow-hidden relative">
           <div
-            className="h-full bg-white transition-all duration-350 ease-out"
+            className="h-full bg-white transition-all duration-300 ease-out"
             style={{
               width:
                 stage === "BUILD"
