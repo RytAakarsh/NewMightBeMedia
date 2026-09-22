@@ -1,11 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import SectionLabel from "../common/SectionLabel";
 import { differences } from "@/data/difference";
 import { X, Check } from "lucide-react";
 
 export default function DifferenceSection() {
+  const [activeTab, setActiveTab] = useState<"flaws" | "fixes">("fixes");
+
   return (
     <section
       className="py-28 sm:py-36 lg:py-48 px-6 sm:px-10 lg:px-16 bg-[#000000] border-b border-white/10"
@@ -22,10 +24,40 @@ export default function DifferenceSection() {
           </h2>
         </div>
 
+        {/* Mobile Toggle Bar (lg:hidden) */}
+        <div className="lg:hidden flex rounded-lg bg-white/5 p-1 mb-8 border border-white/10">
+          <button
+            type="button"
+            onClick={() => setActiveTab("flaws")}
+            className={`flex-1 py-2.5 rounded-md font-mono text-xs uppercase tracking-wider transition-all ${
+              activeTab === "flaws"
+                ? "bg-red-500/20 text-red-300 font-bold border border-red-500/30"
+                : "text-white/50 hover:text-white"
+            }`}
+          >
+            Traditional Flaws
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("fixes")}
+            className={`flex-1 py-2.5 rounded-md font-mono text-xs uppercase tracking-wider transition-all ${
+              activeTab === "fixes"
+                ? "bg-white text-black font-bold"
+                : "text-white/50 hover:text-white"
+            }`}
+          >
+            The MBM System
+          </button>
+        </div>
+
         {/* 2-Side Comparative Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Left Column: Flawed Traditional Approach */}
-          <div className="p-8 sm:p-12 rounded-xl bg-[#080808] border border-white/10 space-y-10">
+          <div
+            className={`p-8 sm:p-12 rounded-xl bg-[#080808] border border-white/10 space-y-10 ${
+              activeTab === "flaws" ? "block" : "hidden lg:block"
+            }`}
+          >
             <div className="flex items-center gap-3 pb-6 border-b border-white/10">
               <div className="w-8 h-8 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400">
                 <X className="w-4 h-4" />
@@ -55,7 +87,11 @@ export default function DifferenceSection() {
           </div>
 
           {/* Right Column: The MightBeMedia Revenue Fix */}
-          <div className="p-8 sm:p-12 rounded-xl bg-[#0d0d0d] border border-white/20 space-y-10 shadow-2xl">
+          <div
+            className={`p-8 sm:p-12 rounded-xl bg-[#0d0d0d] border border-white/20 space-y-10 shadow-2xl ${
+              activeTab === "fixes" ? "block" : "hidden lg:block"
+            }`}
+          >
             <div className="flex items-center gap-3 pb-6 border-b border-white/10">
               <div className="w-8 h-8 rounded-full bg-white/10 border border-white/30 flex items-center justify-center text-white">
                 <Check className="w-4 h-4" />

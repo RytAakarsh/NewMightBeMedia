@@ -24,25 +24,37 @@ export default function SmoothScrollProvider({
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    // Check if touch device (mobile / tablet)
-    const isTouch =
-      "ontouchstart" in window ||
-      navigator.maxTouchPoints > 0 ||
-      window.innerWidth < 1024;
+    // Check if mobile screen
+    const isMobile = window.innerWidth < 1024;
 
-    if (prefersReducedMotion || isTouch) {
-      // Keep native browser scrolling on mobile / reduced motion
-      return;
+    if (prefersReducedMotion || isMobile) {
+      // Refresh ScrollTrigger on window resize / orientation change with debounce
+      let resizeTimer: NodeJS.Timeout;
+      const handleResize = () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 200);
+      };
+
+      window.addEventListener("resize", handleResize);
+      window.addEventListener("orientationchange", handleResize);
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+        window.removeEventListener("orientationchange", handleResize);
+        clearTimeout(resizeTimer);
+      };
     }
 
     const lenis = new Lenis({
-      duration: 1.15,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 0.95,
-      touchMultiplier: 1.5,
+      touchMultiplier: 1.2,
     });
 
     lenisRef.current = lenis;
@@ -57,7 +69,22 @@ export default function SmoothScrollProvider({
     gsap.ticker.add(tickerCb);
     gsap.ticker.lagSmoothing(0);
 
+    // Debounced resize handler to refresh ScrollTrigger
+    let resizeTimer: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200);
+    };
+
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleResize);
+
     return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
+      clearTimeout(resizeTimer);
       gsap.ticker.remove(tickerCb);
       lenis.destroy();
       lenisRef.current = null;

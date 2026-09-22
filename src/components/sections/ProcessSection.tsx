@@ -5,13 +5,15 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionLabel from "../common/SectionLabel";
 import { processSteps } from "@/data/process";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export default function ProcessSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeStep, setActiveStep] = useState(0);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (window.innerWidth < 1024) return;
+    if (reducedMotion) return;
 
     const ctx = gsap.context(() => {
       const stepElements = containerRef.current?.querySelectorAll(".process-step-item");
@@ -21,6 +23,7 @@ export default function ProcessSection() {
             trigger: step,
             start: "top center",
             end: "bottom center",
+            invalidateOnRefresh: true,
             onEnter: () => setActiveStep(idx),
             onEnterBack: () => setActiveStep(idx),
           });
@@ -29,7 +32,7 @@ export default function ProcessSection() {
     }, containerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <section
@@ -55,8 +58,8 @@ export default function ProcessSection() {
               eliminate conversion dropoffs and unlock compounding organic revenue.
             </p>
 
-            {/* Desktop Active Step Indicator */}
-            <div className="hidden lg:flex items-center gap-6 mt-12 pt-8 border-t border-white/10 font-mono text-xs text-white/50">
+            {/* Active Step Indicator */}
+            <div className="flex items-center gap-6 mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-white/10 font-mono text-xs text-white/50">
               <span className="text-white font-bold text-lg">
                 0{activeStep + 1}
               </span>
@@ -65,7 +68,7 @@ export default function ProcessSection() {
               <div className="h-px w-24 bg-white/10 relative overflow-hidden">
                 <div
                   className="h-full bg-white transition-all duration-300"
-                  style={{ width: `${((activeStep + 1) / 5) * 100}%` }}
+                  style={{ width: `${((activeStep + 1) / processSteps.length) * 100}%` }}
                 />
               </div>
             </div>
@@ -83,7 +86,7 @@ export default function ProcessSection() {
               />
             </div>
 
-            <div className="space-y-20 sm:space-y-28">
+            <div className="space-y-16 sm:space-y-28">
               {processSteps.map((step, idx) => {
                 const isActive = activeStep === idx;
 
@@ -91,11 +94,11 @@ export default function ProcessSection() {
                   <div
                     key={step.number}
                     className={`process-step-item transition-all duration-500 ${
-                      isActive ? "opacity-100" : "opacity-40"
+                      isActive ? "opacity-100" : "opacity-35"
                     }`}
                   >
                     <div className="flex items-center gap-4 mb-4">
-                      <span className="font-mono text-sm sm:text-base text-white/50">
+                      <span className="font-mono text-xs sm:text-sm text-white/50">
                         STAGE {step.number}
                       </span>
                       <div className="h-px flex-1 max-w-[60px] bg-white/15" />
@@ -105,11 +108,11 @@ export default function ProcessSection() {
                       {step.title}
                     </h3>
 
-                    <p className="font-sans text-base sm:text-lg text-white/80 leading-relaxed mb-6 font-medium">
+                    <p className="font-sans text-base sm:text-lg text-white/80 leading-relaxed mb-4 font-medium">
                       {step.shortDesc}
                     </p>
 
-                    <p className="font-sans text-sm sm:text-base text-white/60 leading-relaxed mb-8">
+                    <p className="font-sans text-sm sm:text-base text-white/60 leading-relaxed mb-6">
                       {step.detailedAnalysis}
                     </p>
 

@@ -1,9 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionLabel from "../common/SectionLabel";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export default function WhySection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const pillarsRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = useReducedMotion();
+
   const pillars = [
     {
       num: "01",
@@ -27,8 +34,37 @@ export default function WhySection() {
     },
   ];
 
+  useEffect(() => {
+    if (reducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      const items = pillarsRef.current?.querySelectorAll(".why-pillar-card");
+      if (items && items.length > 0) {
+        gsap.fromTo(
+          items,
+          { y: 35, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.1,
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: pillarsRef.current,
+              start: "top 80%",
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      }
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [reducedMotion]);
+
   return (
     <section
+      ref={containerRef}
       className="py-28 sm:py-36 lg:py-48 px-6 sm:px-10 lg:px-16 bg-[#080808] border-b border-white/10"
       aria-label="Why MightBeMedia Editorial Manifesto"
     >
@@ -48,9 +84,12 @@ export default function WhySection() {
         </div>
 
         {/* 4 Editorial Manifesto Statements */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 pt-12 border-t border-white/10">
+        <div
+          ref={pillarsRef}
+          className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 pt-12 border-t border-white/10"
+        >
           {pillars.map((item) => (
-            <div key={item.num} className="space-y-4">
+            <div key={item.num} className="why-pillar-card space-y-4">
               <span className="font-mono text-xs text-white/40 block">
                 /{item.num}
               </span>

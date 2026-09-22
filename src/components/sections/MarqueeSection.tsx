@@ -43,12 +43,12 @@ export default function MarqueeSection() {
       {/* Row 1: Leftward moving Project Names */}
       <div className="marquee-container relative w-full overflow-hidden py-3 border-y border-white/5">
         <div className="animate-marquee-left flex items-center gap-12 sm:gap-20">
-          {[...clientsRow1, ...clientsRow1, ...clientsRow1].map((client, idx) => (
+          {[...clientsRow1, ...clientsRow1, ...clientsRow1, ...clientsRow1].map((client, idx) => (
             <div
               key={idx}
               className="flex items-center gap-12 sm:gap-20 shrink-0"
             >
-              <span className="font-display font-bold text-3xl sm:text-5xl lg:text-6xl text-white/80 hover:text-white transition-colors duration-200 uppercase tracking-tighter">
+              <span className="font-display font-bold text-3xl sm:text-5xl lg:text-6xl text-white/75 hover:text-white transition-colors duration-300 uppercase tracking-tighter cursor-default">
                 {client}
               </span>
               <span className="font-mono text-xs sm:text-sm text-white/20 select-none">
@@ -62,12 +62,12 @@ export default function MarqueeSection() {
       {/* Row 2: Rightward moving System Categories */}
       <div className="marquee-container relative w-full overflow-hidden py-3 mt-4 border-b border-white/5">
         <div className="animate-marquee-right flex items-center gap-12 sm:gap-20">
-          {[...clientsRow2, ...clientsRow2, ...clientsRow2].map((category, idx) => (
+          {[...clientsRow2, ...clientsRow2, ...clientsRow2, ...clientsRow2].map((category, idx) => (
             <div
               key={idx}
               className="flex items-center gap-12 sm:gap-20 shrink-0"
             >
-              <span className="font-mono font-medium text-lg sm:text-2xl lg:text-3xl text-white/40 hover:text-white/80 transition-colors duration-200 uppercase tracking-tight">
+              <span className="font-mono font-medium text-base sm:text-2xl lg:text-3xl text-white/40 hover:text-white/80 transition-colors duration-300 uppercase tracking-tight cursor-default">
                 {category}
               </span>
               <span className="font-mono text-xs text-white/10 select-none">

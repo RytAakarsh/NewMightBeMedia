@@ -4,18 +4,22 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionLabel from "../common/SectionLabel";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export default function OutcomesSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const numbersRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
+    if (reducedMotion) return;
+
     const ctx = gsap.context(() => {
       const metricBoxes = numbersRef.current?.querySelectorAll(".outcome-number");
       if (metricBoxes && metricBoxes.length > 0) {
         gsap.fromTo(
           metricBoxes,
-          { scale: 0.85, opacity: 0, y: 30 },
+          { scale: 0.85, opacity: 0, y: 35 },
           {
             scale: 1,
             opacity: 1,
@@ -26,6 +30,7 @@ export default function OutcomesSection() {
             scrollTrigger: {
               trigger: containerRef.current,
               start: "top 75%",
+              invalidateOnRefresh: true,
             },
           }
         );
@@ -33,7 +38,7 @@ export default function OutcomesSection() {
     }, containerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [reducedMotion]);
 
   const outcomes = [
     {

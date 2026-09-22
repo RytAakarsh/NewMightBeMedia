@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { ArrowUpRight, Plus, Minus } from "lucide-react";
 import SectionLabel from "../common/SectionLabel";
 import { industries } from "@/data/industries";
@@ -46,12 +45,14 @@ export default function IndustriesSection() {
                 key={ind.number}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
-                className="group py-8 sm:py-12 transition-all duration-300"
+                className={`group py-8 sm:py-12 transition-all duration-300 ${
+                  isHovered ? "bg-white/[0.02]" : ""
+                }`}
               >
-                {/* Desktop and Mobile Header */}
+                {/* Desktop and Mobile Header (Tappable on mobile) */}
                 <div
                   onClick={() => toggleMobile(idx)}
-                  className="flex items-center justify-between cursor-pointer"
+                  className="flex items-center justify-between cursor-pointer py-1"
                 >
                   <div className="flex items-baseline gap-4 sm:gap-8">
                     <span className="font-mono text-sm sm:text-base text-white/40 group-hover:text-white transition-colors">
@@ -67,19 +68,19 @@ export default function IndustriesSection() {
                       {ind.badge}
                     </span>
                     <div className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/70 group-hover:border-white group-hover:text-white transition-all">
-                      <div className="sm:hidden">
+                      <div className="lg:hidden">
                         {isExpanded ? (
                           <Minus className="w-4 h-4" />
                         ) : (
                           <Plus className="w-4 h-4" />
                         )}
                       </div>
-                      <ArrowUpRight className="hidden sm:block w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      <ArrowUpRight className="hidden lg:block w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </div>
                   </div>
                 </div>
 
-                {/* Desktop Expanded Layout (Always visible on lg, styled with grid) */}
+                {/* Desktop Expanded Layout (Always visible on lg) */}
                 <div className="hidden lg:grid grid-cols-12 gap-8 pt-8 mt-6 border-t border-white/5 items-center">
                   <div className="col-span-4 pr-6">
                     <p className="font-mono text-xs uppercase tracking-widest text-white/40 mb-2">
@@ -131,7 +132,7 @@ export default function IndustriesSection() {
 
                 {/* Mobile Accordion Content (Controlled by tap) */}
                 {isExpanded && (
-                  <div className="lg:hidden pt-6 mt-4 space-y-4 border-t border-white/5 animate-in fade-in duration-200">
+                  <div className="lg:hidden pt-6 mt-4 space-y-4 border-t border-white/5 animate-in fade-in slide-in-from-top-2 duration-300">
                     <div>
                       <p className="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-1">
                         THE FRICTION
@@ -150,15 +151,31 @@ export default function IndustriesSection() {
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between pt-2">
-                      <span className="font-display font-bold text-xl text-white">
-                        {ind.proofMetric}
-                      </span>
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {ind.capabilities.map((cap, i) => (
+                        <span
+                          key={i}
+                          className="font-mono text-[9px] uppercase tracking-wider text-white/50 bg-white/5 px-2 py-0.5 rounded"
+                        >
+                          {cap}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center justify-between pt-3 border-t border-white/5">
+                      <div>
+                        <span className="font-mono text-[9px] uppercase tracking-widest text-white/40 block">
+                          BENCHMARK
+                        </span>
+                        <span className="font-display font-bold text-xl text-white">
+                          {ind.proofMetric}
+                        </span>
+                      </div>
                       <a
                         href="#contact"
                         className="font-mono text-xs uppercase tracking-wider text-white underline"
                       >
-                        Start Project
+                        Start Project →
                       </a>
                     </div>
                   </div>

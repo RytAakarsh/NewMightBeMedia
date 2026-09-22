@@ -50,13 +50,13 @@
 
 /* Fluid Heading Clamping */
 .hero-headline {
-  font-size: clamp(2.75rem, 7.5vw, 9.25rem);
+  font-size: clamp(2.5rem, 7.5vw, 9.25rem);
   line-height: 0.94;
   letter-spacing: -0.04em;
 }
 
 .section-headline {
-  font-size: clamp(2.25rem, 5.5vw, 6.25rem);
+  font-size: clamp(2rem, 5.5vw, 6.25rem);
   line-height: 0.96;
   letter-spacing: -0.035em;
 }
@@ -141,6 +141,15 @@ html.lenis, html.lenis body {
 .marquee-container:hover .animate-marquee-left,
 .marquee-container:hover .animate-marquee-right {
   animation-play-state: paused;
+}
+
+/* Hide scrollbar for clean horizontal swipe containers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Custom Scrollbar */

@@ -1,11 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionLabel from "../common/SectionLabel";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export default function PrinciplesSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const rowsRef = useRef<HTMLDivElement>(null);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const reducedMotion = useReducedMotion();
 
   const principles = [
     {
@@ -31,8 +37,40 @@ export default function PrinciplesSection() {
     },
   ];
 
+  useEffect(() => {
+    if (reducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      const items = rowsRef.current?.querySelectorAll(".principle-row");
+      if (items && items.length > 0) {
+        items.forEach((item) => {
+          gsap.fromTo(
+            item,
+            { x: -30, opacity: 0 },
+            {
+              x: 0,
+              opacity: 1,
+              duration: 0.8,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: item,
+                start: "top 85%",
+                end: "top 55%",
+                scrub: 0.4,
+                invalidateOnRefresh: true,
+              },
+            }
+          );
+        });
+      }
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [reducedMotion]);
+
   return (
     <section
+      ref={containerRef}
       className="py-24 sm:py-32 lg:py-40 px-6 sm:px-10 lg:px-16 bg-[#080808] border-b border-white/10"
       aria-label="Core Principles"
     >
@@ -48,7 +86,10 @@ export default function PrinciplesSection() {
         </div>
 
         {/* Large Horizontal Editorial Rows */}
-        <div className="divide-y divide-white/10 border-y border-white/10">
+        <div
+          ref={rowsRef}
+          className="divide-y divide-white/10 border-y border-white/10"
+        >
           {principles.map((item, idx) => {
             const isHovered = hoveredIdx === idx;
             return (
@@ -56,7 +97,7 @@ export default function PrinciplesSection() {
                 key={item.number}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
-                className={`group py-10 sm:py-14 transition-all duration-500 ease-out cursor-pointer ${
+                className={`principle-row group py-10 sm:py-14 transition-all duration-500 ease-out cursor-pointer ${
                   isHovered ? "bg-white/[0.03] px-4 sm:px-6" : "px-0"
                 }`}
               >
