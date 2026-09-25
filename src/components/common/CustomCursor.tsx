@@ -1,113 +1,106 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export default function CustomCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const [cursorText, setCursorText] = useState("");
-  const [isHovered, setIsHovered] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [cursorText, setCursorText] = useState("");
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const posRef = useRef({ x: -100, y: -100, targetX: -100, targetY: -100 });
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    // Only enable on non-touch desktop devices
-    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    // Only enable on desktop with mouse
+    const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 1024;
+    if (isTouch || reducedMotion) return;
 
-    if (!isFinePointer || prefersReducedMotion) {
-      return;
-    }
+    setMounted(true);
 
-    setIsEnabled(true);
-
-    let mouseX = -100;
-    let mouseY = -100;
-    let currentX = -100;
-    let currentY = -100;
-    let rafId: number;
-
-    const onMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+    const handleMouseMove = (e: MouseEvent) => {
+      posRef.current.targetX = e.clientX;
+      posRef.current.targetY = e.clientY;
       if (!isVisible) setIsVisible(true);
+    };
 
-      // Check hovered elements for custom cursor triggers
+    const handleMouseLeave = () => setIsVisible(false);
+    const handleMouseEnter = () => setIsVisible(true);
+
+    const handleOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
-      if (target) {
-        const cursorTarget = target.closest("[data-cursor]") as HTMLElement | null;
-        if (cursorTarget) {
-          const text = cursorTarget.getAttribute("data-cursor") || "";
-          setCursorText(text);
-          setIsHovered(true);
-        } else if (
-          target.closest("a, button, input, textarea, select, [role='button']")
-        ) {
-          setCursorText("");
-          setIsHovered(true);
-        } else {
-          setCursorText("");
-          setIsHovered(false);
-        }
+      if (!target) return;
+
+      const cursorTarget = target.closest("[data-cursor]") as HTMLElement | null;
+      const isInteractive = target.closest("a, button, input, textarea, select, [role='button']");
+
+      if (cursorTarget) {
+        const text = cursorTarget.getAttribute("data-cursor") || "";
+        setCursorText(text);
+        setIsHovered(true);
+      } else if (isInteractive) {
+        setCursorText("");
+        setIsHovered(true);
+      } else {
+        setCursorText("");
+        setIsHovered(false);
       }
     };
 
-    const onMouseLeave = () => {
-      setIsVisible(false);
-    };
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    document.addEventListener("mouseleave", handleMouseLeave);
+    document.addEventListener("mouseenter", handleMouseEnter);
+    document.addEventListener("mouseover", handleOver, { passive: true });
 
-    const onMouseEnter = () => {
-      setIsVisible(true);
-    };
-
-    window.addEventListener("mousemove", onMouseMove, { passive: true });
-    document.addEventListener("mouseleave", onMouseLeave);
-    document.addEventListener("mouseenter", onMouseEnter);
-
+    let animationFrameId: number;
     const render = () => {
-      // Smooth lerp (0.18 factor)
-      currentX += (mouseX - currentX) * 0.2;
-      currentY += (mouseY - currentY) * 0.2;
+      // Smooth lerp
+      posRef.current.x += (posRef.current.targetX - posRef.current.x) * 0.18;
+      posRef.current.y += (posRef.current.targetY - posRef.current.y) * 0.18;
 
       if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+        cursorRef.current.style.transform = `translate3d(${posRef.current.x}px, ${posRef.current.y}px, 0)`;
       }
-      rafId = requestAnimationFrame(render);
+
+      animationFrameId = requestAnimationFrame(render);
     };
 
-    rafId = requestAnimationFrame(render);
+    render();
 
     return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseleave", onMouseLeave);
-      document.removeEventListener("mouseenter", onMouseEnter);
-      cancelAnimationFrame(rafId);
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      document.removeEventListener("mouseenter", handleMouseEnter);
+      document.removeEventListener("mouseover", handleOver);
+      cancelAnimationFrame(animationFrameId);
     };
-  }, [isVisible]);
+  }, [isVisible, reducedMotion]);
 
-  if (!isEnabled) return null;
+  if (!mounted) return null;
 
   return (
     <div
       ref={cursorRef}
-      aria-hidden="true"
-      className={`fixed top-0 left-0 pointer-events-none z-999 transition-opacity duration-300 will-change-transform ${
+      className={`fixed top-0 left-0 pointer-events-none z-[99999] -translate-x-1/2 -translate-y-1/2 will-change-transform transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
-      style={{ transform: "translate3d(-100px, -100px, 0)" }}
+      style={{ willChange: "transform" }}
+      aria-hidden="true"
     >
       <div
-        className={`flex items-center justify-center rounded-full border transition-all duration-300 ${
-          cursorText
-            ? "w-20 h-20 bg-[#FAFAFA] text-[#000000] border-transparent scale-100"
-            : isHovered
-            ? "w-12 h-12 bg-white/15 backdrop-blur-sm border-white/60 scale-100"
-            : "w-3 h-3 bg-white border-transparent"
+        ref={dotRef}
+        className={`flex items-center justify-center rounded-full transition-all duration-300 ease-out ${
+          isHovered
+            ? cursorText
+              ? "w-20 h-20 bg-[#FF0000] text-white shadow-lg"
+              : "w-10 h-10 bg-[#0A0A0A]/80 backdrop-blur-sm border border-white/20 scale-110"
+            : "w-3 h-3 bg-[#FF0000]"
         }`}
       >
         {cursorText && (
-          <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#000000]">
+          <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-center px-1">
             {cursorText}
           </span>
         )}

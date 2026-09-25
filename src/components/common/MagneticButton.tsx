@@ -1,80 +1,76 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import Link from "next/link";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 interface MagneticButtonProps {
   children: React.ReactNode;
-  className?: string;
-  onClick?: () => void;
   href?: string;
+  onClick?: () => void;
+  variant?: "primary" | "secondary" | "outline" | "red";
+  className?: string;
   cursorBadge?: string;
-  variant?: "primary" | "secondary" | "outline" | "white";
-  target?: string;
+  type?: "button" | "submit" | "reset";
 }
 
 export default function MagneticButton({
   children,
-  className = "",
-  onClick,
   href,
-  cursorBadge,
+  onClick,
   variant = "primary",
-  target,
+  className = "",
+  cursorBadge,
+  type = "button",
 }: MagneticButtonProps) {
   const buttonRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const reducedMotion = useReducedMotion();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!buttonRef.current) return;
-    // Don't apply magnetic effect on touch or small screens
-    if (window.innerWidth < 1024) return;
-
-    const rect = buttonRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    const distanceX = e.clientX - centerX;
-    const distanceY = e.clientY - centerY;
-
-    // Dampen movement to max 10px
-    const maxOffset = 10;
-    const moveX = (distanceX / (rect.width / 2)) * maxOffset;
-    const moveY = (distanceY / (rect.height / 2)) * maxOffset;
-
-    setPosition({ x: moveX, y: moveY });
+    if (reducedMotion || !buttonRef.current) return;
+    const { clientX, clientY } = e;
+    const { left, top, width, height } = buttonRef.current.getBoundingClientRect();
+    const x = (clientX - (left + width / 2)) * 0.22;
+    const y = (clientY - (top + height / 2)) * 0.22;
+    setPosition({ x, y });
   };
 
   const handleMouseLeave = () => {
     setPosition({ x: 0, y: 0 });
   };
 
-  const variantStyles = {
-    primary:
-      "bg-[#FFFFFF] text-[#000000] hover:bg-[#E5E5E5] border border-transparent",
-    secondary:
-      "bg-[#111111] text-[#FFFFFF] hover:bg-[#222222] border border-white/20",
-    outline:
-      "bg-transparent text-[#FFFFFF] hover:bg-white hover:text-black border border-white/30",
-    white:
-      "bg-[#000000] text-[#FFFFFF] hover:bg-[#1A1A1A] border border-black/10",
+  const getVariantStyles = () => {
+    switch (variant) {
+      case "red":
+        return "bg-[#FF0000] text-white hover:bg-[#E00000] shadow-md hover:shadow-lg border border-[#FF0000]";
+      case "primary":
+        return "bg-[#0A0A0A] text-white hover:bg-[#FF0000] hover:border-[#FF0000] border border-[#0A0A0A]";
+      case "secondary":
+        return "bg-[#F5F5F5] text-[#0A0A0A] hover:bg-[#0A0A0A] hover:text-white border border-[#E5E5E5]";
+      case "outline":
+        return "bg-transparent text-[#0A0A0A] hover:text-[#FF0000] border border-[#0A0A0A]/25 hover:border-[#FF0000]";
+      default:
+        return "bg-[#0A0A0A] text-white hover:bg-[#FF0000]";
+    }
   };
 
-  const baseStyle =
-    "relative inline-flex items-center justify-center font-mono text-xs uppercase tracking-[0.2em] font-semibold px-7 py-4 transition-all duration-300 ease-out select-none min-h-[48px]";
+  const baseStyles =
+    "inline-flex items-center justify-center font-mono text-xs uppercase tracking-[0.2em] font-semibold px-6 sm:px-8 py-3.5 sm:py-4 rounded-none transition-colors duration-300 select-none cursor-pointer";
 
   const content = (
     <div
       ref={buttonRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      data-cursor={cursorBadge}
       style={{
         transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
-        transition: position.x === 0 ? "transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1)" : "none",
+        transition: position.x === 0 ? "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)" : "none",
       }}
+      data-cursor={cursorBadge}
       className="inline-block will-change-transform"
     >
-      <div className={`${baseStyle} ${variantStyles[variant]} ${className}`}>
+      <div className={`${baseStyles} ${getVariantStyles()} ${className}`}>
         {children}
       </div>
     </div>
@@ -82,14 +78,14 @@ export default function MagneticButton({
 
   if (href) {
     return (
-      <a href={href} onClick={onClick} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined} className="inline-block">
+      <Link href={href} className="inline-block focus:outline-none">
         {content}
-      </a>
+      </Link>
     );
   }
 
   return (
-    <button type="button" onClick={onClick} className="inline-block bg-transparent p-0 border-none cursor-pointer">
+    <button type={type} onClick={onClick} className="inline-block focus:outline-none">
       {content}
     </button>
   );

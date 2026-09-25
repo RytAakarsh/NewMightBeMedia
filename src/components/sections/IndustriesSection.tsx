@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { ArrowUpRight, Plus, Minus } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, Plus, Minus, CheckCircle } from "lucide-react";
 import SectionLabel from "../common/SectionLabel";
 import { industries } from "@/data/industries";
 
 export default function IndustriesSection() {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(0);
   const [expandedMobile, setExpandedMobile] = useState<number | null>(0);
 
   const toggleMobile = (idx: number) => {
@@ -16,26 +17,25 @@ export default function IndustriesSection() {
   return (
     <section
       id="industries"
-      className="py-28 sm:py-36 lg:py-48 px-6 sm:px-10 lg:px-16 bg-[#000000] border-b border-white/10"
-      aria-label="Industries We Specialize In"
+      className="py-24 sm:py-32 lg:py-44 px-6 sm:px-10 lg:px-16 bg-[#FFFFFF] text-[#0A0A0A] border-b border-black/[0.08]"
+      aria-label="Specialized Verticals"
     >
       <div className="max-w-7xl mx-auto">
-        <SectionLabel number="06" label="SPECIALIZED VERTICALS" theme="dark" />
+        <SectionLabel number="06" label="SPECIALIZED VERTICALS" theme="light" />
 
         <div className="mb-14 sm:mb-20">
-          <h2 className="font-display font-bold section-headline uppercase text-white tracking-tighter">
+          <h2 className="font-display font-black section-headline uppercase text-[#0A0A0A] tracking-tighter">
             PROVEN SYSTEMS FOR
             <br />
-            <span className="text-white/40">HIGH-GROWTH NICHES.</span>
+            <span className="text-[#FF0000]">HIGH-GROWTH NICHES.</span>
           </h2>
-          <p className="font-sans text-base sm:text-lg text-white/60 mt-4 max-w-xl">
-            We don&apos;t apply one generic template across every sector. We build bespoke
-            funnel mechanisms tailored to specific customer acquisition loops.
+          <p className="font-sans text-base sm:text-lg text-[#0A0A0A]/70 mt-4 max-w-xl font-normal">
+            We don&apos;t apply one generic template across every sector. We build bespoke funnel mechanisms tailored to specific customer acquisition loops.
           </p>
         </div>
 
-        {/* Large Editorial Rows */}
-        <div className="divide-y divide-white/10 border-y border-white/10 relative">
+        {/* Large Editorial Rows / Cards */}
+        <div className="divide-y divide-black/[0.08] border-y border-black/[0.08]">
           {industries.map((ind, idx) => {
             const isHovered = hoveredIdx === idx;
             const isExpanded = expandedMobile === idx;
@@ -44,30 +44,29 @@ export default function IndustriesSection() {
               <div
                 key={ind.number}
                 onMouseEnter={() => setHoveredIdx(idx)}
-                onMouseLeave={() => setHoveredIdx(null)}
                 className={`group py-8 sm:py-12 transition-all duration-300 ${
-                  isHovered ? "bg-white/[0.02]" : ""
+                  isHovered ? "bg-[#FAFAFA]" : ""
                 }`}
               >
-                {/* Desktop and Mobile Header (Tappable on mobile) */}
+                {/* Header Row */}
                 <div
                   onClick={() => toggleMobile(idx)}
                   className="flex items-center justify-between cursor-pointer py-1"
                 >
                   <div className="flex items-baseline gap-4 sm:gap-8">
-                    <span className="font-mono text-sm sm:text-base text-white/40 group-hover:text-white transition-colors">
+                    <span className="font-mono text-sm sm:text-base font-bold text-[#FF0000]">
                       /{ind.number}
                     </span>
-                    <h3 className="font-display font-bold text-2xl sm:text-4xl lg:text-5xl text-white group-hover:text-white/90 uppercase tracking-tight transition-colors">
+                    <h3 className="font-display font-bold text-2xl sm:text-4xl lg:text-5xl text-[#0A0A0A] group-hover:text-[#FF0000] uppercase tracking-tight transition-colors">
                       {ind.name}
                     </h3>
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <span className="hidden sm:inline-block font-mono text-xs uppercase tracking-widest text-white/40 border border-white/10 px-3 py-1 rounded-full">
+                    <span className="hidden sm:inline-block font-mono text-xs uppercase tracking-widest text-[#0A0A0A]/60 border border-black/10 bg-white px-3 py-1 rounded-full font-medium">
                       {ind.badge}
                     </span>
-                    <div className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/70 group-hover:border-white group-hover:text-white transition-all">
+                    <div className="w-10 h-10 rounded-full border border-black/15 flex items-center justify-center text-[#0A0A0A] group-hover:border-[#FF0000] group-hover:bg-[#FF0000] group-hover:text-white transition-all">
                       <div className="lg:hidden">
                         {isExpanded ? (
                           <Minus className="w-4 h-4" />
@@ -81,28 +80,28 @@ export default function IndustriesSection() {
                 </div>
 
                 {/* Desktop Expanded Layout (Always visible on lg) */}
-                <div className="hidden lg:grid grid-cols-12 gap-8 pt-8 mt-6 border-t border-white/5 items-center">
+                <div className="hidden lg:grid grid-cols-12 gap-8 pt-8 mt-6 border-t border-black/[0.06] items-center">
                   <div className="col-span-4 pr-6">
-                    <p className="font-mono text-xs uppercase tracking-widest text-white/40 mb-2">
-                      THE PROBLEM
+                    <p className="font-mono text-xs uppercase tracking-widest text-[#FF0000] font-bold mb-2">
+                      [THE FRICTION]
                     </p>
-                    <p className="font-sans text-sm text-white/70 leading-relaxed">
+                    <p className="font-sans text-sm text-[#0A0A0A]/70 leading-relaxed">
                       {ind.problem}
                     </p>
                   </div>
 
                   <div className="col-span-5 pr-6">
-                    <p className="font-mono text-xs uppercase tracking-widest text-white/40 mb-2">
-                      OUR REVENUE FIX
+                    <p className="font-mono text-xs uppercase tracking-widest text-[#0A0A0A] font-bold mb-2">
+                      [OUR REVENUE FIX]
                     </p>
-                    <p className="font-sans text-sm text-white/90 leading-relaxed font-medium">
+                    <p className="font-sans text-sm text-[#0A0A0A]/90 leading-relaxed font-semibold">
                       {ind.solution}
                     </p>
                     <div className="flex flex-wrap gap-2 mt-4">
                       {ind.capabilities.map((cap, i) => (
                         <span
                           key={i}
-                          className="font-mono text-[10px] uppercase tracking-wider text-white/60 bg-white/5 border border-white/10 px-2.5 py-1 rounded"
+                          className="font-mono text-[10px] uppercase tracking-wider text-[#0A0A0A]/70 bg-white border border-black/10 px-2.5 py-1 rounded-xs"
                         >
                           {cap}
                         </span>
@@ -112,41 +111,41 @@ export default function IndustriesSection() {
 
                   <div className="col-span-3 flex flex-col items-end justify-between h-full">
                     <div className="text-right">
-                      <span className="font-mono text-[10px] uppercase tracking-widest text-white/40 block mb-1">
+                      <span className="font-mono text-[10px] uppercase tracking-widest text-[#0A0A0A]/40 font-bold block mb-1">
                         BENCHMARK IMPACT
                       </span>
-                      <span className="font-display font-bold text-3xl text-white">
+                      <span className="font-display font-black text-3xl text-[#FF0000]">
                         {ind.proofMetric}
                       </span>
                     </div>
 
-                    <a
-                      href="#contact"
-                      className="mt-6 font-mono text-xs uppercase tracking-widest text-white/70 hover:text-white inline-flex items-center gap-2 group-hover:underline"
+                    <Link
+                      href="/#contact"
+                      className="mt-6 font-mono text-xs uppercase tracking-widest text-[#0A0A0A] hover:text-[#FF0000] inline-flex items-center gap-2 group-hover:underline font-bold"
                     >
                       <span>BUILD FOR {ind.name.split(" ")[0]}</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </a>
+                      <ArrowUpRight className="w-3.5 h-3.5 text-[#FF0000]" />
+                    </Link>
                   </div>
                 </div>
 
                 {/* Mobile Accordion Content (Controlled by tap) */}
                 {isExpanded && (
-                  <div className="lg:hidden pt-6 mt-4 space-y-4 border-t border-white/5 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <div className="lg:hidden pt-6 mt-4 space-y-4 border-t border-black/[0.06] animate-in fade-in slide-in-from-top-2 duration-300">
                     <div>
-                      <p className="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-1">
-                        THE FRICTION
+                      <p className="font-mono text-[10px] uppercase tracking-widest text-[#FF0000] font-bold mb-1">
+                        [THE FRICTION]
                       </p>
-                      <p className="font-sans text-sm text-white/70 leading-relaxed">
+                      <p className="font-sans text-sm text-[#0A0A0A]/70 leading-relaxed">
                         {ind.problem}
                       </p>
                     </div>
 
                     <div>
-                      <p className="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-1">
-                        THE SYSTEM
+                      <p className="font-mono text-[10px] uppercase tracking-widest text-[#0A0A0A] font-bold mb-1">
+                        [THE SYSTEM FIX]
                       </p>
-                      <p className="font-sans text-sm text-white/90 leading-relaxed font-medium">
+                      <p className="font-sans text-sm text-[#0A0A0A]/90 leading-relaxed font-semibold">
                         {ind.solution}
                       </p>
                     </div>
@@ -155,28 +154,28 @@ export default function IndustriesSection() {
                       {ind.capabilities.map((cap, i) => (
                         <span
                           key={i}
-                          className="font-mono text-[9px] uppercase tracking-wider text-white/50 bg-white/5 px-2 py-0.5 rounded"
+                          className="font-mono text-[9px] uppercase tracking-wider text-[#0A0A0A]/70 bg-white border border-black/10 px-2 py-0.5 rounded-xs"
                         >
                           {cap}
                         </span>
                       ))}
                     </div>
 
-                    <div className="flex items-center justify-between pt-3 border-t border-white/5">
+                    <div className="flex items-center justify-between pt-3 border-t border-black/[0.06]">
                       <div>
-                        <span className="font-mono text-[9px] uppercase tracking-widest text-white/40 block">
+                        <span className="font-mono text-[9px] uppercase tracking-widest text-[#0A0A0A]/40 font-bold block">
                           BENCHMARK
                         </span>
-                        <span className="font-display font-bold text-xl text-white">
+                        <span className="font-display font-black text-xl text-[#FF0000]">
                           {ind.proofMetric}
                         </span>
                       </div>
-                      <a
-                        href="#contact"
-                        className="font-mono text-xs uppercase tracking-wider text-white underline"
+                      <Link
+                        href="/#contact"
+                        className="font-mono text-xs uppercase tracking-wider text-[#FF0000] underline font-bold"
                       >
                         Start Project →
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 )}

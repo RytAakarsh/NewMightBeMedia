@@ -20,19 +20,19 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: "About", href: "#about" },
-    { label: "Services", href: "#services" },
-    { label: "Work", href: "#work" },
-    { label: "Process", href: "#process" },
-    { label: "Insights", href: "#blog" },
+    { label: "About", href: "/#about" },
+    { label: "Services", href: "/#services" },
+    { label: "Projects", href: "/projects" },
+    { label: "Insights", href: "/blog" },
+    { label: "FAQ", href: "/#faqs" },
   ];
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 select-none ${
           scrolled
-            ? "py-3 bg-black/80 backdrop-blur-md border-b border-white/10"
+            ? "py-3.5 bg-white/90 backdrop-blur-md border-b border-black/[0.08] shadow-xs"
             : "py-6 bg-transparent"
         }`}
       >
@@ -43,42 +43,43 @@ export default function Navbar() {
             className="flex items-center gap-3 group focus:outline-none"
             aria-label="MightBeMedia Homepage"
           >
-            <div className="relative w-8 h-8 sm:w-9 sm:h-9">
+            <div className="relative w-8 h-8 sm:w-9 sm:h-9 transition-transform duration-300 group-hover:scale-105">
               <Image
                 src="/logos/MightBeMedia_ICONNEW.png"
-                alt="MightBeMedia"
+                alt="MightBeMedia Logo"
                 fill
                 priority
-                className="object-contain invert brightness-100 group-hover:scale-105 transition-transform duration-300"
+                className="object-contain"
               />
             </div>
-            <span className="font-display font-bold text-lg sm:text-xl tracking-tight text-white group-hover:opacity-90 transition-opacity">
-              MightBeMedia
+            <span className="font-display font-bold text-xl sm:text-2xl tracking-tight text-[#0A0A0A]">
+              Might<span className="text-[#FF0000]">Be</span>Media
             </span>
           </Link>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-8 lg:gap-10" aria-label="Main Navigation">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
-                className="font-mono text-xs uppercase tracking-[0.18em] text-white/70 hover:text-white transition-colors duration-200 editorial-link py-1"
+                className="font-mono text-xs uppercase tracking-[0.2em] text-[#0A0A0A]/70 hover:text-[#FF0000] transition-colors duration-200 editorial-link py-1 font-medium"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
             <MagneticButton
-              href="#contact"
-              variant="primary"
-              cursorBadge="TALK"
-              className="py-3 px-6 text-[11px]"
+              href="/#contact"
+              variant="red"
+              cursorBadge="START"
+              className="py-2.5 px-6 text-[11px]"
             >
-              Let&apos;s Talk
+              <span>START A PROJECT</span>
+              <span className="ml-2 text-white">→</span>
             </MagneticButton>
           </div>
 
@@ -87,13 +88,13 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="flex items-center justify-center p-2 text-white/90 hover:text-white focus:outline-none min-h-[44px] min-w-[44px]"
+              className="flex items-center justify-center p-2 text-[#0A0A0A] hover:text-[#FF0000] focus:outline-none min-h-[44px] min-w-[44px]"
               aria-label="Open navigation menu"
             >
               <div className="w-6 h-4 flex flex-col justify-between">
-                <span className="w-full h-[1.5px] bg-white block" />
-                <span className="w-4/5 h-[1.5px] bg-white block ml-auto" />
-                <span className="w-full h-[1.5px] bg-white block" />
+                <span className="w-full h-[2px] bg-[#0A0A0A] block transition-all" />
+                <span className="w-4/5 h-[2px] bg-[#FF0000] block ml-auto transition-all" />
+                <span className="w-full h-[2px] bg-[#0A0A0A] block transition-all" />
               </div>
             </button>
           </div>

@@ -6,29 +6,32 @@ import Link from "next/link";
 import { ArrowUp } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export default function Footer() {
   const wordmarkRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   useEffect(() => {
+    if (reducedMotion) return;
+
     const ctx = gsap.context(() => {
-      // Wordmark clip-reveal on scroll
       if (wordmarkRef.current) {
         gsap.fromTo(
           wordmarkRef.current,
-          { clipPath: "inset(0 100% 0 0)", opacity: 0.5 },
+          { clipPath: "inset(0 100% 0 0)", opacity: 0.3 },
           {
             clipPath: "inset(0 0% 0 0)",
             opacity: 1,
             scrollTrigger: {
               trigger: wordmarkRef.current,
-              start: "top 90%",
-              end: "top 50%",
+              start: "top 92%",
+              end: "top 60%",
               scrub: 0.6,
               invalidateOnRefresh: true,
             },
@@ -38,12 +41,12 @@ export default function Footer() {
     }, footerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <footer
       ref={footerRef}
-      className="relative bg-black text-white pt-24 sm:pt-32 pb-12 px-6 sm:px-10 lg:px-16 overflow-hidden select-none"
+      className="relative bg-[#0A0A0A] text-white pt-24 sm:pt-32 pb-12 px-6 sm:px-10 lg:px-16 overflow-hidden select-none border-t border-black/10"
       aria-label="Footer"
     >
       <div className="max-w-7xl mx-auto">
@@ -59,8 +62,8 @@ export default function Footer() {
                   className="object-contain invert brightness-100"
                 />
               </div>
-              <span className="font-display font-bold text-2xl tracking-tight">
-                MightBeMedia
+              <span className="font-display font-bold text-2xl tracking-tight text-white">
+                Might<span className="text-[#FF0000]">Be</span>Media
               </span>
             </Link>
 
@@ -70,64 +73,64 @@ export default function Footer() {
               high-growth clinics, coaches, and startups globally.
             </p>
 
-            <div className="flex items-center gap-4 font-mono text-xs text-white/40 uppercase tracking-widest pt-2">
-              <span>BUILD</span>
-              <span>•</span>
-              <span>CONVERT</span>
-              <span>•</span>
-              <span>SCALE</span>
+            <div className="flex items-center gap-3 font-mono text-xs text-white/50 uppercase tracking-widest pt-2">
+              <span className="text-white font-semibold">BUILD</span>
+              <span className="text-[#FF0000]">•</span>
+              <span className="text-white font-semibold">CONVERT</span>
+              <span className="text-[#FF0000]">•</span>
+              <span className="text-white font-semibold">SCALE</span>
             </div>
           </div>
 
           {/* Navigation Links Column */}
           <div className="lg:col-span-3 space-y-4">
-            <span className="font-mono text-xs uppercase tracking-widest text-white/40 block mb-2">
-              INDEX
+            <span className="font-mono text-xs uppercase tracking-widest text-[#FF0000] block mb-2 font-bold">
+              [INDEX]
             </span>
             <ul className="space-y-3 font-mono text-xs uppercase tracking-wider text-white/70">
               <li>
-                <a href="#about" className="hover:text-white transition-colors editorial-link">
+                <Link href="/#about" className="hover:text-white transition-colors editorial-link">
                   About Agency
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#services" className="hover:text-white transition-colors editorial-link">
+                <Link href="/#services" className="hover:text-white transition-colors editorial-link">
                   Capabilities
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#work" className="hover:text-white transition-colors editorial-link">
+                <Link href="/projects" className="hover:text-white transition-colors editorial-link">
                   Selected Work
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#process" className="hover:text-white transition-colors editorial-link">
+                <Link href="/#process" className="hover:text-white transition-colors editorial-link">
                   The Methodology
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#blog" className="hover:text-white transition-colors editorial-link">
+                <Link href="/blog" className="hover:text-white transition-colors editorial-link">
                   Insights & Blog
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#faqs" className="hover:text-white transition-colors editorial-link">
+                <Link href="/#faqs" className="hover:text-white transition-colors editorial-link">
                   FAQ
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* Contact Details Column */}
           <div className="lg:col-span-3 space-y-4">
-            <span className="font-mono text-xs uppercase tracking-widest text-white/40 block mb-2">
-              COMMUNICATIONS
+            <span className="font-mono text-xs uppercase tracking-widest text-[#FF0000] block mb-2 font-bold">
+              [COMMUNICATIONS]
             </span>
             <div className="space-y-2 font-mono text-xs text-white/80">
               <p>
                 <a
                   href="mailto:info@mightbemedia.in"
-                  className="hover:text-white transition-colors block text-sm font-sans editorial-link"
+                  className="hover:text-[#FF0000] transition-colors block text-sm font-sans editorial-link text-white"
                 >
                   info@mightbemedia.in
                 </a>
@@ -135,26 +138,26 @@ export default function Footer() {
               <p>
                 <a
                   href="tel:+918851872245"
-                  className="hover:text-white transition-colors block text-sm font-sans editorial-link"
+                  className="hover:text-[#FF0000] transition-colors block text-sm font-sans editorial-link text-white"
                 >
                   +91 88518 72245
                 </a>
               </p>
-              <p className="text-white/40 pt-2">
+              <p className="text-white/40 pt-2 font-mono text-xs">
                 India · Operating Globally
               </p>
             </div>
           </div>
         </div>
 
-        {/* Giant Monolithic Wordmark — responsive with clamp() */}
-        <div ref={wordmarkRef} className="py-12 sm:py-16 overflow-hidden">
+        {/* Giant Monolithic Wordmark — responsive clamp with zero overflow */}
+        <div ref={wordmarkRef} className="py-12 sm:py-16 overflow-hidden select-none">
           <div
-            className="font-display font-black uppercase tracking-tighter text-white/[0.07] select-none text-center whitespace-nowrap"
+            className="font-display font-black uppercase text-white/[0.08] select-none text-center whitespace-nowrap tracking-tighter"
             style={{
-              fontSize: "clamp(2rem, 10vw, 13rem)",
-              lineHeight: 1,
-              letterSpacing: "-0.03em",
+              fontSize: "clamp(1.75rem, 8.8vw, 11rem)",
+              lineHeight: 0.95,
+              letterSpacing: "-0.04em",
             }}
           >
             MIGHTBEMEDIA
@@ -168,11 +171,11 @@ export default function Footer() {
           <button
             type="button"
             onClick={scrollToTop}
-            className="flex items-center gap-2 hover:text-white transition-colors group cursor-pointer"
+            className="flex items-center gap-2 hover:text-[#FF0000] transition-colors group cursor-pointer"
             aria-label="Scroll to top of page"
           >
             <span>BACK TO TOP</span>
-            <ArrowUp className="w-3.5 h-3.5 group-hover:-translate-y-1 transition-transform" />
+            <ArrowUp className="w-3.5 h-3.5 group-hover:-translate-y-1 transition-transform text-[#FF0000]" />
           </button>
         </div>
       </div>

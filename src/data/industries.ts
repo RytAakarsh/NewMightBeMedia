@@ -6,48 +6,48 @@ export interface Industry {
   solution: string;
   capabilities: string[];
   proofMetric: string;
-  previewImage: string;
+  accent: string;
 }
 
 export const industries: Industry[] = [
   {
     number: "01",
     name: "Coaches & Course Sellers",
-    badge: "Knowledge & Consulting",
-    problem: "Losing high-value leads on Instagram bio links. Thousands of views on educational reels, but zero structured call bookings or automated course checkouts.",
-    solution: "We build dedicated high-converting sales funnels with automated calendar qualification, video sales letter (VSL) architecture, and instant payment checkout.",
-    capabilities: ["Automated Qualification Funnels", "High-Converting VSL Pages", "Seamless Calendar Booking Integration", "Course Checkout & Upsell Systems"],
-    proofMetric: "3.2x Booking Rate",
-    previewImage: "/projects/modulus.png"
+    badge: "HIGH-CONVERTING FUNNELS",
+    problem: "High ad spend driving traffic to generic landing pages with low trust, high drop-off rates, and manual, messy follow-ups.",
+    solution: "Bespoke high-converting sales funnels, high-trust visual proof, automated WhatsApp lead nurture sequences, and 1-click checkout architectures.",
+    capabilities: ["Automated WhatsApp Nurture", "High-Converting Sales Pages", "Video Sales Letter (VSL) Frameworks", "Dynamic Checkout Systems"],
+    proofMetric: "3.4x Conversion Lift",
+    accent: "#FF0000"
   },
   {
     number: "02",
     name: "Clinics & Doctors",
-    badge: "Healthcare & Aesthetics",
-    problem: "High-intent local patients searching for skin, hair, and dental treatments cannot find your clinic on Google Maps and bounce to competitors.",
-    solution: "SEO-dominated clinical platforms with automated WhatsApp consultation booking, localized Google Map ranking, and automated 5-star review collection engines.",
-    capabilities: ["Local Google Map Pack Domination", "Automated WhatsApp Consultation Routing", "Clinical Treatment Detail Architecture", "QR Code Lobby Review Systems"],
-    proofMetric: "+180% Inquiries",
-    previewImage: "/projects/viva.png"
+    badge: "LOCAL PATIENT ENGINES",
+    problem: "Losing high-intent local patients to competitors because of poor Google map rankings and confusing appointment booking processes.",
+    solution: "Local Map Pack dominance, verified clinical credentials, treatment-specific landing pages, and instant 1-tap WhatsApp consultation scheduling.",
+    capabilities: ["Google Map 3-Pack Dominance", "Instant Patient WhatsApp Routing", "Doctor Authority Credentialing", "Treatment Funnel Architecture"],
+    proofMetric: "180% More Monthly Bookings",
+    accent: "#FF0000"
   },
   {
     number: "03",
     name: "Trainers, Gyms & Studios",
-    badge: "Fitness & Wellness",
-    problem: "Relying on chaotic direct messages and paper intake forms to sell gym memberships and personal training packages, causing massive dropoff.",
-    solution: "Bold, high-intensity digital brand experiences that showcase transformations, offer instant 1-click trial passes, and automate monthly recurring membership payments.",
-    capabilities: ["Instant Trial Pass Booking Flow", "Transformation Social Proof Sliders", "Automated Membership Recurring Billing", "Class Schedule & Trainer Rosters"],
-    proofMetric: "45% Trial-to-Member",
-    previewImage: "/projects/sem.png"
+    badge: "MEMBERSHIP SCALE",
+    problem: "Relying purely on unpredictable walk-ins, messy DM conversations, and high monthly member churn.",
+    solution: "High-energy brand flagships, automated free trial & day-pass funnels, client transformation showcases, and structured recurring membership flows.",
+    capabilities: ["Trial Pass Booking Funnels", "Trainer Spotlight Showcases", "Automated SMS/DM Follow-Up", "Recurring Membership Portals"],
+    proofMetric: "+210% Trial Registrations",
+    accent: "#FF0000"
   },
   {
     number: "04",
     name: "Startup Founders",
-    badge: "Tech & Products",
-    problem: "Stuck in 6-month developer agency limbo with bloated estimates while cash burns and market validation remains completely unproven.",
-    solution: "Rapid 3-to-4 week functional MVPs engineered using modern Next.js stacks. We build the exact core mechanics required to acquire first users and validate PMF.",
-    capabilities: ["21-Day MVP Rapid Execution", "Clean Scalable TypeScript Architecture", "User Telemetry & Event Analytics", "Investor Demo Preparation"],
-    proofMetric: "18-Day Launch",
-    previewImage: "/projects/baristai.png"
+    badge: "RAPID 0→1 MVP",
+    problem: "Spending 9 months building bloated software in the dark without market validation or investor-ready metrics.",
+    solution: "Rapid 0-to-1 prototype and functional MVP built in 3–6 weeks, complete with analytics tracking, onboarding flows, and investor demonstration decks.",
+    capabilities: ["3-6 Week MVP Sprints", "Full-Stack Web & Mobile Codebases", "User Telemetry & Event Analytics", "Investor Demo Architecture"],
+    proofMetric: "0 to Live in 28 Days",
+    accent: "#FF0000"
   }
 ];

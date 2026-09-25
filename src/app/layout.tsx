@@ -26,7 +26,7 @@ const spaceMono = Space_Mono({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#FFFFFF",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -34,17 +34,18 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://mightbemedia.in"),
-  title: "MightBeMedia | Revenue Growth Systems for Businesses",
+  title: "MightBeMedia | Revenue Growth Partner for Businesses",
   description:
-    "MightBeMedia builds high-converting websites, digital products, AI-powered systems, and growth solutions designed to turn traffic into customers.",
+    "MightBeMedia builds high-converting websites, apps, software, SEO and growth systems that help businesses turn traffic into high-paying clients.",
   keywords: [
     "website development",
     "revenue systems",
     "growth partner",
     "conversion rate optimization",
     "MVP development",
-    "local SEO clinics",
-    "custom software",
+    "marketing agency in New Delhi",
+    "software development company in India",
+    "digital marketing agency in Delhi",
     "MightBeMedia",
     "growth agency India",
   ],
@@ -61,9 +62,9 @@ export const metadata: Metadata = {
     apple: "/logos/MightBeMedia_ICONNEW.png",
   },
   openGraph: {
-    title: "MightBeMedia | Revenue Growth Systems for Businesses",
+    title: "MightBeMedia | Revenue Growth Partner for Businesses",
     description:
-      "We don't build websites. We build revenue systems that convert traffic into paying clients.",
+      "We build revenue systems that convert traffic into high-paying clients. BUILD • CONVERT • SCALE.",
     url: "https://mightbemedia.in",
     siteName: "MightBeMedia",
     locale: "en_US",
@@ -79,7 +80,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "MightBeMedia | Revenue Growth Partner",
+    title: "MightBeMedia | Revenue Growth Partner for Businesses",
     description:
       "High-converting websites, MVPs & growth systems for coaches, clinics, fitness trainers, and startups.",
     images: ["/logos/MightBemedia_completeLOGO.png"],
@@ -98,7 +99,7 @@ export default function RootLayout({
     url: "https://mightbemedia.in",
     logo: "https://mightbemedia.in/logos/MightBeMedia_ICONNEW.png",
     description:
-      "Revenue growth agency building high-converting websites, MVPs and growth systems for businesses, coaches, clinics, fitness trainers and startups.",
+      "MightBeMedia builds high-converting websites, apps, software, SEO and growth systems that help businesses turn traffic into high-paying clients.",
     email: "info@mightbemedia.in",
     telephone: "+91-8851872245",
     address: {
@@ -120,7 +121,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-[#000000] text-[#FAFAFA] font-sans selection:bg-[#FFFFFF] selection:text-[#000000] overflow-x-hidden min-h-screen">
+      <body className="bg-[#FFFFFF] text-[#0A0A0A] font-sans selection:bg-[#FF0000] selection:text-[#FFFFFF] overflow-x-hidden min-h-screen">
         <SmoothScrollProvider>
           <CustomCursor />
           {children}

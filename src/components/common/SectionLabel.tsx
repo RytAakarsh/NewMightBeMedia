@@ -1,41 +1,33 @@
+"use client";
+
 import React from "react";
 
 interface SectionLabelProps {
-  number?: string;
+  number: string;
   label: string;
-  theme?: "dark" | "light";
+  theme?: "light" | "dark";
+  className?: string;
 }
 
 export default function SectionLabel({
   number,
   label,
-  theme = "dark",
+  theme = "light",
+  className = "",
 }: SectionLabelProps) {
-  const isLight = theme === "light";
+  const isDark = theme === "dark";
 
   return (
-    <div className="flex items-center gap-4 select-none mb-6">
-      {number && (
-        <span
-          className={`font-mono text-xs tracking-wider ${
-            isLight ? "text-neutral-400" : "text-white/40"
-          }`}
-        >
-          [{number}]
-        </span>
-      )}
-      <span
-        className={`font-mono text-xs uppercase tracking-[0.25em] font-medium ${
-          isLight ? "text-neutral-600" : "text-white/60"
-        }`}
-      >
+    <div
+      className={`inline-flex items-center gap-3 font-mono text-[11px] sm:text-xs uppercase tracking-[0.25em] mb-6 sm:mb-8 select-none ${
+        isDark ? "text-white/60" : "text-black/60"
+      } ${className}`}
+    >
+      <span className="text-[#FF0000] font-bold">[{number}]</span>
+      <span className={`w-6 h-px ${isDark ? "bg-white/20" : "bg-black/20"}`} />
+      <span className={`font-semibold ${isDark ? "text-white/90" : "text-black/90"}`}>
         {label}
       </span>
-      <div
-        className={`h-px flex-1 max-w-[120px] ${
-          isLight ? "bg-neutral-200" : "bg-white/10"
-        }`}
-      />
     </div>
   );
 }

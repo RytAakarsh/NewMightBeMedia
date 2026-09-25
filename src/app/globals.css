@@ -5,6 +5,11 @@
     --font-inter: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
     --font-space-grotesk: "Space Grotesk", sans-serif;
     --font-space-mono: "Space Mono", monospace;
+    --brand-red: #FF0000;
+    --brand-black: #0A0A0A;
+    --brand-white: #FFFFFF;
+    --brand-gray-light: #F7F7F7;
+    --brand-gray-border: rgba(10, 10, 10, 0.08);
   }
 
   * {
@@ -14,8 +19,8 @@
   }
 
   html {
-    background-color: #000000;
-    color: #FAFAFA;
+    background-color: #FFFFFF;
+    color: #0A0A0A;
     font-family: var(--font-inter);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -23,15 +28,15 @@
   }
 
   body {
-    background-color: #000000;
-    color: #FAFAFA;
+    background-color: #FFFFFF;
+    color: #0A0A0A;
     overflow-x: hidden;
     width: 100%;
   }
 
   ::selection {
-    background-color: #FFFFFF;
-    color: #000000;
+    background-color: #FF0000;
+    color: #FFFFFF;
   }
 }
 
@@ -50,25 +55,25 @@
 
 /* Fluid Heading Clamping */
 .hero-headline {
-  font-size: clamp(2.5rem, 7.5vw, 9.25rem);
+  font-size: clamp(2.75rem, 7.2vw, 8.75rem);
   line-height: 0.94;
   letter-spacing: -0.04em;
 }
 
 .section-headline {
-  font-size: clamp(2rem, 5.5vw, 6.25rem);
+  font-size: clamp(2.25rem, 5.2vw, 5.75rem);
   line-height: 0.96;
   letter-spacing: -0.035em;
 }
 
 .chapter-headline {
-  font-size: clamp(1.75rem, 4vw, 4.5rem);
+  font-size: clamp(1.75rem, 3.8vw, 4.25rem);
   line-height: 1.02;
   letter-spacing: -0.03em;
 }
 
 .sub-headline {
-  font-size: clamp(1.125rem, 1.8vw, 2rem);
+  font-size: clamp(1.125rem, 1.8vw, 1.875rem);
   line-height: 1.35;
   letter-spacing: -0.02em;
 }
@@ -124,18 +129,18 @@ html.lenis, html.lenis body {
   display: flex;
   width: max-content;
   will-change: transform;
-  animation: marquee-left 34s linear infinite;
+  animation: marquee-left 32s linear infinite;
 }
 
 .animate-marquee-right {
   display: flex;
   width: max-content;
   will-change: transform;
-  animation: marquee-right 34s linear infinite;
+  animation: marquee-right 32s linear infinite;
 }
 
 .animate-marquee-fast {
-  animation-duration: 22s;
+  animation-duration: 20s;
 }
 
 .marquee-container:hover .animate-marquee-left,
@@ -143,7 +148,7 @@ html.lenis, html.lenis body {
   animation-play-state: paused;
 }
 
-/* Hide scrollbar for clean horizontal swipe containers */
+/* Hide scrollbar for clean touch swipe containers */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -152,22 +157,22 @@ html.lenis, html.lenis body {
   scrollbar-width: none;
 }
 
-/* Custom Scrollbar */
+/* Custom Editorial Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #080808;
+  background: #F2F2F2;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #262626;
+  background: #1A1A1A;
   border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #404040;
+  background: #FF0000;
 }
 
 /* Utility Clip Paths */
@@ -179,7 +184,7 @@ html.lenis, html.lenis body {
   clip-path: inset(0 0 0 0);
 }
 
-/* Underline Animation */
+/* Editorial Underline Animation */
 .editorial-link {
   position: relative;
   display: inline-block;
@@ -191,13 +196,28 @@ html.lenis, html.lenis body {
   bottom: -2px;
   left: 0;
   width: 0;
-  height: 1px;
-  background-color: currentColor;
-  transition: width 0.35s cubic-bezier(0.76, 0, 0.24, 1);
+  height: 1.5px;
+  background-color: #FF0000;
+  transition: width 0.3s cubic-bezier(0.76, 0, 0.24, 1);
 }
 
 .editorial-link:hover::after {
   width: 100%;
+}
+
+/* Subtle Hairline Grid */
+.bg-grid-light {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+}
+
+.bg-grid-dark {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
 }
 
 /* Accessibility: Reduced Motion */

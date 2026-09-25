@@ -7,6 +7,7 @@ export interface Service {
   ticker: string[];
   visualType: "browser" | "analytics" | "mobile" | "system" | "mvp" | "social";
   deliverables: string[];
+  themeAccent: string;
 }
 
 export const services: Service[] = [
@@ -17,15 +18,16 @@ export const services: Service[] = [
     fullDescription: "We do not build generic digital brochures. We build conversion engines structured meticulously around your customer's decision journey. Every heading, interaction, and checkout touchpoint is engineered to minimize friction and maximize completed actions.",
     capabilities: [
       "Custom Next.js & React Architecture",
-      "Conversion Funnel UX/UI",
-      "Sub-Second Page Load Optimization",
-      "E-Commerce & Headless Commerce",
-      "CMS & Dynamic Content Engineering",
-      "Conversion Tracking & Analytics Instrumentation"
+      "Conversion Funnel UX/UI & Wireframing",
+      "Sub-Second Page Load & Core Web Vitals",
+      "Headless E-Commerce & Custom Caching",
+      "Dynamic Headless CMS Integration",
+      "Full Telemetry & Event Analytics Setup"
     ],
     ticker: ["HIGH-CONVERTING DESIGN", "FUNNEL ARCHITECTURE", "SUB-SECOND LOAD", "CUSTOM CMS", "CONVERSION OPTIMIZED"],
     visualType: "browser",
-    deliverables: ["Custom Full-Stack Codebase", "Mobile-Perfect Responsive Layouts", "Automated Form Routing", "Full Analytics Setup"]
+    deliverables: ["Custom Full-Stack Next.js Codebase", "Mobile-First Responsive Layouts", "Automated Form & WhatsApp Routing", "Comprehensive Analytics Instrumentation"],
+    themeAccent: "#FF0000"
   },
   {
     number: "02",
@@ -42,7 +44,8 @@ export const services: Service[] = [
     ],
     ticker: ["LOCAL MAP DOMINANCE", "HIGH-INTENT TRAFFIC", "STRUCTURED SCHEMA", "CORE WEB VITALS", "ORGANIC REVENUE"],
     visualType: "analytics",
-    deliverables: ["Comprehensive Keyword Strategy", "Google Map Optimization", "Structured Data Integration", "Monthly Growth Tracking"]
+    deliverables: ["Comprehensive Keyword Strategy", "Google Map Optimization", "Structured Data Integration", "Monthly Growth Tracking"],
+    themeAccent: "#FF0000"
   },
   {
     number: "03",
@@ -59,7 +62,8 @@ export const services: Service[] = [
     ],
     ticker: ["NATIVE PERFORMANCE", "CROSS-PLATFORM", "RETENTION LOOPS", "FRICTIONLESS PAYMENTS", "PUSH NOTIFICATIONS"],
     visualType: "mobile",
-    deliverables: ["App Store & Play Store Builds", "Complete Source Code", "Scalable API Architecture", "Retention Dashboard"]
+    deliverables: ["App Store & Play Store Builds", "Complete Source Code", "Scalable API Architecture", "Retention Dashboard"],
+    themeAccent: "#FF0000"
   },
   {
     number: "04",
@@ -76,7 +80,8 @@ export const services: Service[] = [
     ],
     ticker: ["CUSTOM DASHBOARDS", "WORKFLOW AUTOMATION", "ROBUST APIS", "SECURE DATA PIPELINES", "ZERO-BOTTLENECK"],
     visualType: "system",
-    deliverables: ["Production-Ready Software System", "Database Migration Suite", "Admin Control Center", "Full Architecture Documentation"]
+    deliverables: ["Production-Ready Software System", "Database Migration Suite", "Admin Control Center", "Full Architecture Documentation"],
+    themeAccent: "#FF0000"
   },
   {
     number: "05",
@@ -93,7 +98,8 @@ export const services: Service[] = [
     ],
     ticker: ["0 TO 1 IN 21 DAYS", "INVESTOR-READY", "FEEDBACK-DRIVEN", "LEAN VALUE CORE", "RAPID ITERATION"],
     visualType: "mvp",
-    deliverables: ["Functional Live MVP", "User Onboarding Funnel", "Telemetry & Event Tracking", "Investor Pitch Deck Demo"]
+    deliverables: ["Functional Live MVP", "User Onboarding Funnel", "Telemetry & Event Tracking", "Investor Pitch Deck Demo"],
+    themeAccent: "#FF0000"
   },
   {
     number: "06",
@@ -110,6 +116,7 @@ export const services: Service[] = [
     ],
     ticker: ["ATTENTION TO REVENUE", "RETENTION SCRIPTS", "AUTOMATED DM FUNNELS", "VIRAL AUTHORITY", "LEAD CAPTURE"],
     visualType: "social",
-    deliverables: ["Monthly Content Calender & Scripts", "High-End Edited Video Assets", "Direct Message Lead Funnels", "Audience Conversion Analytics"]
+    deliverables: ["Monthly Content Calendar & Scripts", "High-End Edited Video Assets", "Direct Message Lead Funnels", "Audience Conversion Analytics"],
+    themeAccent: "#FF0000"
   }
 ];

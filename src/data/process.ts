@@ -4,48 +4,42 @@ export interface ProcessStep {
   shortDesc: string;
   detailedAnalysis: string;
   deliverables: string[];
-  keyQuestion: string;
 }
 
 export const processSteps: ProcessStep[] = [
   {
     number: "01",
-    title: "Understand Business",
-    shortDesc: "We deep-dive into your economics, customer acquisition bottlenecks, and unit margins before writing a single line of code.",
-    detailedAnalysis: "Most design shops start with Figma colors. We start with your balance sheet. We map your average order value, customer lifetime value, inquiry-to-close ratios, and exact customer journey to identify where capital is being lost.",
-    deliverables: ["Comprehensive Business Funnel Audit", "Target Buyer Persona Archetypes", "Conversion Bottleneck Diagnostic"],
-    keyQuestion: "Where does your current customer attention originate, and exactly why does it fail to convert?"
+    title: "Understand Business & Economics",
+    shortDesc: "We do not start in Figma; we start with your unit economics, acquisition costs, and customer lifetime value.",
+    detailedAnalysis: "We analyze your exact profit margins, sales cycle length, traffic acquisition channels, and high-value customer segments to define quantifiable revenue benchmarks.",
+    deliverables: ["Commercial Unit Economics Audit", "Competitor Keyword & Positioning Gap Map", "Customer Acquisition Blueprint"]
   },
   {
     number: "02",
     title: "Identify Conversion Gaps",
-    shortDesc: "We dissect where traffic leaks out of your current funnel and systematically architect the conversion bridge.",
-    detailedAnalysis: "We analyze bounce points across devices, scan form submission dropoffs, evaluate search competition rankings, and inspect mobile checkout friction to prioritize solutions by highest revenue impact.",
-    deliverables: ["Dropoff Heatmap & Friction Matrix", "Competitor Architecture Benchmarks", "High-Priority Fix Roadmap"],
-    keyQuestion: "What is the single biggest friction barrier stopping high-intent visitors from taking action?"
+    shortDesc: "Diagnosing where high-intent traffic leaks from your current website and communication touchpoints.",
+    detailedAnalysis: "We dissect your existing site architecture, mobile responsiveness, Core Web Vitals, form submission drop-offs, and trust deficits preventing visitors from taking immediate action.",
+    deliverables: ["Friction Bottleneck Matrix", "Core Web Vitals Speed Diagnostic", "Cognitive UX Audit"]
   },
   {
     number: "03",
     title: "Build Growth System",
-    shortDesc: "We engineer a bespoke, conversion-obsessed digital experience with sub-second speeds and flawless ergonomics.",
-    detailedAnalysis: "Full-stack engineering combining Next.js, editorial typographic hierarchy, responsive layouts, automated CRM routing, and local SEO metadata. Every pixel serves a commercial objective.",
-    deliverables: ["Custom Full-Stack Web Architecture", "Conversion Funnel & Lead Capture Engine", "Local SEO & Structured Schema Suite"],
-    keyQuestion: "Does every section of this experience advance the prospect to a high-intent commercial decision?"
+    shortDesc: "Engineering the custom digital flagship, conversion funnels, and automated backend infrastructure.",
+    detailedAnalysis: "Our full-stack team builds your platform on Next.js, crafts benefit-first editorial copy, and instruments instant WhatsApp / CRM routing engines for seamless conversion.",
+    deliverables: ["Custom Full-Stack Next.js Platform", "Conversion Funnel & Wireframe System", "Automated Lead Routing Infrastructure"]
   },
   {
     number: "04",
     title: "Launch & Optimize",
-    shortDesc: "We deploy with zero downtime, conduct rigorous live telemetry testing, and eliminate all post-launch bugs.",
-    detailedAnalysis: "Going live is just day one. We monitor live user sessions, track conversion milestone funnels, stress-test database integrations under real traffic, and optimize performance parameters immediately.",
-    deliverables: ["Production Cloud Deployment", "Event Telemetry & Analytics Dashboard", "Stress Testing & Core Web Vitals Audit"],
-    keyQuestion: "Are conversions registering flawlessly across all mobile viewports, payment gateways, and forms?"
+    shortDesc: "Deploying to global edge networks, verifying telemetry tracking, and running multi-variant conversion tests.",
+    detailedAnalysis: "We launch with sub-second page performance, verify event-level analytics attribution across all traffic sources, and initiate continuous headline and CTA optimization sprints.",
+    deliverables: ["Global Cloudflare / Vercel Edge Deployment", "End-to-End Analytics Attribution Setup", "Live Conversion Optimization Audit"]
   },
   {
     number: "05",
     title: "Scale Revenue",
-    shortDesc: "We double down on verified conversion winners, compound organic search rankings, and scale client acquisition.",
-    detailedAnalysis: "With a proven conversion baseline established, we activate organic keyword expansion, automated review collection loops, and retargeting systems to systematically multiply your monthly client bookings.",
-    deliverables: ["Monthly Funnel Optimization Reports", "Continuous SEO & Local Keyword Expansion", "Automated Reputation Review Engine"],
-    keyQuestion: "How do we compound your customer acquisition efficiency month after month?"
+    shortDesc: "Expanding high-intent search rankings, localized map dominance, and compounding inbound acquisition.",
+    detailedAnalysis: "We systematically execute transactional SEO strategies, programmatic authority content, and automated nurturing to continually lower customer acquisition costs and scale top-line revenue.",
+    deliverables: ["High-Intent SEO Ranking Dominance", "Quarterly Conversion Rate Enhancements", "Standing Technical & Growth Partnership"]
   }
 ];
