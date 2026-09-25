@@ -3,6 +3,7 @@ import { Space_Grotesk, Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
 import CustomCursor from "@/components/common/CustomCursor";
+import AppPreloader from "@/components/common/AppPreloader";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -123,6 +124,7 @@ export default function RootLayout({
       </head>
       <body className="bg-[#FFFFFF] text-[#0A0A0A] font-sans selection:bg-[#FF0000] selection:text-[#FFFFFF] overflow-x-hidden min-h-screen">
         <SmoothScrollProvider>
+          <AppPreloader />
           <CustomCursor />
           {children}
         </SmoothScrollProvider>

@@ -52,7 +52,7 @@ export default function MobileMenu({
         >
           <BrandLogo
             variant={isDarkTheme ? "dark" : "light"}
-            className="h-8 w-auto"
+            className="w-[135px] sm:w-[155px] h-auto"
             priority
           />
         </Link>

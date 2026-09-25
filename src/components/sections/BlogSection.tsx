@@ -40,6 +40,7 @@ export default function BlogSection() {
         {/* Featured Editorial Article */}
         <Link
           href={`/blog/${featured.slug}`}
+          data-cursor="READ →"
           className="group block p-6 sm:p-10 rounded-2xl bg-[#FAFAFA] border border-black/[0.08] hover:border-[#FF0000] hover:shadow-xl transition-all duration-300 mb-10"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -87,6 +88,7 @@ export default function BlogSection() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
+              data-cursor="READ →"
               className="group p-6 rounded-xl bg-[#FAFAFA] border border-black/[0.08] hover:border-[#FF0000] hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
             >
               <div>

@@ -1,25 +1,48 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+
+type CursorState = "normal" | "link" | "button" | "badge";
 
 export default function CustomCursor() {
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [cursorState, setCursorState] = useState<"normal" | "link" | "button" | "badge">("normal");
+  const [cursorState, setCursorState] = useState<CursorState>("normal");
   const [cursorText, setCursorText] = useState("");
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const posRef = useRef({ x: -100, y: -100, targetX: -100, targetY: -100 });
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+
+  const pathname = usePathname();
+  const isDarkPage = pathname.startsWith("/projects");
+
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const posRef = useRef({
+    targetX: -100,
+    targetY: -100,
+    dotX: -100,
+    dotY: -100,
+    ringX: -100,
+    ringY: -100,
+  });
+
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    // Only enable on desktop with mouse
+    // Strictly disable on touch / coarse pointer / tablet & mobile screens
+    if (typeof window === "undefined") return;
+
     const isTouch =
+      window.matchMedia("(pointer: coarse)").matches ||
       "ontouchstart" in window ||
       navigator.maxTouchPoints > 0 ||
       window.innerWidth < 1024;
 
-    if (isTouch || reducedMotion) return;
+    if (isTouch || reducedMotion) {
+      setMounted(false);
+      return;
+    }
 
     setMounted(true);
 
@@ -36,18 +59,26 @@ export default function CustomCursor() {
       const target = e.target as HTMLElement | null;
       if (!target) return;
 
+      // Dark background / theme detection for contrast
+      const darkContainer = target.closest(
+        "[data-theme='dark'], footer, .bg-black, [class*='bg-[#0A0A0A]'], [class*='bg-[#080808]']"
+      );
+      setIsDarkTheme(Boolean(darkContainer) || isDarkPage);
+
       const cursorTarget = target.closest("[data-cursor]") as HTMLElement | null;
-      const isButton = target.closest("button, [role='button'], .btn, a.btn, a[class*='bg-']");
-      const isLink = target.closest("a, input, textarea, select");
+      const isBtn = target.closest(
+        "button, [role='button'], .btn, a.btn, a[class*='bg-[#FF0000]'], a[class*='bg-black'], a[class*='bg-white']"
+      );
+      const isLnk = target.closest("a, input, textarea, select, label");
 
       if (cursorTarget) {
         const text = cursorTarget.getAttribute("data-cursor") || "";
         setCursorText(text);
         setCursorState("badge");
-      } else if (isButton) {
+      } else if (isBtn) {
         setCursorText("");
         setCursorState("button");
-      } else if (isLink) {
+      } else if (isLnk) {
         setCursorText("");
         setCursorState("link");
       } else {
@@ -62,13 +93,21 @@ export default function CustomCursor() {
     document.addEventListener("mouseover", handleOver, { passive: true });
 
     let animationFrameId: number;
-    const render = () => {
-      // Smooth lerp (slightly lagging behind for a premium weight)
-      posRef.current.x += (posRef.current.targetX - posRef.current.x) * 0.16;
-      posRef.current.y += (posRef.current.targetY - posRef.current.y) * 0.16;
 
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${posRef.current.x}px, ${posRef.current.y}px, 0)`;
+    const render = () => {
+      // Fluid lerp: Dot follows tightly, Ring follows with smooth delay for magnetic feel
+      const { targetX, targetY } = posRef.current;
+      posRef.current.dotX += (targetX - posRef.current.dotX) * 0.45;
+      posRef.current.dotY += (targetY - posRef.current.dotY) * 0.45;
+
+      posRef.current.ringX += (targetX - posRef.current.ringX) * 0.15;
+      posRef.current.ringY += (targetY - posRef.current.ringY) * 0.15;
+
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${posRef.current.dotX}px, ${posRef.current.dotY}px, 0)`;
+      }
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate3d(${posRef.current.ringX}px, ${posRef.current.ringY}px, 0)`;
       }
 
       animationFrameId = requestAnimationFrame(render);
@@ -83,33 +122,56 @@ export default function CustomCursor() {
       document.removeEventListener("mouseover", handleOver);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [isVisible, reducedMotion]);
+  }, [isVisible, isDarkPage, reducedMotion]);
 
   if (!mounted) return null;
 
+  const activeDark = isDarkTheme || isDarkPage;
+
   return (
     <div
-      ref={cursorRef}
-      className={`fixed top-0 left-0 pointer-events-none z-[999999] -translate-x-1/2 -translate-y-1/2 will-change-transform transition-opacity duration-200 select-none ${
+      className={`fixed top-0 left-0 pointer-events-none z-[9999999] select-none transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
-      style={{ willChange: "transform" }}
       aria-hidden="true"
     >
+      {/* 1. Fast Inner Dot */}
       <div
-        className={`flex items-center justify-center rounded-full transition-all duration-300 ease-out ${
+        ref={dotRef}
+        className={`fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none transition-transform duration-150 ease-out will-change-transform ${
+          cursorState === "badge" || cursorState === "button"
+            ? "opacity-0 scale-0"
+            : cursorState === "link"
+            ? "w-1.5 h-1.5 bg-[#FF0000] scale-100"
+            : `w-2 h-2 ${activeDark ? "bg-white" : "bg-[#0A0A0A]"} scale-100`
+        }`}
+        style={{ willChange: "transform" }}
+      />
+
+      {/* 2. Fluid Outer Ring / Interactive Morphing Pill */}
+      <div
+        ref={ringRef}
+        className={`fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none flex items-center justify-center transition-all duration-300 ease-out will-change-transform ${
           cursorState === "badge"
             ? "w-24 h-24 bg-[#FF0000] text-white shadow-2xl scale-100 border border-white/20"
             : cursorState === "button"
-            ? "w-10 h-10 bg-[#FF0000] opacity-90 scale-110 shadow-md"
+            ? "w-11 h-11 bg-[#FF0000] text-white shadow-lg scale-100 border border-white/20"
             : cursorState === "link"
-            ? "w-10 h-10 bg-black/10 backdrop-blur-xs border border-[#FF0000]/60 scale-105"
-            : "w-3 h-3 bg-[#FF0000] shadow-xs"
+            ? "w-10 h-10 bg-[#FF0000]/10 border border-[#FF0000]/60 scale-100 backdrop-blur-xs"
+            : `w-8 h-8 bg-transparent ${
+                activeDark ? "border border-white/30" : "border border-black/25"
+              } scale-100`
         }`}
+        style={{ willChange: "transform" }}
       >
         {cursorState === "badge" && cursorText && (
-          <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-center px-1 text-white leading-tight">
+          <span className="font-mono text-[9px] uppercase font-bold tracking-widest text-center px-2 text-white leading-tight">
             {cursorText}
+          </span>
+        )}
+        {cursorState === "button" && (
+          <span className="font-mono text-xs font-bold text-white leading-none">
+            →
           </span>
         )}
       </div>

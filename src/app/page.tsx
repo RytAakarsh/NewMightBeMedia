@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-import PageLoader from "@/components/common/PageLoader";
+import React from "react";
 import Navbar from "@/components/layout/Navbar";
 import HeroSection from "@/components/sections/HeroSection";
 import MarqueeSection from "@/components/sections/MarqueeSection";
@@ -18,55 +17,50 @@ import CtaSection from "@/components/sections/CtaSection";
 import Footer from "@/components/layout/Footer";
 
 export default function HomePage() {
-  const [loaderComplete, setLoaderComplete] = useState(false);
-
   return (
     <main className="relative bg-[#FFFFFF] text-[#0A0A0A] min-h-screen selection:bg-[#FF0000] selection:text-white">
-      {/* 01. Initial Editorial Page Loader (Guaranteed single-session execution) */}
-      <PageLoader onComplete={() => setLoaderComplete(true)} />
-
-      {/* 02. Minimalist Navigation with real BrandLogo */}
+      {/* Minimalist Navigation with real BrandLogo */}
       <Navbar />
 
       {/* The Continuous Storytelling Architecture */}
       <div className="flex flex-col w-full">
-        {/* 03. Unified Hero Composition (Eyebrow + Large Headline + Copy + Integrated Blog Rail) */}
+        {/* 01. Unified Hero Composition (Eyebrow + Large Headline + Copy + Integrated Blog Rail) */}
         <HeroSection />
 
-        {/* 04. Selected Clientele & Platforms Marquee */}
+        {/* 02. Selected Clientele & Platforms Marquee */}
         <MarqueeSection />
 
-        {/* 05. About MightBeMedia + Foundation Principles (Integrated) */}
+        {/* 03. About MightBeMedia + Foundation Principles (Integrated) */}
         <AboutSection />
 
-        {/* 06. What We Do / Services (Radial Selector & Pinned Chapters) */}
+        {/* 04. What We Do / Services (Radial Selector & Pinned Chapters) */}
         <ServicesSection />
 
-        {/* 07. The MightBeMedia Standard (Digital Momentum) */}
+        {/* 05. The MightBeMedia Standard (Digital Momentum) */}
         <MomentumSection />
 
-        {/* 08. Specialized Verticals */}
+        {/* 06. Specialized Verticals */}
         <IndustriesSection />
 
-        {/* 09. 5-Stage Growth Methodology */}
+        {/* 07. 5-Stage Growth Methodology */}
         <ProcessSection />
 
-        {/* 10. Verified Commercial Outcomes (with Counting Numbers) */}
+        {/* 08. Verified Commercial Outcomes (with Counting Numbers) */}
         <OutcomesSection />
 
-        {/* 11. Partnership Thesis (Why MightBeMedia) */}
+        {/* 09. Partnership Thesis (Why MightBeMedia) */}
         <WhySection />
 
-        {/* 12. Insights / Perspectives Preview */}
+        {/* 10. Insights / Perspectives Preview */}
         <BlogSection />
 
-        {/* 13. Frequent Inquiries (FAQ Accordion) */}
+        {/* 11. Frequent Inquiries (FAQ Accordion) */}
         <FaqSection />
 
-        {/* 14. Final CTA / Underline Revenue Inquiry Form */}
+        {/* 12. Final CTA / Underline Revenue Inquiry Form */}
         <CtaSection />
 
-        {/* 15. Responsive Clamp Footer */}
+        {/* 13. Responsive Clamp Footer */}
         <Footer />
       </div>
     </main>

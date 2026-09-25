@@ -171,7 +171,7 @@ export default function ProjectsPage() {
               <div
                 key={proj.id}
                 onClick={() => setSelectedProject(proj)}
-                data-cursor="EXPLORE →"
+                data-cursor="VIEW PROJECT →"
                 className="project-chapter group cursor-pointer pt-10 sm:pt-14 border-t border-white/15"
               >
                 <div

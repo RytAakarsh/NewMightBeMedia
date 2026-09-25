@@ -11,7 +11,7 @@ interface BrandLogoProps {
 
 export default function BrandLogo({
   variant = "light",
-  className = "h-8 sm:h-9 w-auto",
+  className = "w-[135px] sm:w-[155px] md:w-[170px] lg:w-[185px] h-auto",
   priority = false,
 }: BrandLogoProps) {
   const logoSrc =
@@ -27,7 +27,7 @@ export default function BrandLogo({
         width={865}
         height={289}
         priority={priority}
-        className="h-full w-auto object-contain pointer-events-none"
+        className="w-full h-auto object-contain pointer-events-none"
       />
     </div>
   );

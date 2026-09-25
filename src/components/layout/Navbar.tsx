@@ -47,7 +47,7 @@ export default function Navbar({ theme = "light" }: NavbarProps) {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 flex items-center justify-between">
-          {/* Real Official Logo Image */}
+          {/* Real Official Logo Image - Prominent Responsive Sizing */}
           <Link
             href="/"
             className="flex items-center group focus:outline-none"
@@ -55,7 +55,7 @@ export default function Navbar({ theme = "light" }: NavbarProps) {
           >
             <BrandLogo
               variant={isDark ? "dark" : "light"}
-              className="h-8 sm:h-9 w-auto transition-transform duration-300 group-hover:scale-[1.02]"
+              className="w-[135px] sm:w-[155px] md:w-[170px] lg:w-[185px] h-auto transition-transform duration-300 group-hover:scale-[1.02]"
               priority
             />
           </Link>
