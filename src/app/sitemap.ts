@@ -1,38 +1,43 @@
 import { MetadataRoute } from "next";
 import { blogPosts } from "@/data/blog";
-import { projects } from "@/data/projects";
+
+const BASE_URL = "https://mightbemedia.in";
+
+// Content milestone dates
+const HOMEPAGE_LAST_MODIFIED = new Date("2026-03-20T00:00:00.000Z");
+const PROJECTS_LAST_MODIFIED = new Date("2026-03-15T00:00:00.000Z");
+const BLOG_INDEX_LAST_MODIFIED = new Date("2026-03-15T10:00:00.000Z");
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://mightbemedia.in";
-
-  // Static routes
+  // 1. Primary Pillar Routes
   const staticRoutes: MetadataRoute.Sitemap = [
     {
-      url: baseUrl,
-      lastModified: new Date(),
+      url: `${BASE_URL}/`,
+      lastModified: HOMEPAGE_LAST_MODIFIED,
       changeFrequency: "weekly",
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/projects`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
+      url: `${BASE_URL}/projects`,
+      lastModified: PROJECTS_LAST_MODIFIED,
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
     {
-      url: `${baseUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.9,
+      url: `${BASE_URL}/blog`,
+      lastModified: BLOG_INDEX_LAST_MODIFIED,
+      changeFrequency: "weekly",
+      priority: 0.8,
     },
   ];
 
-  // Dynamic blog routes
+  // 2. Data-Driven Dynamic Blog Article Routes
+  // Automatically populates any newly added published blog post from central data
   const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: new Date(),
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedAt || post.publishedAt),
     changeFrequency: "monthly",
-    priority: 0.8,
+    priority: 0.7,
   }));
 
   return [...staticRoutes, ...blogRoutes];

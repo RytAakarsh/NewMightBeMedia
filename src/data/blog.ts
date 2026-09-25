@@ -6,6 +6,8 @@ export interface BlogPost {
   primaryKeyword: string;
   category: "Growth Systems" | "Web Engineering" | "Software & AI" | "SEO & Marketing";
   date: string;
+  publishedAt: string;
+  updatedAt?: string;
   readTime: string;
   excerpt: string;
   coverImage: string;
@@ -39,6 +41,8 @@ export const blogPosts: BlogPost[] = [
     primaryKeyword: "marketing agency in New Delhi",
     category: "Growth Systems",
     date: "March 2026",
+    publishedAt: "2026-03-01T08:00:00.000Z",
+    updatedAt: "2026-03-15T10:00:00.000Z",
     readTime: "8 min read",
     coverImage: "/projects/sommie.png",
     coverAccent: "#FF0000",
@@ -122,6 +126,8 @@ export const blogPosts: BlogPost[] = [
     primaryKeyword: "digital marketing agency in Delhi",
     category: "Growth Systems",
     date: "March 2026",
+    publishedAt: "2026-03-01T08:00:00.000Z",
+    updatedAt: "2026-03-12T09:30:00.000Z",
     readTime: "10 min read",
     coverImage: "/projects/baristai.png",
     coverAccent: "#FF0000",
@@ -179,6 +185,8 @@ export const blogPosts: BlogPost[] = [
     primaryKeyword: "software development company in India",
     category: "Software & AI",
     date: "February 2026",
+    publishedAt: "2026-02-18T08:00:00.000Z",
+    updatedAt: "2026-02-28T11:00:00.000Z",
     readTime: "9 min read",
     coverImage: "/projects/viva.png",
     coverAccent: "#FF0000",
@@ -223,6 +231,8 @@ export const blogPosts: BlogPost[] = [
     primaryKeyword: "software development company India",
     category: "Software & AI",
     date: "February 2026",
+    publishedAt: "2026-02-10T08:00:00.000Z",
+    updatedAt: "2026-02-24T14:00:00.000Z",
     readTime: "11 min read",
     coverImage: "/projects/modulus.png",
     coverAccent: "#FF0000",
@@ -265,6 +275,8 @@ export const blogPosts: BlogPost[] = [
     primaryKeyword: "web development company in Delhi",
     category: "Web Engineering",
     date: "January 2026",
+    publishedAt: "2026-01-28T08:00:00.000Z",
+    updatedAt: "2026-02-15T12:00:00.000Z",
     readTime: "8 min read",
     coverImage: "/projects/sem.png",
     coverAccent: "#FF0000",
@@ -307,6 +319,8 @@ export const blogPosts: BlogPost[] = [
     primaryKeyword: "AI development company in India",
     category: "Software & AI",
     date: "January 2026",
+    publishedAt: "2026-01-20T08:00:00.000Z",
+    updatedAt: "2026-02-05T16:00:00.000Z",
     readTime: "10 min read",
     coverImage: "/projects/she&soul.png",
     coverAccent: "#FF0000",
@@ -343,6 +357,8 @@ export const blogPosts: BlogPost[] = [
     primaryKeyword: "growth marketing agency India",
     category: "Growth Systems",
     date: "January 2026",
+    publishedAt: "2026-01-12T08:00:00.000Z",
+    updatedAt: "2026-01-25T10:00:00.000Z",
     readTime: "8 min read",
     coverImage: "/projects/primesports.png",
     coverAccent: "#FF0000",
@@ -373,6 +389,8 @@ export const blogPosts: BlogPost[] = [
     primaryKeyword: "software development company India",
     category: "Software & AI",
     date: "December 2025",
+    publishedAt: "2025-12-22T08:00:00.000Z",
+    updatedAt: "2026-01-10T11:00:00.000Z",
     readTime: "9 min read",
     coverImage: "/projects/passioncrafted.png",
     coverAccent: "#FF0000",
@@ -407,6 +425,8 @@ export const blogPosts: BlogPost[] = [
     primaryKeyword: "digital marketing services India",
     category: "Growth Systems",
     date: "December 2025",
+    publishedAt: "2025-12-15T08:00:00.000Z",
+    updatedAt: "2026-01-05T09:00:00.000Z",
     readTime: "12 min read",
     coverImage: "/projects/sommie.png",
     coverAccent: "#FF0000",
@@ -436,6 +456,8 @@ export const blogPosts: BlogPost[] = [
     primaryKeyword: "marketing and software development company",
     category: "Growth Systems",
     date: "December 2025",
+    publishedAt: "2025-12-01T08:00:00.000Z",
+    updatedAt: "2025-12-20T15:00:00.000Z",
     readTime: "7 min read",
     coverImage: "/projects/baristai.png",
     coverAccent: "#FF0000",

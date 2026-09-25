@@ -50,6 +50,9 @@ export const metadata: Metadata = {
     "MightBeMedia",
     "growth agency India",
   ],
+  alternates: {
+    canonical: "https://mightbemedia.in/",
+  },
   authors: [{ name: "MightBeMedia" }],
   creator: "MightBeMedia",
   publisher: "MightBeMedia",
@@ -66,7 +69,7 @@ export const metadata: Metadata = {
     title: "MightBeMedia | Revenue Growth Partner for Businesses",
     description:
       "We build revenue systems that convert traffic into high-paying clients. BUILD • CONVERT • SCALE.",
-    url: "https://mightbemedia.in",
+    url: "https://mightbemedia.in/",
     siteName: "MightBeMedia",
     locale: "en_US",
     type: "website",
@@ -95,20 +98,38 @@ export default function RootLayout({
 }>) {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "MightBeMedia",
-    url: "https://mightbemedia.in",
-    logo: "https://mightbemedia.in/logos/MightBeMedia_ICONNEW.png",
-    description:
-      "MightBeMedia builds high-converting websites, apps, software, SEO and growth systems that help businesses turn traffic into high-paying clients.",
-    email: "info@mightbemedia.in",
-    telephone: "+91-8851872245",
-    address: {
-      "@type": "PostalAddress",
-      addressCountry: "IN",
-    },
-    areaServed: "Worldwide",
-    sameAs: [],
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://mightbemedia.in/#organization",
+        name: "MightBeMedia",
+        url: "https://mightbemedia.in/",
+        logo: {
+          "@type": "ImageObject",
+          url: "https://mightbemedia.in/logos/MightBeMedia_ICONNEW.png",
+          caption: "MightBeMedia",
+        },
+        description:
+          "MightBeMedia builds high-converting websites, apps, software, SEO and growth systems that help businesses turn traffic into high-paying clients.",
+        email: "info@mightbemedia.in",
+        telephone: "+91-8851872245",
+        address: {
+          "@type": "PostalAddress",
+          addressCountry: "IN",
+        },
+        areaServed: "Worldwide",
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://mightbemedia.in/#website",
+        url: "https://mightbemedia.in/",
+        name: "MightBeMedia",
+        description: "Revenue Growth Partner for Businesses",
+        publisher: {
+          "@id": "https://mightbemedia.in/#organization",
+        },
+      },
+    ],
   };
 
   return (

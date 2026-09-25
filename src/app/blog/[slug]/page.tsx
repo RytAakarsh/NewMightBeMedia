@@ -29,6 +29,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     };
   }
 
+  const absoluteImageUrl = `https://mightbemedia.in${post.coverImage}`;
+
   return {
     title: `${post.seoTitle} | MightBeMedia`,
     description: post.metaDescription,
@@ -41,9 +43,12 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       description: post.metaDescription,
       url: `https://mightbemedia.in/blog/${post.slug}`,
       type: "article",
+      publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt || post.publishedAt,
+      authors: ["MightBeMedia"],
       images: [
         {
-          url: post.coverImage,
+          url: absoluteImageUrl,
           width: 1200,
           height: 630,
           alt: post.title,
@@ -54,7 +59,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       card: "summary_large_image",
       title: post.title,
       description: post.metaDescription,
-      images: [post.coverImage],
+      images: [absoluteImageUrl],
     },
   };
 }
@@ -69,32 +74,62 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const relatedPosts = blogPosts.filter((p) => p.slug !== slug).slice(0, 3);
 
-  // Article Schema JSON-LD
+  // Article & Breadcrumbs Schema JSON-LD
   const articleJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
-    headline: post.title,
-    description: post.metaDescription,
-    image: `https://mightbemedia.in${post.coverImage}`,
-    datePublished: "2026-01-15T08:00:00+05:30",
-    dateModified: "2026-03-01T08:00:00+05:30",
-    author: {
-      "@type": "Organization",
-      name: "MightBeMedia",
-      url: "https://mightbemedia.in",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "MightBeMedia",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://mightbemedia.in/logos/MightBeMedia_ICONNEW.png",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": `https://mightbemedia.in/blog/${post.slug}#article`,
+        headline: post.title,
+        description: post.metaDescription,
+        image: [`https://mightbemedia.in${post.coverImage}`],
+        datePublished: post.publishedAt,
+        dateModified: post.updatedAt || post.publishedAt,
+        author: {
+          "@type": "Organization",
+          name: "MightBeMedia",
+          url: "https://mightbemedia.in/",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "MightBeMedia",
+          url: "https://mightbemedia.in/",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://mightbemedia.in/logos/MightBeMedia_ICONNEW.png",
+          },
+        },
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": `https://mightbemedia.in/blog/${post.slug}`,
+        },
       },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `https://mightbemedia.in/blog/${post.slug}`,
-    },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `https://mightbemedia.in/blog/${post.slug}#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: "https://mightbemedia.in/",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Insights",
+            item: "https://mightbemedia.in/blog",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: post.title,
+            item: `https://mightbemedia.in/blog/${post.slug}`,
+          },
+        ],
+      },
+    ],
   };
 
   return (
@@ -112,17 +147,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <article className="pt-36 sm:pt-44 pb-20 px-6 sm:px-10 lg:px-16">
         <div className="max-w-4xl mx-auto">
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center gap-3 font-mono text-xs text-[#0A0A0A]/50 mb-8 select-none">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2.5 font-mono text-xs text-[#0A0A0A]/50 mb-8 select-none">
             <Link href="/" className="hover:text-[#FF0000] transition-colors">
               HOME
             </Link>
             <span>/</span>
             <Link href="/blog" className="hover:text-[#FF0000] transition-colors">
-              INSIGHTS
+              BLOG
             </Link>
             <span>/</span>
-            <span className="text-[#FF0000] truncate max-w-[200px] sm:max-w-xs">{post.category}</span>
-          </div>
+            <span className="text-[#FF0000] truncate max-w-[240px] sm:max-w-md font-semibold" title={post.title}>
+              {post.title}
+            </span>
+          </nav>
 
           {/* Category Badge */}
           <div className="mb-4">
