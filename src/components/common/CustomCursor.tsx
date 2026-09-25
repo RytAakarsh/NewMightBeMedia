@@ -6,16 +6,19 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 export default function CustomCursor() {
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  const [cursorState, setCursorState] = useState<"normal" | "link" | "button" | "badge">("normal");
   const [cursorText, setCursorText] = useState("");
   const cursorRef = useRef<HTMLDivElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
   const posRef = useRef({ x: -100, y: -100, targetX: -100, targetY: -100 });
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     // Only enable on desktop with mouse
-    const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 1024;
+    const isTouch =
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0 ||
+      window.innerWidth < 1024;
+
     if (isTouch || reducedMotion) return;
 
     setMounted(true);
@@ -34,18 +37,22 @@ export default function CustomCursor() {
       if (!target) return;
 
       const cursorTarget = target.closest("[data-cursor]") as HTMLElement | null;
-      const isInteractive = target.closest("a, button, input, textarea, select, [role='button']");
+      const isButton = target.closest("button, [role='button'], .btn, a.btn, a[class*='bg-']");
+      const isLink = target.closest("a, input, textarea, select");
 
       if (cursorTarget) {
         const text = cursorTarget.getAttribute("data-cursor") || "";
         setCursorText(text);
-        setIsHovered(true);
-      } else if (isInteractive) {
+        setCursorState("badge");
+      } else if (isButton) {
         setCursorText("");
-        setIsHovered(true);
+        setCursorState("button");
+      } else if (isLink) {
+        setCursorText("");
+        setCursorState("link");
       } else {
         setCursorText("");
-        setIsHovered(false);
+        setCursorState("normal");
       }
     };
 
@@ -56,9 +63,9 @@ export default function CustomCursor() {
 
     let animationFrameId: number;
     const render = () => {
-      // Smooth lerp
-      posRef.current.x += (posRef.current.targetX - posRef.current.x) * 0.18;
-      posRef.current.y += (posRef.current.targetY - posRef.current.y) * 0.18;
+      // Smooth lerp (slightly lagging behind for a premium weight)
+      posRef.current.x += (posRef.current.targetX - posRef.current.x) * 0.16;
+      posRef.current.y += (posRef.current.targetY - posRef.current.y) * 0.16;
 
       if (cursorRef.current) {
         cursorRef.current.style.transform = `translate3d(${posRef.current.x}px, ${posRef.current.y}px, 0)`;
@@ -83,24 +90,25 @@ export default function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      className={`fixed top-0 left-0 pointer-events-none z-[99999] -translate-x-1/2 -translate-y-1/2 will-change-transform transition-opacity duration-300 ${
+      className={`fixed top-0 left-0 pointer-events-none z-[999999] -translate-x-1/2 -translate-y-1/2 will-change-transform transition-opacity duration-200 select-none ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
       style={{ willChange: "transform" }}
       aria-hidden="true"
     >
       <div
-        ref={dotRef}
         className={`flex items-center justify-center rounded-full transition-all duration-300 ease-out ${
-          isHovered
-            ? cursorText
-              ? "w-20 h-20 bg-[#FF0000] text-white shadow-lg"
-              : "w-10 h-10 bg-[#0A0A0A]/80 backdrop-blur-sm border border-white/20 scale-110"
-            : "w-3 h-3 bg-[#FF0000]"
+          cursorState === "badge"
+            ? "w-24 h-24 bg-[#FF0000] text-white shadow-2xl scale-100 border border-white/20"
+            : cursorState === "button"
+            ? "w-10 h-10 bg-[#FF0000] opacity-90 scale-110 shadow-md"
+            : cursorState === "link"
+            ? "w-10 h-10 bg-black/10 backdrop-blur-xs border border-[#FF0000]/60 scale-105"
+            : "w-3 h-3 bg-[#FF0000] shadow-xs"
         }`}
       >
-        {cursorText && (
-          <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-center px-1">
+        {cursorState === "badge" && cursorText && (
+          <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-center px-1 text-white leading-tight">
             {cursorText}
           </span>
         )}

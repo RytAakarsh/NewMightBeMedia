@@ -1,17 +1,23 @@
 "use client";
 
 import React, { useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, X } from "lucide-react";
+import BrandLogo from "../common/BrandLogo";
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
   links: { label: string; href: string }[];
+  isDarkTheme?: boolean;
 }
 
-export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
+export default function MobileMenu({
+  isOpen,
+  onClose,
+  links,
+  isDarkTheme = false,
+}: MobileMenuProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -27,7 +33,11 @@ export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) 
 
   return (
     <div
-      className="fixed inset-0 z-[9999] bg-[#FFFFFF] text-[#0A0A0A] flex flex-col justify-between p-6 sm:p-10 animate-in fade-in duration-300"
+      className={`fixed inset-0 z-[9999] flex flex-col justify-between p-6 sm:p-10 animate-in fade-in duration-300 ${
+        isDarkTheme
+          ? "bg-[#0A0A0A] text-white"
+          : "bg-[#FFFFFF] text-[#0A0A0A]"
+      }`}
       role="dialog"
       aria-modal="true"
       aria-label="Mobile Navigation Menu"
@@ -37,26 +47,24 @@ export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) 
         <Link
           href="/"
           onClick={onClose}
-          className="flex items-center gap-3"
+          className="flex items-center"
           aria-label="MightBeMedia Homepage"
         >
-          <div className="relative w-8 h-8">
-            <Image
-              src="/logos/MightBeMedia_ICONNEW.png"
-              alt="MightBeMedia Logo"
-              fill
-              className="object-contain"
-            />
-          </div>
-          <span className="font-display font-bold text-xl tracking-tight text-[#0A0A0A]">
-            Might<span className="text-[#FF0000]">Be</span>Media
-          </span>
+          <BrandLogo
+            variant={isDarkTheme ? "dark" : "light"}
+            className="h-8 w-auto"
+            priority
+          />
         </Link>
 
         <button
           type="button"
           onClick={onClose}
-          className="p-3 text-[#0A0A0A] hover:text-[#FF0000] rounded-full bg-black/[0.04] border border-black/10 min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors"
+          className={`p-3 rounded-full border min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors cursor-pointer ${
+            isDarkTheme
+              ? "text-white hover:text-[#FF0000] bg-white/5 border-white/10"
+              : "text-[#0A0A0A] hover:text-[#FF0000] bg-black/[0.04] border-black/10"
+          }`}
           aria-label="Close menu"
         >
           <X className="w-5 h-5" />
@@ -70,37 +78,53 @@ export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) 
             key={link.label}
             href={link.href}
             onClick={onClose}
-            className="group flex items-center justify-between py-2.5 border-b border-black/10"
+            className={`group flex items-center justify-between py-2.5 border-b ${
+              isDarkTheme ? "border-white/10" : "border-black/10"
+            }`}
           >
             <div className="flex items-baseline gap-4">
               <span className="font-mono text-xs text-[#FF0000] font-bold">
                 0{idx + 1}
               </span>
-              <span className="font-display font-bold text-3xl sm:text-4xl text-[#0A0A0A] group-hover:text-[#FF0000] transition-colors uppercase tracking-tight">
+              <span
+                className={`font-display font-bold text-3xl sm:text-4xl group-hover:text-[#FF0000] transition-colors uppercase tracking-tight ${
+                  isDarkTheme ? "text-white" : "text-[#0A0A0A]"
+                }`}
+              >
                 {link.label}
               </span>
             </div>
-            <ArrowUpRight className="w-5 h-5 text-black/40 group-hover:text-[#FF0000] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+            <ArrowUpRight className="w-5 h-5 opacity-40 group-hover:opacity-100 group-hover:text-[#FF0000] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
           </Link>
         ))}
 
         <Link
           href="/#contact"
           onClick={onClose}
-          className="group flex items-center justify-between py-2.5 border-b border-black/10"
+          className={`group flex items-center justify-between py-2.5 border-b ${
+            isDarkTheme ? "border-white/10" : "border-black/10"
+          }`}
         >
           <div className="flex items-baseline gap-4">
             <span className="font-mono text-xs text-[#FF0000] font-bold">06</span>
-            <span className="font-display font-bold text-3xl sm:text-4xl text-[#0A0A0A] group-hover:text-[#FF0000] transition-colors uppercase tracking-tight">
+            <span
+              className={`font-display font-bold text-3xl sm:text-4xl group-hover:text-[#FF0000] transition-colors uppercase tracking-tight ${
+                isDarkTheme ? "text-white" : "text-[#0A0A0A]"
+              }`}
+            >
               Contact
             </span>
           </div>
-          <ArrowUpRight className="w-5 h-5 text-black/40 group-hover:text-[#FF0000] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+          <ArrowUpRight className="w-5 h-5 opacity-40 group-hover:opacity-100 group-hover:text-[#FF0000] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
         </Link>
       </nav>
 
       {/* Bottom Footer Info & Fast CTA */}
-      <div className="flex flex-col gap-4 pt-4 border-t border-black/10">
+      <div
+        className={`flex flex-col gap-4 pt-4 border-t ${
+          isDarkTheme ? "border-white/10" : "border-black/10"
+        }`}
+      >
         <Link
           href="/#contact"
           onClick={onClose}
@@ -109,7 +133,11 @@ export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) 
           START A PROJECT →
         </Link>
 
-        <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-black/60 pt-1">
+        <div
+          className={`flex flex-wrap items-center justify-between gap-2 font-mono text-xs pt-1 ${
+            isDarkTheme ? "text-white/60" : "text-black/60"
+          }`}
+        >
           <a
             href="mailto:info@mightbemedia.in"
             className="hover:text-[#FF0000] transition-colors"

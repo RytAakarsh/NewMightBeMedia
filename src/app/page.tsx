@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import PageLoader from "@/components/common/PageLoader";
 import Navbar from "@/components/layout/Navbar";
 import HeroSection from "@/components/sections/HeroSection";
-import BlogRailSection from "@/components/sections/BlogRailSection";
 import MarqueeSection from "@/components/sections/MarqueeSection";
 import AboutSection from "@/components/sections/AboutSection";
 import ServicesSection from "@/components/sections/ServicesSection";
@@ -23,54 +22,51 @@ export default function HomePage() {
 
   return (
     <main className="relative bg-[#FFFFFF] text-[#0A0A0A] min-h-screen selection:bg-[#FF0000] selection:text-white">
-      {/* 01. Initial Editorial Page Loader */}
+      {/* 01. Initial Editorial Page Loader (Guaranteed single-session execution) */}
       <PageLoader onComplete={() => setLoaderComplete(true)} />
 
-      {/* 02. Persistent Minimalist Navigation */}
+      {/* 02. Minimalist Navigation with real BrandLogo */}
       <Navbar />
 
-      {/* The 14-Chapter Continuous Storytelling Architecture */}
+      {/* The Continuous Storytelling Architecture */}
       <div className="flex flex-col w-full">
-        {/* 03. Hero Headline & Split Mask Reveal */}
+        {/* 03. Unified Hero Composition (Eyebrow + Large Headline + Copy + Integrated Blog Rail) */}
         <HeroSection />
 
-        {/* 04. Hero Blog / Insights Infinite Visual Rail */}
-        <BlogRailSection />
-
-        {/* 05. Selected Clientele / Brands Marquee */}
+        {/* 04. Selected Clientele & Platforms Marquee */}
         <MarqueeSection />
 
-        {/* 06. About MightBeMedia + Foundation Principles (Integrated) */}
+        {/* 05. About MightBeMedia + Foundation Principles (Integrated) */}
         <AboutSection />
 
-        {/* 07. What We Do / Services (Radial Desktop Pin & Mobile Chapters) */}
+        {/* 06. What We Do / Services (Radial Selector & Pinned Chapters) */}
         <ServicesSection />
 
-        {/* 08. The MightBeMedia Standard (Digital Momentum) */}
+        {/* 07. The MightBeMedia Standard (Digital Momentum) */}
         <MomentumSection />
 
-        {/* 09. Specialized Verticals */}
+        {/* 08. Specialized Verticals */}
         <IndustriesSection />
 
-        {/* 10. 5-Stage Growth Methodology */}
+        {/* 09. 5-Stage Growth Methodology */}
         <ProcessSection />
 
-        {/* 11. Verified Commercial Outcomes */}
+        {/* 10. Verified Commercial Outcomes (with Counting Numbers) */}
         <OutcomesSection />
 
-        {/* 12. Partnership Thesis (Why MightBeMedia) */}
+        {/* 11. Partnership Thesis (Why MightBeMedia) */}
         <WhySection />
 
-        {/* 13. Insights / Perspectives Preview */}
+        {/* 12. Insights / Perspectives Preview */}
         <BlogSection />
 
-        {/* 14. Frequent Inquiries (FAQ Accordion) */}
+        {/* 13. Frequent Inquiries (FAQ Accordion) */}
         <FaqSection />
 
-        {/* 15. Final CTA / Underline Revenue Inquiry Form */}
+        {/* 14. Final CTA / Underline Revenue Inquiry Form */}
         <CtaSection />
 
-        {/* 16. Monolithic Clamp Footer */}
+        {/* 15. Responsive Clamp Footer */}
         <Footer />
       </div>
     </main>
