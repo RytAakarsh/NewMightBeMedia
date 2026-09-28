@@ -12,7 +12,14 @@ import { blogPosts } from "@/data/blog";
 export default function BlogHubPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
 
-  const categories = ["ALL", "Growth Systems", "Web Engineering", "Software & AI", "SEO & Marketing"];
+  const categories = [
+    "ALL",
+    "Growth Systems",
+    "Web Engineering",
+    "Software & AI",
+    "SEO & Marketing",
+    "E-Commerce & Retail",
+  ];
 
   const filteredPosts =
     selectedCategory === "ALL"
@@ -45,7 +52,7 @@ export default function BlogHubPage() {
             </div>
 
             <div className="flex items-center gap-2 font-mono text-xs text-[#0A0A0A]/60">
-              <span className="text-[#FF0000] font-bold">10</span>
+              <span className="text-[#FF0000] font-bold">{blogPosts.length}</span>
               <span>IN-DEPTH RESEARCH ESSAYS</span>
             </div>
           </div>

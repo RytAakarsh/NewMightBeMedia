@@ -28,8 +28,8 @@ export const projects: Project[] = [
     category: "Web Application & Funnel",
     summary: "AI-powered digital beverage platform engineered with high-conversion checkout flows, sub-second latency, and intuitive subscription workflows.",
     preview: "/projects/sommie.png",
-    url: "https://pro.sommie.io/",
-    liveUrl: "https://pro.sommie.io/",
+    url: "https://sommie.io/",
+    liveUrl: "https://sommie.io/",
     technologies: ["Next.js 14", "TypeScript", "Tailwind CSS", "Stripe Connect", "Node.js", "PostgreSQL"],
     metrics: [
       { label: "Checkout Completion", value: "+34%" },

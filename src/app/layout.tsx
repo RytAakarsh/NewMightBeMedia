@@ -61,9 +61,12 @@ export const metadata: Metadata = {
     follow: true,
   },
   icons: {
-    icon: "/logos/MightBeMedia_ICONNEW.png",
-    shortcut: "/logos/MightBeMedia_ICONNEW.png",
-    apple: "/logos/MightBeMedia_ICONNEW.png",
+    icon: [
+      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.png", type: "image/png", sizes: "32x32" },
+    ],
+    shortcut: "/icon.png",
+    apple: "/apple-icon.png",
   },
   openGraph: {
     title: "MightBeMedia | Revenue Growth Partner for Businesses",
