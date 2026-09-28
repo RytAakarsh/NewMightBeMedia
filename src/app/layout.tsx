@@ -62,15 +62,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/icon.png", type: "image/png" },
-      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
-      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      {
+        url: "/mbm-favicon.png",
+        type: "image/png",
+      },
     ],
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    apple: "/mbm-favicon.png",
   },
-  manifest: "/site.webmanifest",
   openGraph: {
     title: "MightBeMedia | Revenue Growth Partner for Businesses",
     description:
