@@ -1,622 +1,1633 @@
-// @ts-nocheck
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import "./proposal.css";
-
-// React element helpers
-const u = {
-  jsx: (type, props) => {
-    if (!props) return React.createElement(type);
-    const { children, ...rest } = props;
-    return React.createElement(type, rest, children);
-  },
-  jsxs: (type, props) => {
-    if (!props) return React.createElement(type);
-    const { children, ...rest } = props;
-    if (Array.isArray(children)) {
-      return React.createElement(type, rest, ...children);
-    }
-    return React.createElement(type, rest, children);
-  },
-  Fragment: React.Fragment,
-};
-
-const _ = React;
-const a4 = "/projects/MBM_ICON.png";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  CheckCircle2,
+  Calendar,
+  MessageCircle,
+  Phone,
+  Mail,
+  Copy,
+  Check,
+  Printer,
+  Sparkles,
+  ShieldCheck,
+  TrendingUp,
+  Search,
+  QrCode,
+  Video,
+  Target,
+  Maximize2,
+  LayoutList,
+  Layers,
+  ChevronRight,
+  ChevronLeft,
+  Clock,
+  Briefcase,
+  AlertTriangle,
+  Flame,
+  Send,
+  Wand2,
+  X,
+  Star,
+  Globe
+} from "lucide-react";
+import BrandLogo from "@/components/common/BrandLogo";
 
 export default function ProposalPage() {
-  const [e, t] = useState(0); // currentSlide
-  const [n, r] = useState(false); // isPresenting
-  const [o, i] = useState(false); // isAiLabOpen
-  const [s, l] = useState("chatbot"); // aiTab
-  const [d, f] = useState([
+  const [currentSlide, setCurrentSlide] = useState(1);
+  const [viewMode, setViewMode] = useState<"deck" | "scroll">("deck");
+  const [isAiLabOpen, setIsAiLabOpen] = useState(false);
+  const [aiTab, setAiTab] = useState<"chatbot" | "script" | "proposal">("chatbot");
+  const [copied, setCopied] = useState(false);
+
+  // AI Chat states
+  const [chatMessages, setChatMessages] = useState([
     {
       role: "assistant",
       content:
         "Hello! I'm ClearSkin AI, your automated reception assistant. How can I help you find medical skincare support today?",
     },
   ]);
-  const [p, m] = useState([
+  const [chatInput, setChatInput] = useState("");
+  const [isChatThinking, setIsChatThinking] = useState(false);
+
+  // Script Generator states
+  const [scriptTopic, setScriptTopic] = useState("");
+  const [generatedScript, setGeneratedScript] = useState("");
+  const [isScriptGenerating, setIsScriptGenerating] = useState(false);
+
+  // Proposal Advisor states
+  const [proposalMessages, setProposalMessages] = useState([
     {
       role: "assistant",
       content:
         'Ask me anything about our deliverables, pricing structure, or support coverage! For instance: "What does the ₹20,000 package include?" or "Explain the retainer fee."',
     },
   ]);
-  const [h, g] = useState("");
-  const [w, y] = useState("");
-  const [T, v] = useState("");
-  const [x, E] = useState("");
-  const [b, C] = useState(false);
-  const [N, A] = useState(false);
-  const [k, I] = useState(false);
-  const P = useRef([]);
-  const O = 17;
+  const [proposalInput, setProposalInput] = useState("");
+  const [isProposalThinking, setIsProposalThinking] = useState(false);
 
-  const U = () => {
-    e < O - 1 && t(e + 1);
-  };
-  const q = () => {
-    e > 0 && t(e - 1);
-  };
+  const totalSlides = 17;
 
+  // Keyboard navigation for slide deck
   useEffect(() => {
-    const handleKey = (K) => {
-      if (n) {
-        if (K.key === "ArrowRight" || K.key === " ") {
-          K.preventDefault();
-          U();
-        } else if (K.key === "ArrowLeft") {
-          K.preventDefault();
-          q();
-        }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (viewMode !== "deck" || isAiLabOpen) return;
+      if (e.key === "ArrowRight" || e.key === " ") {
+        e.preventDefault();
+        setCurrentSlide((prev) => Math.min(totalSlides, prev + 1));
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setCurrentSlide((prev) => Math.max(1, prev - 1));
       }
     };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [n, e]);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [viewMode, isAiLabOpen]);
 
-  useEffect(() => {
-    if (n) t(0);
-  }, [n]);
-
-  const S = async ($, K) => {
-    return "Thank you for asking! MightBeMedia engineers dedicated AI chatbots and revenue growth systems for Clear Skin Clinic with direct WhatsApp appointment booking.";
-  };
-
-  const F = async () => {
-    if (!h.trim()) return;
-    const userMsg = { role: "user", content: h };
-    f((prev) => [...prev, userMsg]);
-    g("");
-    I(true);
-    setTimeout(() => {
-      f((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content:
-            "Thank you for inquiring! At Clear Skin Clinic, Dr. Nikita Baid provides customized dermatological assessments. Would you like to schedule a consultation via WhatsApp?",
-        },
-      ]);
-      I(false);
-    }, 600);
-  };
-
-  const V = async () => {
-    if (!w.trim()) return;
-    const userMsg = { role: "user", content: w };
-    m((prev) => [...prev, userMsg]);
-    y("");
-    I(true);
-    setTimeout(() => {
-      m((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content:
-            "The MightBeMedia proposal includes a one-time ₹20,000 setup (AI Skincare Website, Meta Ads Setup, Patient Chatbot, Local SEO, 3 Years Technical Support, and Google Review QR Engine) plus an optional ₹10,000/mo growth retainer.",
-        },
-      ]);
-      I(false);
-    }, 600);
-  };
-
-  const z = async () => {
-    if (T.trim()) {
-      C(true);
-      A(true);
-      E("Generating outline...");
-      setTimeout(() => {
-        E(
-          "HOOK: Struggling with persistent skin concerns? Here is what dermatologists actually recommend...\n\nVISUAL: Highlighting clinical care and genuine before/after transformations with Dr. Nikita Baid.\n\nCTA: Tap the link in bio to book your clinical consultation at Clear Skin Clinic!"
-        );
-        C(false);
-      }, 700);
-    }
-  };
-
-  const R = (text) => {
+  const handleCopyLink = () => {
     if (typeof window !== "undefined") {
-      navigator.clipboard.writeText(text);
-      const K = document.createElement("div");
-      K.className =
-        "fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#E8FF1C] text-black font-mono text-xs font-bold px-4 py-2 rounded-full shadow-2xl z-50 animate-bounce";
-      K.textContent = "COPIED TO CLIPBOARD!";
-      document.body.appendChild(K);
-      setTimeout(() => K.remove(), 2000);
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
-  const po = [
-    // Slide 1
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"neon-glow-primary -top-0 -right-40 w-[600px] h-[200px]"}),u.jsx("div",{className:"neon-glow-violet -bottom-32 -left-32 w-[500px] h-[200px]"}),u.jsx("div",{className:"dot-matrix"}),u.jsx("div",{className:"grid-blueprint"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-white/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("img",{src:a4,alt:"MightBeMedia Logo",className:"w-8 h-8 flex-shrink-0"}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-white",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-neonLime font-bold bg-neonLime/10 px-3 py-1 rounded-full border border-neonLime/20",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 grid grid-cols-12 gap-6 items-center w-full",children:[u.jsxs("div",{className:"col-span-12 lg:col-span-7 flex flex-col justify-center",children:[u.jsxs("div",{className:"flex items-center gap-2 mb-4",children:[u.jsx("span",{className:"h-2.5 w-2.5 rounded-full bg-neonLime animate-pulse"}),u.jsx("span",{className:"text-[10px] font-bold uppercase tracking-[0.5em] text-neonLime/90",children:"We Don't Build Marketing System"})]}),u.jsxs("h1",{className:"font-display font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.1] tracking-tight text-white mb-5",children:["We Build ",u.jsx("br",{}),u.jsx("span",{className:"text-transparent bg-clip-text bg-gradient-to-r from-neonLime via-emerald-400 to-teal-400",children:"Revenue System"}),"."]}),u.jsx("p",{className:"text-white/60 text-sm sm:text-base max-w-[500px] leading-relaxed font-light mb-6",children:"A customized premium conversion infrastructure to transform clinic attention into predictable revenue flow."}),u.jsx("div",{className:"flex items-center gap-4",children:u.jsxs("div",{className:"bg-white/5 border border-white/10 px-4 py-2.5 rounded-xl flex items-center gap-3",children:[u.jsx("i",{className:"fa-solid fa-shield-halved text-neonLime"}),u.jsx("span",{className:"text-xs text-white/80 font-mono",children:"Your Revenue Growth Proposal"})]})})]}),u.jsxs("div",{className:"col-span-12 lg:col-span-5 relative flex justify-center",children:[u.jsx("div",{className:"absolute w-[300px] h-[300px] bg-neonLime/15 rounded-full filter blur-[40px] -z-10 animate-pulse"}),u.jsxs("div",{className:"glass-card-dark neon-card-highlight p-6 rounded-[24px] w-full max-w-[340px] relative overflow-hidden transition-all duration-300 hover:shadow-neonGlow",children:[u.jsx("div",{className:"absolute top-3 right-3 text-[9px] text-neonLime/60 font-mono px-2 py-0.5 bg-neonLime/10 rounded-full",children:"SYSTEM: ACTIVE"}),u.jsx("img",{src:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80",alt:"Premium abstract glass sculpture",className:"w-full h-[180px] object-cover rounded-xl mb-4 border border-white/10 shadow-inner",onError:$=>{$.currentTarget.style.display="none"}}),u.jsx("div",{className:"flex justify-between items-center",children:u.jsxs("div",{children:[u.jsx("span",{className:"text-[8px] text-white/40 block tracking-wider uppercase",children:"CLIENT SPECIFICATION"}),u.jsx("span",{className:"text-xs font-semibold text-white tracking-wide",children:"MightBeMedia Proposal"})]})})]})]})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-white/5 pt-4 text-[10px] text-white/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono hover:text-neonLime transition-colors cursor-pointer",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"01 / 17"})]})]}),
-
-    // Slide 2
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"dot-matrix-light"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-black/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-black flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-brandDark",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-black font-bold bg-neonLime px-3 py-1 rounded-full",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 grid grid-cols-12 gap-6 items-center w-full",children:[u.jsxs("div",{className:"col-span-12 lg:col-span-7",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-black bg-neonLime px-2.5 py-1 rounded-md mb-3 inline-block",children:"WHO WE ARE"}),u.jsx("h2",{className:"font-display font-bold text-3xl lg:text-4xl tracking-tight mb-3",children:"Who We Are"}),u.jsx("p",{className:"text-brandDark/80 text-sm leading-relaxed mb-4 font-normal",children:"At MightBeMedia, we help clinics, doctors, healthcare brands, and local businesses transform their social media attention into predictable patient bookings. Most agencies focus entirely on cosmetic metrics like views. We focus single-mindedly on conversions and revenue."}),u.jsxs("div",{className:"grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-5",children:[u.jsxs("div",{className:"glass-card-light p-3.5 border-t-2 border-black/85 hover:border-neonLime transition-all duration-300",children:[u.jsx("span",{className:"text-xs font-mono font-bold text-black/50",children:"01"}),u.jsx("h4",{className:"font-display font-bold text-xs mt-1 mb-1 text-black",children:"Generate Consultations"}),u.jsx("p",{className:"text-[10px] text-black/75 leading-normal font-medium",children:"Turning casual lookers into verified booked appointments."})]}),u.jsxs("div",{className:"glass-card-light p-3.5 border-t-2 border-black/85 hover:border-neonLime transition-all duration-300",children:[u.jsx("span",{className:"text-xs font-mono font-bold text-black/50",children:"02"}),u.jsx("h4",{className:"font-display font-bold text-xs mt-1 mb-1 text-black",children:"Generate Trust"}),u.jsx("p",{className:"text-[10px] text-black/75 leading-normal font-medium",children:"Structuring high-authority social proof and system loops."})]}),u.jsxs("div",{className:"glass-card-light p-3.5 border-t-2 border-black/85 hover:border-neonLime transition-all duration-300",children:[u.jsx("span",{className:"text-xs font-mono font-bold text-black/50",children:"03"}),u.jsx("h4",{className:"font-display font-bold text-xs mt-1 mb-1 text-black",children:"Generate Revenue"}),u.jsx("p",{className:"text-[10px] text-black/75 leading-normal font-medium",children:"Direct, measurable impact on the clinic's monthly balance sheet."})]})]})]}),u.jsx("div",{className:"col-span-12 lg:col-span-5",children:u.jsxs("div",{className:"rounded-2xl overflow-hidden shadow-2xl border-4 border-white relative h-[200px] sm:h-[250px] lg:h-[300px]",children:[u.jsx("img",{src:"https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=500&q=80",alt:"Luxury clinic lobby interior",className:"w-full h-full object-cover",onError:$=>{$.currentTarget.style.display="none"}}),u.jsxs("div",{className:"absolute bottom-3 left-3 bg-black/80 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/10 text-white flex items-center gap-2",children:[u.jsx("i",{className:"fa-solid fa-hospital-user text-neonLime text-xs"}),u.jsx("span",{className:"text-[9px] font-mono tracking-wide uppercase",children:"Dermatology Standard"})]})]})})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-black/5 pt-4 text-[10px] text-black/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"02 / 17"})]})]}),
-
-    // Slide 3
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"neon-glow-red -bottom-40 -left-40 w-[500px] h-[500px]"}),u.jsx("div",{className:"dot-matrix"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-white/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-neonLime flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-white",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-white/40 font-semibold bg-white/5 px-3 py-1 rounded-full border border-white/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 grid grid-cols-12 gap-6 items-center w-full",children:[u.jsxs("div",{className:"col-span-12 lg:col-span-6",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-red-500 bg-red-500/10 border border-red-500/20 px-2.5 py-1 rounded-md mb-3 inline-block",children:"THE SYSTEM BOTTLENECK"}),u.jsx("h2",{className:"font-display font-bold text-3xl lg:text-4xl tracking-tight mb-3",children:"The Real Problem"}),u.jsx("p",{className:"text-white/60 text-sm leading-relaxed mb-4 font-light",children:"Clinics routinely exhaust resources creating and editing video content, thinking that virality solves customer acquisition. Thousands of views, but zero consultations."}),u.jsx("div",{className:"bg-red-500/5 border-l-4 border-red-500 p-4 rounded-r-xl",children:u.jsx("p",{className:"text-white/80 text-xs leading-relaxed",children:"The actual barrier isn't content reach. The real issue is the complete lack of a Conversion System behind your social media attention."})})]}),u.jsx("div",{className:"col-span-12 lg:col-span-6 flex justify-end w-full",children:u.jsxs("div",{className:"glass-card-dark p-6 rounded-2xl border border-red-500/30 w-full max-w-[400px] shadow-2xl relative overflow-hidden",children:[u.jsx("div",{className:"absolute -top-10 -right-10 w-32 h-32 bg-red-500/10 rounded-full blur-2xl"}),u.jsxs("div",{className:"flex items-center gap-4 mb-5",children:[u.jsx("div",{className:"w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-500 text-base border border-red-500/30",children:u.jsx("i",{className:"fa-solid fa-triangle-exclamation"})}),u.jsxs("div",{children:[u.jsx("span",{className:"text-[8px] tracking-widest text-red-400 font-mono block uppercase font-bold",children:"THE VIRALITY TRAP"}),u.jsx("h3",{className:"text-sm font-bold",children:"Misleading Metric Correlation"})]})]}),u.jsx("blockquote",{className:"text-lg font-display font-light italic text-white/90 leading-snug mb-5 border-l-2 border-neonLime pl-3",children:'"More Views automatically equals More Patients"'}),u.jsxs("div",{className:"flex items-center justify-between text-[10px] text-white/40 font-mono pt-3 border-t border-white/5",children:[u.jsx("span",{children:"REVENUE CONVERSION"}),u.jsx("span",{className:"text-red-500 font-bold",children:"0% ACCELERATION"})]})]})})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-white/5 pt-4 text-[10px] text-white/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"03 / 17"})]})]}),
-
-    // Slide 4
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"dot-matrix-light"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-black/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-black flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-brandDark",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-brandDark/50 font-semibold bg-brandDark/5 px-3 py-1 rounded-full border border-brandDark/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 grid grid-cols-12 gap-6 items-center w-full",children:[u.jsxs("div",{className:"col-span-12 lg:col-span-5",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-brandDark bg-neonLime px-2.5 py-1 rounded-md mb-3 inline-block",children:"FRICTION TUNNEL ANALYSIS"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight mb-3",children:"The Current Friction Flow"}),u.jsx("p",{className:"text-brandDark/80 text-sm leading-relaxed mb-4",children:"Your audience hits massive friction points on their way from discovery to clinic check-in."}),u.jsxs("div",{className:"glass-card-light p-4 border border-red-200 bg-red-50/40 rounded-xl flex items-start gap-3",children:[u.jsx("div",{className:"w-9 h-9 rounded-lg bg-red-100 flex items-center justify-center text-red-500 text-base flex-shrink-0",children:u.jsx("i",{className:"fa-solid fa-chart-line-down"})}),u.jsxs("div",{children:[u.jsx("h4",{className:"font-display font-bold text-xs text-red-900 mb-0.5",children:"Massive Attention Decay"}),u.jsx("p",{className:"text-[10px] text-red-700 leading-relaxed",children:"With a raw conversion rate, the vast majority of interested viewers completely drop off before ever booking."})]})]})]}),u.jsxs("div",{className:"col-span-12 lg:col-span-7 flex flex-col gap-2.5 pl-0 lg:pl-6 w-full",children:[u.jsxs("div",{className:"flex items-center gap-3 w-full",children:[u.jsx("div",{className:"w-20 text-right font-mono text-[9px] text-brandDark/40 uppercase tracking-widest flex-shrink-0",children:"Phase 01"}),u.jsxs("div",{className:"flex-1 bg-brandDark text-white px-4 sm:px-5 py-2 rounded-full flex justify-between items-center transition-all duration-300 hover:scale-[1.015] shadow-sm",children:[u.jsx("span",{className:"text-xs font-semibold tracking-wider",children:"10k Views"}),u.jsx("span",{className:"text-[9px] font-mono text-neonLime bg-white/10 px-2 py-0.5 rounded",children:"Discovery"})]})]}),u.jsxs("div",{className:"flex items-center gap-3 w-full",children:[u.jsx("div",{className:"w-20 text-right font-mono text-[9px] text-brandDark/40 uppercase tracking-widest flex-shrink-0",children:"Phase 02"}),u.jsxs("div",{className:"flex-1 max-w-[85%] bg-brandDark/90 text-white px-4 sm:px-5 py-2 rounded-full flex justify-between items-center transition-all duration-300 hover:scale-[1.015] shadow-sm",children:[u.jsx("span",{className:"text-xs font-semibold tracking-wider",children:"200 Likes"}),u.jsx("span",{className:"text-[9px] font-mono text-white/50 bg-white/5 px-2 py-0.5 rounded",children:"Interest"})]})]}),u.jsxs("div",{className:"flex items-center gap-3 w-full",children:[u.jsx("div",{className:"w-20 text-right font-mono text-[9px] text-brandDark/40 uppercase tracking-widest flex-shrink-0",children:"Phase 03"}),u.jsxs("div",{className:"flex-1 max-w-[70%] bg-brandDark/80 text-white px-4 sm:px-5 py-2 rounded-full flex justify-between items-center transition-all duration-300 hover:scale-[1.015] shadow-sm",children:[u.jsx("span",{className:"text-xs font-semibold tracking-wider",children:"50 Visits"}),u.jsx("span",{className:"text-[9px] font-mono text-white/50 bg-white/5 px-2 py-0.5 rounded",children:"Intention"})]})]}),u.jsxs("div",{className:"flex items-center gap-3 w-full",children:[u.jsx("div",{className:"w-20 text-right font-mono text-[9px] text-brandDark/40 uppercase tracking-widest flex-shrink-0",children:"Phase 04"}),u.jsxs("div",{className:"flex-1 max-w-[55%] bg-brandDark/70 text-white px-4 sm:px-5 py-2 rounded-full flex justify-between items-center transition-all duration-300 hover:scale-[1.015] shadow-sm",children:[u.jsx("span",{className:"text-xs font-semibold tracking-wider",children:"15 DMs"}),u.jsx("span",{className:"text-[9px] font-mono text-white/50 bg-white/5 px-2 py-0.5 rounded",children:"Inquiry"})]})]}),u.jsxs("div",{className:"flex items-center gap-3 w-full",children:[u.jsx("div",{className:"w-20 text-right font-mono text-[9px] text-brandDark/40 uppercase tracking-widest flex-shrink-0",children:"Final Goal"}),u.jsxs("div",{className:"flex-1 max-w-[40%] bg-red-600 text-white px-4 sm:px-5 py-2 rounded-full flex justify-between items-center shadow-md transition-all duration-300 hover:scale-[1.015]",children:[u.jsx("span",{className:"text-xs font-bold tracking-wider",children:"1-2 Patients"}),u.jsx("span",{className:"text-[9px] font-mono bg-black/20 px-2 py-0.5 rounded",children:"Check-In"})]})]})]})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-black/5 pt-4 text-[10px] text-black/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"04 / 17"})]})]}),
-
-    // Slide 5
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"dot-matrix-light"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-black/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-black flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-brandDark",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-brandDark/50 font-semibold bg-brandDark/5 px-3 py-1 rounded-full border border-brandDark/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 w-full",children:[u.jsxs("div",{className:"text-center mb-4",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-red-500 bg-red-500/10 border border-red-500/20 px-2.5 py-1 rounded-md inline-block mb-1.5",children:"REVENUE AUDIT REPORT"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight text-brandDark",children:"The Hidden Revenue Leak"})]}),u.jsxs("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch w-full",children:[u.jsx("div",{className:"glass-card-light p-5 border-t-4 border-emerald-500 relative overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow",children:u.jsxs("div",{children:[u.jsxs("div",{className:"flex items-center gap-2.5 mb-3",children:[u.jsx("div",{className:"w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-500",children:u.jsx("i",{className:"fa-solid fa-circle-check text-sm"})}),u.jsx("h3",{className:"font-display font-bold text-sm text-brandDark",children:"What patients actually do:"})]}),u.jsx("p",{className:"text-[10px] uppercase tracking-wider font-semibold text-emerald-600 mb-3",children:"They are ready for skincare help, but..."}),u.jsxs("ul",{className:"space-y-2.5",children:[u.jsxs("li",{className:"flex items-center gap-2.5 text-xs text-brandDark/70",children:[u.jsx("i",{className:"fa-solid fa-check text-emerald-500"})," Watch your highly-engaging reel video"]}),u.jsxs("li",{className:"flex items-center gap-2.5 text-xs text-brandDark/70",children:[u.jsx("i",{className:"fa-solid fa-check text-emerald-500"})," Visit your clinic's social media profile"]}),u.jsxs("li",{className:"flex items-center gap-2.5 text-xs text-brandDark/70",children:[u.jsx("i",{className:"fa-solid fa-check text-emerald-500"})," Become actively interested in procedures"]})]})]})}),u.jsx("div",{className:"glass-card-light p-5 border-t-4 border-red-500 relative overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow",children:u.jsxs("div",{children:[u.jsxs("div",{className:"flex items-center gap-2.5 mb-3",children:[u.jsx("div",{className:"w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-red-500",children:u.jsx("i",{className:"fa-solid fa-circle-xmark text-sm"})}),u.jsx("h3",{className:"font-display font-bold text-sm text-brandDark",children:"Where the process breaks down:"})]}),u.jsx("p",{className:"text-[10px] uppercase tracking-wider font-semibold text-red-600 mb-3",children:"Critical structural friction points"}),u.jsxs("ul",{className:"space-y-2.5",children:[u.jsxs("li",{className:"flex items-center gap-2.5 text-xs text-brandDark/70",children:[u.jsx("i",{className:"fa-solid fa-xmark text-red-500 font-bold"})," No proper optimized clinic landing page"]}),u.jsxs("li",{className:"flex items-center gap-2.5 text-xs text-brandDark/70",children:[u.jsx("i",{className:"fa-solid fa-xmark text-red-500 font-bold"})," No instant guidance or response on profile"]}),u.jsxs("li",{className:"flex items-center gap-2.5 text-xs text-brandDark/70",children:[u.jsx("i",{className:"fa-solid fa-xmark text-red-500 font-bold"})," No streamlined, 24/7 appointment system"]}),u.jsxs("li",{className:"flex items-center gap-2.5 text-xs text-brandDark/70",children:[u.jsx("i",{className:"fa-solid fa-xmark text-red-500 font-bold"})," No automated trust-building or follow-ups"]})]})]})})]})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-black/5 pt-4 text-[10px] text-black/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"05 / 17"})]})]}),
-
-    // Slide 6
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"dot-matrix-light"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-black/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-black flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-brandDark",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-brandDark/50 font-semibold bg-brandDark/5 px-3 py-1 rounded-full border border-brandDark/10",children:"Build • Convert • Scale"})]}),u.jsx("div",{className:"content-area my-auto z-10 w-full",children:u.jsxs("div",{className:"grid grid-cols-12 gap-6 items-center w-full",children:[u.jsxs("div",{className:"col-span-12 lg:col-span-5",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-brandDark bg-neonLime px-2.5 py-1 rounded-md mb-3 inline-block",children:"ATTENTION ANALYSIS"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight mb-3",children:"Attention Is Not The Problem"}),u.jsx("p",{className:"text-brandDark/70 text-sm leading-relaxed mb-4 font-light",children:"Every month, thousands of local prospective patients with active skin conditions are watching your content, finding your clinic profile, and then drifting away."})]}),u.jsxs("div",{className:"col-span-12 lg:col-span-7 flex flex-col justify-center w-full",children:[u.jsx("div",{className:"relative bg-brandDark/5 p-4 sm:p-5 rounded-2xl border border-brandDark/10 w-full",children:u.jsxs("div",{className:"grid grid-cols-2 sm:grid-cols-4 gap-3 text-center relative z-10",children:[u.jsxs("div",{className:"bg-white p-3 rounded-xl shadow border border-brandDark/5",children:[u.jsx("span",{className:"text-[9px] font-mono text-brandDark/40",children:"STEP 01"}),u.jsx("h4",{className:"font-display font-bold text-xs mt-0.5 mb-0.5 text-brandDark",children:"Raw Audience"}),u.jsx("div",{className:"w-5 h-5 rounded-full bg-brandDark/10 mx-auto mt-1 flex items-center justify-center text-[9px]",children:u.jsx("i",{className:"fa-solid fa-users text-brandDark"})})]}),u.jsxs("div",{className:"bg-white p-3 rounded-xl shadow border border-brandDark/5",children:[u.jsx("span",{className:"text-[9px] font-mono text-brandDark/40",children:"STEP 02"}),u.jsx("h4",{className:"font-display font-bold text-xs mt-0.5 mb-0.5 text-brandDark",children:"Active Interest"}),u.jsx("div",{className:"w-5 h-5 rounded-full bg-brandDark/10 mx-auto mt-1 flex items-center justify-center text-[9px]",children:u.jsx("i",{className:"fa-solid fa-heart text-brandDark"})})]}),u.jsxs("div",{className:"bg-red-500 text-white p-3 rounded-xl shadow border border-red-600",children:[u.jsx("span",{className:"text-[8px] font-mono tracking-wider block text-white/80 font-bold",children:"CRITICAL GAP"}),u.jsx("h4",{className:"font-display font-bold text-[9px] mt-0.5 leading-tight mb-0.5",children:"MISSING BRIDGE"}),u.jsx("div",{className:"w-5 h-5 rounded-full bg-white/20 mx-auto mt-1 flex items-center justify-center text-[9px]",children:u.jsx("i",{className:"fa-solid fa-bolt text-white"})})]}),u.jsxs("div",{className:"bg-brandDark text-white p-3 rounded-xl shadow border border-brandDark",children:[u.jsx("span",{className:"text-[9px] font-mono text-white/50",children:"STEP 03"}),u.jsx("h4",{className:"font-display font-bold text-xs mt-0.5 mb-0.5 text-white",children:"Booked"}),u.jsx("div",{className:"w-5 h-5 rounded-full bg-neonLime text-brandDark mx-auto mt-1 flex items-center justify-center text-[9px]",children:u.jsx("i",{className:"fa-solid fa-calendar-check"})})]})]})}),u.jsx("div",{className:"text-center mt-3",children:u.jsxs("span",{className:"text-[10px] font-mono tracking-wider text-brandDark/50 uppercase",children:[u.jsx("i",{className:"fa-solid fa-circle-chevron-right text-neonLime mr-1"})," Your End-Goal is directly linked to the bridge"]})})]})]})}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-black/5 pt-4 text-[10px] text-black/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"06 / 17"})]})]}),
-
-    // Slide 7
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"dot-matrix-light"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-black/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-black flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-brandDark",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-brandDark/50 font-semibold bg-brandDark/5 px-3 py-1 rounded-full border border-brandDark/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 w-full",children:[u.jsxs("div",{className:"text-center mb-5",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-brandDark bg-neonLime px-2.5 py-1 rounded-md inline-block mb-1.5",children:"INFRASTRUCTURE BLUEPRINT"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight text-brandDark",children:"The MightBeMedia Revenue System™"}),u.jsx("p",{className:"text-brandDark/70 text-xs max-w-[650px] mx-auto mt-1 leading-relaxed",children:"Instead of simply drafting content and hoping for views, we build an entire revenue ecosystem. A streamlined patient acquisition machine operating 24 hours a day, 7 days a week, continuously nurturing clinic interest."})]}),u.jsxs("div",{className:"w-full",children:[u.jsx("span",{className:"text-[9px] uppercase tracking-[0.2em] font-mono text-brandDark/50 block text-center mb-2.5",children:"The Flow Optimization System"}),u.jsxs("div",{className:"grid grid-cols-1 sm:grid-cols-3 gap-4 w-full",children:[u.jsxs("div",{className:"bg-white p-4 rounded-xl shadow-md border border-brandDark/5 flex flex-col justify-between hover:border-neonLime transition-all duration-300 cursor-pointer",onClick:()=>{i(!0),l("chatbot")},children:[u.jsxs("div",{children:[u.jsxs("div",{className:"flex justify-between items-start",children:[u.jsx("span",{className:"text-[10px] font-mono text-brandDark/35 block",children:"MODULE 01"}),u.jsx("span",{className:"text-[9px] font-bold bg-neonLime/30 text-black px-1.5 py-0.5 rounded animate-pulse",children:"LIVE DEMO"})]}),u.jsx("h4",{className:"font-display font-bold text-sm mt-1.5 mb-1.5 text-brandDark",children:"Convert Viewers"})]}),u.jsx("div",{className:"bg-brandDark/5 rounded-lg p-2 text-center text-[11px] font-semibold text-brandDark/70",children:"→ Into Inquiries"})]}),u.jsxs("div",{className:"bg-white p-4 rounded-xl shadow-md border border-brandDark/5 flex flex-col justify-between hover:border-neonLime transition-all duration-300",children:[u.jsxs("div",{children:[u.jsx("span",{className:"text-[10px] font-mono text-brandDark/35 block",children:"MODULE 02"}),u.jsx("h4",{className:"font-display font-bold text-sm mt-1.5 mb-1.5 text-brandDark",children:"Nurture Inquiries"})]}),u.jsx("div",{className:"bg-brandDark/5 rounded-lg p-2 text-center text-[11px] font-semibold text-brandDark/70",children:"→ Into Booked Consultations"})]}),u.jsxs("div",{className:"bg-white p-4 rounded-xl shadow-md border border-brandDark/5 flex flex-col justify-between hover:border-neonLime transition-all duration-300",children:[u.jsxs("div",{children:[u.jsx("span",{className:"text-[10px] font-mono text-brandDark/35 block",children:"MODULE 03"}),u.jsx("h4",{className:"font-display font-bold text-sm mt-1.5 mb-1.5 text-brandDark",children:"Deliver Services"})]}),u.jsx("div",{className:"bg-brandDark/5 rounded-lg p-2 text-center text-[11px] font-semibold text-brandDark/70",children:"System Loop Integration Completed"})]})]})]})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-black/5 pt-4 text-[10px] text-black/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"07 / 17"})]})]}),
-
-    // Slide 8
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"dot-matrix-light"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-black/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-black flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-brandDark",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-brandDark/50 font-semibold bg-brandDark/5 px-3 py-1 rounded-full border border-brandDark/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 grid grid-cols-12 gap-6 items-center w-full",children:[u.jsxs("div",{className:"col-span-12 lg:col-span-6",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-brandDark bg-neonLime px-2.5 py-1 rounded-md mb-3 inline-block",children:"PRODUCT SUITE"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight mb-3",children:"Personalised Premium Website"}),u.jsx("p",{className:"text-brandDark/70 text-sm leading-relaxed mb-4 font-light",children:"A highly optimized premium-tier skincare website structured from the ground up to rank and convert visitors into patients."}),u.jsxs("div",{className:"grid grid-cols-2 gap-x-4 gap-y-2.5",children:[u.jsxs("div",{className:"flex items-center gap-2 text-xs text-brandDark/80 font-medium",children:[u.jsx("i",{className:"fa-solid fa-square-check text-emerald-500"})," Premium Design"]}),u.jsxs("div",{className:"flex items-center gap-2 text-xs text-brandDark/80 font-medium",children:[u.jsx("i",{className:"fa-solid fa-square-check text-emerald-500"})," WhatsApp System"]}),u.jsxs("div",{className:"flex items-center gap-2 text-xs text-brandDark/80 font-medium",children:[u.jsx("i",{className:"fa-solid fa-square-check text-emerald-500"})," Treatment Pages"]}),u.jsxs("div",{className:"flex items-center gap-2 text-xs text-brandDark/80 font-medium",children:[u.jsx("i",{className:"fa-solid fa-square-check text-emerald-500"})," SEO Optimization"]}),u.jsxs("div",{className:"flex items-center gap-2 text-xs text-brandDark/80 font-medium",children:[u.jsx("i",{className:"fa-solid fa-square-check text-emerald-500"})," Before/After Slider"]}),u.jsxs("div",{className:"flex items-center gap-2 text-xs text-brandDark/80 font-medium",children:[u.jsx("i",{className:"fa-solid fa-square-check text-emerald-500"})," Fast & Responsive"]})]})]}),u.jsx("div",{className:"col-span-12 lg:col-span-6 w-full",children:u.jsxs("div",{className:"glass-card-light overflow-hidden rounded-xl shadow-2xl border border-brandDark/10 h-[260px] flex flex-col w-full",children:[u.jsxs("div",{className:"bg-brandDark/5 px-3 py-2 border-b border-brandDark/10 flex items-center justify-between",children:[u.jsxs("div",{className:"flex gap-1",children:[u.jsx("span",{className:"w-2 h-2 rounded-full bg-red-400"}),u.jsx("span",{className:"w-2 h-2 rounded-full bg-amber-400"}),u.jsx("span",{className:"w-2 h-2 rounded-full bg-emerald-400"})]}),u.jsx("div",{className:"bg-white px-6 py-0.5 rounded text-[8px] text-brandDark/40 font-mono tracking-wide",children:"https://clearskinclinic.com"}),u.jsx("div",{className:"w-8"})]}),u.jsxs("div",{className:"flex-1 p-4 bg-white relative overflow-hidden flex flex-col justify-between",children:[u.jsxs("div",{className:"flex justify-between items-center mb-2",children:[u.jsx("span",{className:"font-display font-bold text-xs tracking-tight text-black",children:"Clear Skin Clinic"}),u.jsx("span",{className:"text-[8px] bg-brandDark text-white px-2 py-0.5 rounded font-bold uppercase",children:"Book Appointment"})]}),u.jsxs("div",{className:"grid grid-cols-2 gap-3 mt-1 flex-1",children:[u.jsxs("div",{className:"flex flex-col justify-center",children:[u.jsx("h3",{className:"font-display font-bold text-xs leading-tight mb-1 text-black",children:"Premium Skincare"}),u.jsx("p",{className:"text-[8px] text-brandDark/55 leading-normal",children:"Schedule professional dermatological check-ups."}),u.jsx("div",{className:"mt-2 flex gap-1",children:u.jsxs("div",{className:"bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[8px] font-bold text-emerald-700 flex items-center gap-1",children:[u.jsx("i",{className:"fa-brands fa-whatsapp"})," WhatsApp"]})})]}),u.jsxs("div",{className:"bg-brandDark/5 rounded-lg border border-brandDark/5 p-2 flex flex-col justify-center items-center text-center",children:[u.jsx("div",{className:"text-[8px] font-mono text-brandDark/40",children:"Dermatologist Rating"}),u.jsx("div",{className:"text-xs font-display font-bold text-black mt-0.5",children:"4.9 ★★★★★"}),u.jsx("div",{className:"text-[7px] text-emerald-600 font-bold mt-0.5",children:"Verified Clinical Trust"})]})]})]})]})})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-black/5 pt-4 text-[10px] text-black/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono text-brandDark/50 font-semibold uppercase",children:"The MightBeMedia Revenue System™"}),u.jsx("span",{className:"font-mono",children:"08 / 17"})]})]}),
-
-    // Slide 9
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"dot-matrix-light"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-black/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-black flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-brandDark",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-brandDark/50 font-semibold bg-brandDark/5 px-3 py-1 rounded-full border border-brandDark/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 grid grid-cols-12 gap-6 items-center w-full",children:[u.jsxs("div",{className:"col-span-12 lg:col-span-7",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-brandDark bg-neonLime px-2.5 py-1 rounded-md mb-3 inline-block",children:"GUARANTEED CONTINUITY"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight mb-1 text-brandDark",children:"3 Years Technical Support"}),u.jsx("p",{className:"text-brandDark/90 font-semibold text-sm mb-3",children:"Zero Technical Worry for Clear Skin Clinic."}),u.jsx("p",{className:"text-brandDark/70 text-xs leading-relaxed mb-4 font-light",children:"Websites require updates, backups, security patches, and periodic optimization to avoid traffic crashes. We handle everything behind the scenes so you can focus entirely on patients. Complete peace of mind. No hidden retainer fees."}),u.jsxs("div",{className:"grid grid-cols-2 sm:grid-cols-4 gap-3",children:[u.jsxs("div",{className:"bg-white p-3 rounded-lg border border-brandDark/5 text-center shadow-sm",children:[u.jsx("i",{className:"fa-solid fa-wrench text-brandDark text-sm mb-1"}),u.jsx("h4",{className:"font-display font-bold text-[10px] text-brandDark",children:"Maintenance"})]}),u.jsxs("div",{className:"bg-white p-3 rounded-lg border border-brandDark/5 text-center shadow-sm",children:[u.jsx("i",{className:"fa-solid fa-server text-brandDark text-sm mb-1"}),u.jsx("h4",{className:"font-display font-bold text-[10px] text-brandDark",children:"Hosting Care"})]}),u.jsxs("div",{className:"bg-white p-3 rounded-lg border border-brandDark/5 text-center shadow-sm",children:[u.jsx("i",{className:"fa-solid fa-shield-halved text-brandDark text-sm mb-1"}),u.jsx("h4",{className:"font-display font-bold text-[10px] text-brandDark",children:"Security"})]}),u.jsxs("div",{className:"bg-white p-3 rounded-lg border border-brandDark/5 text-center shadow-sm",children:[u.jsx("i",{className:"fa-solid fa-gauge-high text-brandDark text-sm mb-1"}),u.jsx("h4",{className:"font-display font-bold text-[10px] text-brandDark",children:"Performance"})]})]})]}),u.jsx("div",{className:"col-span-12 lg:col-span-5 flex justify-end w-full",children:u.jsxs("div",{className:"bg-brandDark text-white p-6 rounded-2xl w-full max-w-[300px] relative overflow-hidden shadow-xl mx-auto lg:mr-0",children:[u.jsx("div",{className:"absolute -bottom-10 -left-10 w-32 h-32 bg-neonLime/10 rounded-full blur-2xl"}),u.jsxs("div",{className:"flex flex-col items-center text-center",children:[u.jsx("div",{className:"w-12 h-12 rounded-full bg-neonLime text-brandDark flex items-center justify-center text-lg font-bold mb-3 shadow-md",children:u.jsx("i",{className:"fa-solid fa-shield-heart"})}),u.jsx("span",{className:"text-[8px] tracking-widest text-white/40 font-mono block uppercase",children:"CONTRACT INCLUSION"}),u.jsx("h3",{className:"text-lg font-display font-bold mt-0.5 text-white mb-1",children:"3 Years Support"}),u.jsx("p",{className:"text-white/60 text-[10px] leading-relaxed font-light",children:"Fully covered within your direct system setup. Absolute continuity."})]})]})})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-black/5 pt-4 text-[10px] text-black/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"09 / 17"})]})]}),
-
-    // Slide 10
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"dot-matrix-light"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-black/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-black flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-brandDark",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-brandDark/50 font-semibold bg-brandDark/5 px-3 py-1 rounded-full border border-brandDark/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 grid grid-cols-12 gap-6 items-center w-full",children:[u.jsxs("div",{className:"col-span-12 lg:col-span-6",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-brandDark bg-neonLime px-2.5 py-1 rounded-md mb-3 inline-block",children:"TRAFFIC SYSTEM"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight mb-1",children:"SEO & Google Discovery System"}),u.jsx("h4",{className:"font-display font-bold text-sm text-brandDark/80 mb-3",children:"Attracting Active High-Intent Patients"}),u.jsx("p",{className:"text-brandDark/70 text-xs leading-relaxed mb-4 font-light",children:"Unlike social media viewers who might just be looking for skin routines, Google searchers are looking for a dermatologist clinic today to solve their problem immediately."}),u.jsxs("div",{className:"space-y-2 text-brandDark",children:[u.jsxs("div",{className:"flex gap-2 text-xs text-brandDark/85",children:[u.jsx("i",{className:"fa-solid fa-arrow-right mt-0.5 text-brandDark text-[10px]"})," ",u.jsxs("span",{children:[u.jsx("strong",{children:"Discovery Suite Setup:"}),' Directly matches patients actively typing "Skincare specialist clinic near me".']})]}),u.jsxs("div",{className:"flex gap-2 text-xs text-brandDark/85",children:[u.jsx("i",{className:"fa-solid fa-arrow-right mt-0.5 text-brandDark text-[10px]"})," ",u.jsxs("span",{children:[u.jsx("strong",{children:"Google Business Profile Tuning:"})," Claim top organic slots on map listings."]})]}),u.jsxs("div",{className:"flex gap-2 text-xs text-brandDark/85",children:[u.jsx("i",{className:"fa-solid fa-arrow-right mt-0.5 text-brandDark text-[10px]"})," ",u.jsxs("span",{children:[u.jsx("strong",{children:"Skincare Treatments SEO:"})," Targeted keyword ranking for acne, pigment treatments, skin whitening, and lasers."]})]}),u.jsxs("div",{className:"flex gap-2 text-xs text-brandDark/85",children:[u.jsx("i",{className:"fa-solid fa-arrow-right mt-0.5 text-brandDark text-[10px]"})," ",u.jsxs("span",{children:[u.jsx("strong",{children:"High Trust Optimization:"})," Show clear clinic location, timings, and credentials directly in search results."]})]})]})]}),u.jsx("div",{className:"col-span-12 lg:col-span-6 w-full",children:u.jsxs("div",{className:"bg-white p-4 rounded-xl shadow-xl border border-brandDark/10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2 border-b border-brandDark/5 pb-2 mb-3",children:[u.jsx("div",{className:"w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px] font-bold font-mono",children:"G"}),u.jsx("span",{className:"text-[9px] font-mono tracking-wider text-brandDark/40",children:"SECURE DISCOVERY NODE"})]}),u.jsxs("div",{className:"space-y-3",children:[u.jsxs("div",{className:"bg-brandLight/50 p-3 rounded-lg border border-brandDark/5",children:[u.jsx("span",{className:"text-[8px] text-brandDark/40 block",children:"https://www.clearskinclinic.com"}),u.jsx("h3",{className:"font-display font-bold text-xs text-blue-600 hover:underline cursor-pointer",children:"Clear Skin Clinic - Skincare Dermatologist"}),u.jsxs("div",{className:"flex items-center gap-0.5 text-amber-500 text-[10px] mt-0.5",children:[u.jsx("span",{children:"4.9"})," ",u.jsx("i",{className:"fa-solid fa-star"}),u.jsx("i",{className:"fa-solid fa-star"}),u.jsx("i",{className:"fa-solid fa-star"}),u.jsx("i",{className:"fa-solid fa-star"}),u.jsx("i",{className:"fa-solid fa-star"}),u.jsx("span",{className:"text-brandDark/40 text-[8px] font-mono ml-1",children:"(120+ patient ratings)"})]}),u.jsx("p",{className:"text-[9px] text-brandDark/60 mt-1",children:"Dermatology clinical specialists in laser skincare treatments, acne scar removals, and skin lighteners."})]}),u.jsxs("div",{className:"flex justify-between items-center bg-brandDark text-white px-3 py-1.5 rounded-lg text-xs font-semibold",children:[u.jsx("span",{className:"font-mono tracking-wide text-[10px]",children:'"Skincare clinic near me"'}),u.jsx("span",{className:"text-neonLime text-[9px] font-mono",children:"RANKED #1"})]})]})]})})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-black/5 pt-4 text-[10px] text-black/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"10 / 17"})]})]}),
-
-    // Slide 11
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"dot-matrix-light"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-black/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-black flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-brandDark",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-brandDark/50 font-semibold bg-brandDark/5 px-3 py-1 rounded-full border border-brandDark/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 w-full",children:[u.jsxs("div",{className:"text-center mb-4",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-brandDark bg-neonLime px-2.5 py-1 rounded-md inline-block mb-1.5",children:"PATIENT FEEDBACK SYSTEM"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight text-brandDark",children:"Google Review Growth Engine"}),u.jsx("p",{className:"text-brandDark/70 text-xs max-w-[700px] mx-auto mt-1 leading-relaxed",children:"Patient reviews build ultimate medical authority. Before scheduling an appointment, over 80% of skincare patients cross-reference the clinic's Google rating and feedback. A silent clinic profile loses customers instantly."})]}),u.jsxs("div",{className:"w-full",children:[u.jsx("span",{className:"text-[9px] uppercase tracking-[0.2em] font-mono text-brandDark/50 block text-center mb-3",children:"The Operational Funnel"}),u.jsxs("div",{className:"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5 w-full",children:[u.jsxs("div",{className:"bg-white p-4 rounded-xl border border-brandDark/5 shadow-sm flex flex-col justify-between hover:scale-105 transition-transform duration-300",children:[u.jsx("div",{className:"w-7 h-7 rounded-lg bg-brandDark/5 flex items-center justify-center text-xs font-bold text-brandDark mb-2",children:"01"}),u.jsx("p",{className:"text-[11px] font-semibold text-brandDark/80",children:"Automatic review request flow"})]}),u.jsxs("div",{className:"bg-white p-4 rounded-xl border border-brandDark/5 shadow-sm flex flex-col justify-between hover:scale-105 transition-transform duration-300",children:[u.jsx("div",{className:"w-7 h-7 rounded-lg bg-brandDark/5 flex items-center justify-center text-xs font-bold text-brandDark mb-2",children:"02"}),u.jsx("p",{className:"text-[11px] font-semibold text-brandDark/80",children:"Review page direct redirection"})]}),u.jsxs("div",{className:"bg-white p-4 rounded-xl border border-brandDark/5 shadow-sm flex flex-col justify-between hover:scale-105 transition-transform duration-300",children:[u.jsx("div",{className:"w-7 h-7 rounded-lg bg-brandDark/5 flex items-center justify-center text-xs font-bold text-brandDark mb-2",children:"03"}),u.jsx("p",{className:"text-[11px] font-semibold text-brandDark/80",children:"Spam rating protection filter"})]}),u.jsxs("div",{className:"bg-white p-4 rounded-xl border border-brandDark/5 shadow-sm flex flex-col justify-between hover:scale-105 transition-transform duration-300",children:[u.jsx("div",{className:"w-7 h-7 rounded-lg bg-brandDark/5 flex items-center justify-center text-xs font-bold text-brandDark mb-2",children:"04"}),u.jsx("p",{className:"text-[11px] font-semibold text-brandDark/80",children:"Reputation tracking dashboard"})]})]})]})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-black/5 pt-4 text-[10px] text-black/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"11 / 17"})]})]}),
-
-    // Slide 12
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"dot-matrix-light"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-black/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-black flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-brandDark",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-brandDark/50 font-semibold bg-brandDark/5 px-3 py-1 rounded-full border border-brandDark/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 grid grid-cols-12 gap-6 items-center w-full",children:[u.jsxs("div",{className:"col-span-12 lg:col-span-6",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-brandDark bg-neonLime px-2.5 py-1 rounded-md mb-3 inline-block",children:"LOBBY AUTOMATION"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight mb-3",children:"Instant QR Review System"}),u.jsx("p",{className:"text-brandDark/70 text-sm leading-relaxed mb-4 font-light",children:"Make review collection incredibly simple and low friction inside Clear Skin Clinic lobby."}),u.jsxs("div",{className:"space-y-3.5",children:[u.jsxs("div",{className:"flex items-start gap-3",children:[u.jsx("span",{className:"font-display font-bold text-xs bg-brandDark text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0",children:"1"}),u.jsxs("div",{children:[u.jsx("h4",{className:"font-display font-bold text-xs text-brandDark",children:"Scan"}),u.jsx("p",{className:"text-[11px] text-brandDark/60",children:"Patient scans clinic QR code with their mobile."})]})]}),u.jsxs("div",{className:"flex items-start gap-3",children:[u.jsx("span",{className:"font-display font-bold text-xs bg-brandDark text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0",children:"2"}),u.jsxs("div",{children:[u.jsx("h4",{className:"font-display font-bold text-xs text-brandDark",children:"Direct"}),u.jsx("p",{className:"text-[11px] text-brandDark/60",children:"Review input redirects automatically to correct page."})]})]}),u.jsxs("div",{className:"flex items-start gap-3",children:[u.jsx("span",{className:"font-display font-bold text-xs bg-brandDark text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0",children:"3"}),u.jsxs("div",{children:[u.jsx("h4",{className:"font-display font-bold text-xs text-brandDark",children:"Feedback"}),u.jsx("p",{className:"text-[11px] text-brandDark/60",children:"Authentic high-rating logged on clinic profile."})]})]})]})]}),u.jsx("div",{className:"col-span-12 lg:col-span-6 w-full flex justify-center",children:u.jsxs("div",{className:"relative bg-white p-5 rounded-2xl shadow-xl border border-brandDark/10 flex flex-col items-center w-full max-w-[280px]",children:[u.jsx("div",{className:"absolute top-2 left-2 text-[7px] font-mono tracking-wider text-brandDark/30",children:"LOBBY TERMINAL"}),u.jsx("i",{className:"fa-solid fa-qrcode text-6xl mb-3 text-brandDark"}),u.jsx("h4",{className:"font-display font-bold text-xs mb-0.5 text-brandDark",children:"Clear Skin Review Hub"}),u.jsx("span",{className:"text-[8px] font-mono bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200 font-bold",children:"SCAN TO REVIEW"}),u.jsx("div",{className:"mt-3 border-t border-brandDark/5 pt-3 text-center text-[9px] text-brandDark/40 leading-relaxed",children:"Reduces review time friction to under 15 seconds"})]})})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-black/5 pt-4 text-[10px] text-black/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"12 / 17"})]})]}),
-
-    // Slide 13
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"dot-matrix-light"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-black/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-black flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-brandDark",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-brandDark/50 font-semibold bg-brandDark/5 px-3 py-1 rounded-full border border-brandDark/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 w-full",children:[u.jsxs("div",{className:"text-center mb-4",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-brandDark bg-neonLime px-2.5 py-1 rounded-md inline-block mb-1.5",children:"ORGANIC GROWTH ACCELERATOR"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight text-brandDark",children:"Social Media Boost System"}),u.jsx("p",{className:"text-brandDark/70 text-xs max-w-[700px] mx-auto mt-1 leading-relaxed",children:"You treat patients. We handle growth. Our comprehensive content engine is meticulously designed to optimize your time and scale your medical authority across all social channels."})]}),u.jsxs("div",{className:"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mt-3 w-full",children:[u.jsxs("div",{className:"bg-white p-4 rounded-xl border border-brandDark/5 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer",onClick:()=>{i(!0),l("script")},children:[u.jsxs("div",{children:[u.jsxs("div",{className:"flex justify-between items-start",children:[u.jsx("i",{className:"fa-solid fa-feather text-brandDark text-lg mb-2"}),u.jsx("span",{className:"text-[8px] font-bold bg-neonLime text-black px-1.5 py-0.5 rounded",children:"AI DEMO"})]}),u.jsx("h4",{className:"font-display font-bold text-xs text-brandDark",children:"Content Outlines"})]}),u.jsx("p",{className:"text-[10px] text-brandDark/60 leading-normal mt-1.5",children:"Scripts structured for retention and appointment call-to-actions."})]}),u.jsxs("div",{className:"bg-white p-4 rounded-xl border border-brandDark/5 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow",children:[u.jsxs("div",{children:[u.jsx("i",{className:"fa-solid fa-clapperboard text-brandDark text-lg mb-2"}),u.jsx("h4",{className:"font-display font-bold text-xs text-brandDark",children:"Professional Editing"})]}),u.jsx("p",{className:"text-[10px] text-brandDark/60 leading-normal mt-1.5",children:"Sleek, minimal, medical-authority visual pacing."})]}),u.jsxs("div",{className:"bg-white p-4 rounded-xl border border-brandDark/5 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow",children:[u.jsxs("div",{children:[u.jsx("i",{className:"fa-solid fa-chart-line text-brandDark text-lg mb-2"}),u.jsx("h4",{className:"font-display font-bold text-xs text-brandDark",children:"Trend Research"})]}),u.jsx("p",{className:"text-[10px] text-brandDark/60 leading-normal mt-1.5",children:"Capturing organic momentum on fast growing clinic topics."})]}),u.jsxs("div",{className:"bg-white p-4 rounded-xl border border-brandDark/5 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow",children:[u.jsxs("div",{children:[u.jsx("i",{className:"fa-solid fa-calendar-days text-brandDark text-lg mb-2"}),u.jsx("h4",{className:"font-display font-bold text-xs text-brandDark",children:"Scheduling Engine"})]}),u.jsx("p",{className:"text-[10px] text-brandDark/60 leading-normal mt-1.5",children:"Consistent multi-platform publication without friction."})]})]})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-black/5 pt-4 text-[10px] text-black/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"13 / 17"})]})]}),
-
-    // Slide 14
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"dot-matrix-light"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-black/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-black flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-brandDark",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-brandDark/50 font-semibold bg-brandDark/5 px-3 py-1 rounded-full border border-brandDark/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 grid grid-cols-12 gap-6 items-center w-full",children:[u.jsxs("div",{className:"col-span-12 lg:col-span-6",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-brandDark bg-neonLime px-2.5 py-1 rounded-md mb-3 inline-block font-sans",children:"PAID TRAFFIC MATRIX"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight mb-3",children:"Meta Ads Growth System"}),u.jsx("p",{className:"text-brandDark/70 text-xs leading-relaxed mb-4 font-light",children:"Scale reliably beyond organic reach. Organic video reach is subject to algorithmic mood swings. Local Facebook and Instagram ads allow us to target high-intent prospects within a 5-10km radius of Clear Skin Clinic with complete mathematical certainty."}),u.jsxs("div",{className:"space-y-3",children:[u.jsxs("div",{className:"flex gap-2 text-xs text-brandDark/85",children:[u.jsx("i",{className:"fa-solid fa-circle-dot mt-0.5 text-brandDark text-[10px]"})," ",u.jsxs("span",{children:[u.jsx("strong",{children:"Geo-Fenced Targeting:"})," Connect purely with local prospects near you."]})]}),u.jsxs("div",{className:"flex gap-2 text-xs text-brandDark/85",children:[u.jsx("i",{className:"fa-solid fa-circle-dot mt-0.5 text-brandDark text-[10px]"})," ",u.jsxs("span",{children:[u.jsx("strong",{children:"Laser Direct Campaigns:"})," Lead generation directly for skincare consultations."]})]}),u.jsxs("div",{className:"flex gap-2 text-xs text-brandDark/85",children:[u.jsx("i",{className:"fa-solid fa-circle-dot mt-0.5 text-brandDark text-[10px]"})," ",u.jsxs("span",{children:[u.jsx("strong",{children:"Retargeting funnels:"})," Show before/afters to warm, interested leads."]})]})]})]}),u.jsx("div",{className:"col-span-12 lg:col-span-6 w-full",children:u.jsxs("div",{className:"bg-white p-4 rounded-xl shadow-xl border border-brandDark/10 relative overflow-hidden h-[240px] w-full",children:[u.jsx("img",{src:"https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=500&q=80",alt:"Map grid representation",className:"absolute inset-0 w-full h-full object-cover opacity-30",onError:$=>{$.currentTarget.style.display="none"}}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"}),u.jsxs("div",{className:"absolute bottom-3 left-3 right-3 bg-brandDark text-white p-3 rounded-xl border border-white/10 shadow-2xl",children:[u.jsx("span",{className:"text-[8px] font-mono tracking-widest block text-white/50 uppercase",children:"TARGET RADIAL GRID"}),u.jsxs("div",{className:"flex justify-between items-center mt-0.5",children:[u.jsx("span",{className:"font-display font-bold text-xs",children:"Radius: 5-10km Clear Skin"}),u.jsx("span",{className:"text-neonLime text-[10px] font-mono font-bold",children:"ACTIVE SCAN"})]})]})]})})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-black/5 pt-4 text-[10px] text-black/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"14 / 17"})]})]}),
-
-    // Slide 15
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"neon-glow-primary -top-40 -right-40 w-[600px] h-[600px]"}),u.jsx("div",{className:"dot-matrix"}),u.jsx("div",{className:"grid-blueprint"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-white/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-neonLime flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-white",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-white/40 font-semibold bg-white/5 px-3 py-1 rounded-full border border-white/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 grid grid-cols-12 gap-6 items-center w-full",children:[u.jsxs("div",{className:"col-span-12 lg:col-span-5",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-neonLime bg-neonLime/10 border border-neonLime/20 px-2.5 py-1 rounded-md mb-3 inline-block",children:"CAPITAL INFRASTRUCTURE"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight mb-3",children:"One-Time Setup Investment"}),u.jsx("p",{className:"text-white/60 text-xs leading-relaxed mb-4 font-light",children:"Establish your digital framework with our primary setup suite. Pure architecture built for continuous clinic conversion."}),u.jsx("div",{className:"bg-white/5 border-l-4 border-neonLime p-3 rounded-r-xl flex justify-between items-center",children:u.jsxs("div",{children:[u.jsx("span",{className:"text-[8px] font-mono uppercase tracking-widest text-white/40 block",children:"CONTRACT INCLUSION"}),u.jsx("h4",{className:"font-display font-semibold text-[10px] text-white",children:"No Hidden Charges • Fixed Scale Agreement"})]})})]}),u.jsx("div",{className:"col-span-12 lg:col-span-7 flex justify-end w-full",children:u.jsxs("div",{className:"glass-card-dark neon-card-highlight p-6 rounded-2xl w-full max-w-[440px] relative overflow-hidden shadow-2xl",children:[u.jsxs("div",{className:"flex flex-wrap justify-between items-start mb-4 border-b border-white/10 pb-3 gap-2",children:[u.jsxs("div",{children:[u.jsx("span",{className:"text-[8px] font-mono tracking-widest text-white/40 block",children:"PLAN SPECIFICATION"}),u.jsx("h3",{className:"font-display font-bold text-base text-white",children:"COMPLETE ECOSYSTEM SUITE"})]}),u.jsxs("div",{className:"text-right",children:[u.jsx("span",{className:"text-2xl font-display font-bold text-neonLime",children:"₹20,000"}),u.jsx("span",{className:"text-[9px] font-mono block text-white/40",children:"One-Time Setup"})]})]}),u.jsxs("div",{className:"grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-3 text-xs mb-1",children:[u.jsxs("div",{className:"flex items-center gap-2 text-white/80",children:[u.jsx("i",{className:"fa-solid fa-circle-check text-neonLime text-[10px]"})," AI Skincare Website"]}),u.jsxs("div",{className:"flex items-center gap-2 text-white/80",children:[u.jsx("i",{className:"fa-solid fa-circle-check text-neonLime text-[10px]"})," Meta Ads Setup"]}),u.jsxs("div",{className:"flex items-center gap-2 text-white/80 cursor-pointer hover:text-neonLime",onClick:()=>{i(!0),l("chatbot")},children:[u.jsx("i",{className:"fa-solid fa-circle-check text-neonLime text-[10px] animate-pulse"})," AI Patient Chatbot ",u.jsx("span",{className:"text-[8px] bg-neonLime/20 text-neonLime px-1 rounded",children:"Try"})]}),u.jsxs("div",{className:"flex items-center gap-2 text-white/80",children:[u.jsx("i",{className:"fa-solid fa-circle-check text-neonLime text-[10px]"})," Social Media Setup"]}),u.jsxs("div",{className:"flex items-center gap-2 text-white/80",children:[u.jsx("i",{className:"fa-solid fa-circle-check text-neonLime text-[10px]"})," Advanced Local SEO"]}),u.jsxs("div",{className:"flex items-center gap-2 text-white/80",children:[u.jsx("i",{className:"fa-solid fa-circle-check text-neonLime text-[10px]"})," 3 Years Complete Support"]}),u.jsxs("div",{className:"flex items-center gap-2 text-white/80",children:[u.jsx("i",{className:"fa-solid fa-circle-check text-neonLime text-[10px]"})," Google Review Engine"]}),u.jsxs("div",{className:"flex items-center gap-2 text-white/80",children:[u.jsx("i",{className:"fa-solid fa-circle-check text-neonLime text-[10px]"})," QR lobby review system"]})]})]})})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-white/5 pt-4 text-[10px] text-white/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"15 / 17"})]})]}),
-
-    // Slide 16
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"neon-glow-primary -bottom-40 -right-40 w-[600px] h-[600px]"}),u.jsx("div",{className:"dot-matrix"}),u.jsx("div",{className:"grid-blueprint"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-white/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-neonLime flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-white",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-white/40 font-semibold bg-white/5 px-3 py-1 rounded-full border border-white/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 grid grid-cols-12 gap-6 items-center w-full",children:[u.jsxs("div",{className:"col-span-12 lg:col-span-5",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-neonLime bg-neonLime/10 border border-neonLime/20 px-2.5 py-1 rounded-md mb-3 inline-block",children:"ONGOING MAINTENANCE"}),u.jsx("h2",{className:"font-display font-bold text-3xl tracking-tight mb-3",children:"Monthly Growth Management"}),u.jsx("p",{className:"text-white/60 text-xs leading-relaxed mb-4 font-light",children:"Ongoing maintenance, constant creative scaling, ad updates, and algorithmic tuning for Clear Skin Clinic."}),u.jsxs("div",{className:"bg-white/5 border-l-4 border-neonLime p-3 rounded-r-xl",children:[u.jsx("span",{className:"text-[8px] font-mono uppercase tracking-widest text-white/40 block",children:"CONTRACT FREQUENCY"}),u.jsx("h4",{className:"font-display font-semibold text-[10px] text-white",children:"Continuous Expansion Retainer"})]})]}),u.jsx("div",{className:"col-span-12 lg:col-span-7 flex justify-end w-full",children:u.jsxs("div",{className:"glass-card-dark neon-card-highlight p-6 rounded-2xl w-full max-w-[440px] relative overflow-hidden shadow-2xl",children:[u.jsxs("div",{className:"flex flex-wrap justify-between items-start mb-4 border-b border-white/10 pb-3 gap-2",children:[u.jsxs("div",{children:[u.jsx("span",{className:"text-[8px] font-mono tracking-widest text-white/40 block",children:"GROWTH ENGAGEMENT"}),u.jsx("h3",{className:"font-display font-bold text-base text-white",children:"MONTHLY OPTIMIZATION"})]}),u.jsxs("div",{className:"text-right",children:[u.jsx("span",{className:"text-2xl font-display font-bold text-neonLime",children:"₹10,000"}),u.jsx("span",{className:"text-[9px] font-mono block text-white/40",children:"Per Month Retainer"})]})]}),u.jsxs("div",{className:"space-y-2.5 text-xs",children:[u.jsxs("div",{className:"bg-white/5 p-2.5 rounded-lg border border-white/5",children:[u.jsx("strong",{className:"text-neonLime block mb-0.5 text-[11px]",children:"Social Media Maintenance:"}),u.jsx("span",{className:"text-white/75 leading-relaxed text-[11px]",children:"Done-For-You planning, reels editing, & scripts."})]}),u.jsxs("div",{className:"bg-white/5 p-2.5 rounded-lg border border-white/5",children:[u.jsx("strong",{className:"text-neonLime block mb-0.5 text-[11px]",children:"Meta Ads Scaling:"}),u.jsx("span",{className:"text-white/75 leading-relaxed text-[11px]",children:"Creative updates, audience targeting tuning, and lead analytics optimization."})]}),u.jsxs("div",{className:"bg-white/5 p-2.5 rounded-lg border border-white/5",children:[u.jsx("strong",{className:"text-neonLime block mb-0.5 text-[11px]",children:"Funnel Nurturing:"}),u.jsx("span",{className:"text-white/75 leading-relaxed text-[11px]",children:"Constant chatbot refinement and performance analytics oversight."})]})]})]})})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-white/5 pt-4 text-[10px] text-white/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"www.mightbemedia.in"}),u.jsx("span",{className:"font-mono",children:"16 / 17"})]})]}),
-
-    // Slide 17
-    ()=>u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"neon-glow-primary -top-40 -right-40 w-[700px] h-[700px]"}),u.jsx("div",{className:"dot-matrix"}),u.jsx("div",{className:"grid-blueprint"}),u.jsxs("div",{className:"brand-header flex justify-between items-center border-b border-white/5 pb-4 z-10 w-full",children:[u.jsxs("div",{className:"flex items-center gap-2.5",children:[u.jsx("svg",{width:"24",height:"24",className:"w-6 h-6 text-neonLime flex-shrink-0",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:u.jsx("path",{d:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"})}),u.jsx("span",{className:"font-display font-bold text-lg tracking-tight text-white",children:"MightBeMedia"})]}),u.jsx("span",{className:"text-[9px] uppercase tracking-[0.25em] text-white/40 font-semibold bg-white/5 px-3 py-1 rounded-full border border-white/10",children:"Build • Convert • Scale"})]}),u.jsxs("div",{className:"content-area my-auto z-10 text-center flex flex-col items-center justify-center w-full",children:[u.jsx("span",{className:"text-[9px] font-bold uppercase tracking-[0.2em] text-neonLime bg-neonLime/10 border border-neonLime/20 px-3 py-1 rounded-full mb-3 inline-block",children:"PARTNERSHIP ENGAGEMENT"}),u.jsx("h1",{className:"font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-none mb-3",children:"Thank You"}),u.jsx("p",{className:"text-white/70 text-sm max-w-[550px] leading-relaxed mb-4 font-light px-4",children:"We would be deeply honored to act as your digital growth and revenue partner."}),u.jsx("div",{className:"bg-white/5 border border-white/10 rounded-xl p-3.5 max-w-[480px] shadow-xl mb-4 mx-4",children:u.jsxs("p",{className:"text-xs font-semibold tracking-wide italic text-white/90",children:['"We Are Not A Service Provider. ',u.jsx("span",{className:"text-neonLime underline underline-offset-4 decoration-2",children:"We Are Your Revenue Growth Partner."}),'"']})}),u.jsxs("div",{className:"flex flex-wrap gap-4 sm:gap-6 border-t border-white/10 pt-4 mt-2 w-full max-w-[400px] justify-center text-[11px] px-4",children:[u.jsxs("div",{className:"flex items-center gap-2 text-white/70",children:[u.jsx("i",{className:"fa-solid fa-globe text-neonLime text-sm"}),u.jsx("span",{children:"www.mightbemedia.in"})]}),u.jsxs("div",{className:"flex items-center gap-2 text-white/70",children:[u.jsx("i",{className:"fa-solid fa-envelope text-neonLime text-sm"}),u.jsx("span",{children:"info@mightbemedia.in"})]})]})]}),u.jsxs("div",{className:"brand-footer flex justify-between items-center border-t border-white/5 pt-4 text-[10px] text-white/40 z-10 w-full",children:[u.jsx("span",{className:"font-mono",children:"MightBeMedia • Build • Convert • Scale"}),u.jsx("span",{className:"font-mono",children:"17 / 17"})]})]})
-  ];
-
-  const Ni = (idx) => {
-    if (po[idx]) return po[idx]();
-    return null;
+  const handlePrint = () => {
+    if (typeof window !== "undefined") {
+      window.print();
+    }
   };
 
-  // Outer render
+  const handleSendChat = () => {
+    if (!chatInput.trim()) return;
+    const userMsg = { role: "user", content: chatInput };
+    setChatMessages((prev) => [...prev, userMsg]);
+    setChatInput("");
+    setIsChatThinking(true);
+    setTimeout(() => {
+      setChatMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            "Thank you for inquiring! At Clear Skin Clinic, Dr. Nikita Baid provides customized dermatological assessments for acne scars, pigmentation, and anti-aging treatments. Would you like to schedule an in-person consultation via WhatsApp?",
+        },
+      ]);
+      setIsChatThinking(false);
+    }, 600);
+  };
+
+  const handleSendProposal = () => {
+    if (!proposalInput.trim()) return;
+    const userMsg = { role: "user", content: proposalInput };
+    setProposalMessages((prev) => [...prev, userMsg]);
+    setProposalInput("");
+    setIsProposalThinking(true);
+    setTimeout(() => {
+      setProposalMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            "The MightBeMedia proposal includes a one-time ₹20,000 complete setup (AI Skincare Website, Meta Ads Setup, Patient Chatbot, Social Setup, Local SEO, 3 Years Technical Support, and Google Review QR Engine) plus an optional ₹10,000/mo growth retainer.",
+        },
+      ]);
+      setIsProposalThinking(false);
+    }, 600);
+  };
+
+  const handleGenerateScript = () => {
+    if (!scriptTopic.trim()) return;
+    setIsScriptGenerating(true);
+    setTimeout(() => {
+      setGeneratedScript(
+        `HOOK: "Stop treating acne scars like active breakouts! Here is what your dermatologist actually wants you to know..."\n\nVISUAL FLOW: Showcase clinical laser care & before/after results with Dr. Nikita Baid at Clear Skin Clinic.\n\nCALL-TO-ACTION: "Tap the link in our bio to book your consultation at Clear Skin Clinic today!"`
+      );
+      setIsScriptGenerating(false);
+    }, 700);
+  };
+
+  const whatsappMessage = encodeURIComponent(
+    "Hi MightBeMedia team, I reviewed the Clear Skin Clinic Revenue Growth Proposal (₹20,000 setup + ₹10,000/mo retainer) for Dr. Nikita Baid and would like to proceed with the next steps."
+  );
+
   return (
-    <div className="proposal-container min-h-screen bg-[#050507] text-white antialiased">
-      {/* Utility Bar */}
-      <div className="fixed bottom-4 sm:top-4 sm:bottom-auto left-1/2 -translate-x-1/2 z-50 bg-[#070709]/95 backdrop-blur-md border border-white/10 px-3 py-2 sm:px-5 sm:py-2.5 rounded-full flex items-center justify-between gap-3 sm:gap-5 shadow-2xl transition-all duration-300 w-[94%] sm:w-auto max-w-[480px] sm:max-w-none">
-        <div className="flex items-center gap-1.5 flex-shrink-0">
-          <svg
-            width="18"
-            height="18"
-            className="w-[18px] h-[18px] text-[#E8FF1C] flex-shrink-0"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-          </svg>
-          <span className="font-display font-bold text-[9px] sm:text-xs tracking-widest text-white hidden xs:inline-block">
-            MIGHTBEMEDIA
-          </span>
-        </div>
-        <div className="h-4 w-px bg-white/20" />
-        <div className="flex items-center gap-1 flex-shrink-0">
-          <button
-            type="button"
-            onClick={() => r(false)}
-            className={`text-[9px] sm:text-xs bg-white/10 hover:bg-white/20 text-white font-mono px-2 py-1 sm:px-3 rounded-full transition-colors flex items-center gap-1 ${
-              !n ? "bg-white/20" : ""
-            }`}
-          >
-            <i className="fa-solid fa-list-ul" />{" "}
-            <span className="hidden xs:inline">Scroll</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => r(true)}
-            className={`text-[9px] sm:text-xs font-mono px-2 py-1 sm:px-3 rounded-full transition-all flex items-center gap-1 ${
-              n
-                ? "bg-[#E8FF1C] text-black font-bold"
-                : "bg-white/5 hover:bg-[#E8FF1C] hover:text-black text-white"
-            }`}
-          >
-            <i className="fa-solid fa-play" />{" "}
-            <span className="hidden xs:inline">Present</span>
-          </button>
-        </div>
-        {n && (
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="h-4 w-px bg-white/20" />
-            <button
-              type="button"
-              onClick={q}
-              className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
-            >
-              <i className="fa-solid fa-chevron-left text-[10px]" />
-            </button>
-            <span className="font-mono text-[10px] sm:text-xs text-[#E8FF1C] min-w-[32px] text-center font-bold">
-              {e + 1}/{O}
+    <main className="min-h-screen bg-[#FFFFFF] text-[#0A0A0A] selection:bg-[#FF0000] selection:text-white flex flex-col justify-between font-sans overflow-x-hidden">
+      {/* ═══════════════════════════════════════════════════════════════════
+          Top Utility Bar (MightBeMedia V2 Header)
+      ════════════════════════════════════════════════════════════════════ */}
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-black/[0.08] px-4 sm:px-8 py-3.5 flex items-center justify-between">
+        <div className="flex items-center gap-4 sm:gap-6">
+          <BrandLogo variant="light" className="w-[125px] sm:w-[145px] h-auto" priority />
+          <div className="hidden md:flex items-center gap-2 pl-4 border-l border-black/10">
+            <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2 py-0.5 rounded-xs">
+              CONFIDENTIAL PROPOSAL
             </span>
+            <span className="font-mono text-[11px] text-black/60">
+              Clear Skin Clinic • Dr. Nikita Baid
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* View Mode Switcher */}
+          <div className="bg-black/5 p-1 rounded-lg flex items-center gap-1">
             <button
               type="button"
-              onClick={U}
-              className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+              onClick={() => setViewMode("deck")}
+              className={`px-3 py-1.5 rounded-md font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                viewMode === "deck"
+                  ? "bg-[#0A0A0A] text-white shadow-xs"
+                  : "text-black/60 hover:text-black"
+              }`}
+              title="Interactive Slide Deck View"
             >
-              <i className="fa-solid fa-chevron-right text-[10px]" />
+              <Layers className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Deck View</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("scroll")}
+              className={`px-3 py-1.5 rounded-md font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                viewMode === "scroll"
+                  ? "bg-[#0A0A0A] text-white shadow-xs"
+                  : "text-black/60 hover:text-black"
+              }`}
+              title="Full Executive Document Scroll"
+            >
+              <LayoutList className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Full Overview</span>
             </button>
           </div>
-        )}
-        <div className="h-4 w-px bg-white/20" />
-        <button
-          type="button"
-          onClick={() => i(true)}
-          className="relative group overflow-hidden bg-gradient-to-r from-[#E8FF1C] to-emerald-400 text-black text-[9px] sm:text-xs font-bold font-mono px-2.5 py-1 sm:px-4 rounded-full flex items-center gap-1 transition-all duration-300 hover:scale-105 flex-shrink-0"
-        >
-          <i className="fa-solid fa-wand-magic-sparkles" /> <span>AI Lab</span>
-        </button>
-      </div>
 
-      {/* Deck Container */}
-      <div className={`deck-wrapper ${n ? "presenting-mode" : ""}`}>
-        {Array.from({ length: O }, (_, idx) => (
-          <div
-            key={idx}
-            ref={(el) => (P.current[idx] = el)}
-            className={`slide-container ${
-              idx === 0 || idx === 2 || idx >= 14
-                ? "bg-obsidian text-white"
-                : "bg-brandLight text-brandDark"
-            } ${n && idx === e ? "current-active" : ""}`}
-            style={{ display: n && idx !== e ? "none" : "flex" }}
+          {/* AI Lab Trigger */}
+          <button
+            type="button"
+            onClick={() => setIsAiLabOpen(true)}
+            className="bg-[#0A0A0A] hover:bg-[#222222] text-white px-3 py-1.5 rounded-lg font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
+            title="Open Interactive AI Demonstration"
           >
-            {Ni(idx)}
-          </div>
-        ))}
-      </div>
+            <Sparkles className="w-3.5 h-3.5 text-[#FF0000]" />
+            <span className="hidden sm:inline">AI Lab</span>
+          </button>
 
-      {/* AI Lab Sidebar Modal */}
+          {/* Copy Link */}
+          <button
+            type="button"
+            onClick={handleCopyLink}
+            className="p-2 sm:px-3 sm:py-1.5 rounded-lg border border-black/10 hover:border-black/30 font-mono text-xs text-black/70 hover:text-black transition-colors flex items-center gap-1.5 cursor-pointer"
+            title="Copy Direct Link"
+          >
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="hidden sm:inline text-emerald-600 font-bold">Copied</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Share</span>
+              </>
+            )}
+          </button>
+
+          {/* Print / Save PDF */}
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="p-2 sm:px-3 sm:py-1.5 rounded-lg border border-black/10 hover:border-black/30 font-mono text-xs text-black/70 hover:text-black transition-colors hidden md:flex items-center gap-1.5 cursor-pointer"
+            title="Print or Save as PDF"
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span>Print / PDF</span>
+          </button>
+
+          {/* Direct Approval */}
+          <a
+            href={`https://wa.me/918851872245?text=${whatsappMessage}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#FF0000] hover:bg-[#CC0000] text-white px-3 sm:px-4 py-1.5 rounded-lg font-mono text-xs uppercase tracking-wider font-bold transition-transform hover:scale-[1.02] active:scale-[0.98] flex items-center gap-1.5 shadow-sm"
+          >
+            <MessageCircle className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Approve on WhatsApp</span>
+            <span className="sm:hidden">Approve</span>
+          </a>
+        </div>
+      </header>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          VIEW 1: Interactive Slide Deck (MightBeMedia V2 Editorial)
+      ════════════════════════════════════════════════════════════════════ */}
+      {viewMode === "deck" && (
+        <div className="flex-1 flex flex-col justify-between max-w-6xl w-full mx-auto p-4 sm:p-8 md:p-12">
+          {/* Main Presentation Stage */}
+          <div className="bg-[#FAFAFA] border border-black/[0.08] rounded-2xl p-6 sm:p-10 md:p-14 shadow-sm min-h-[580px] flex flex-col justify-between relative overflow-hidden">
+            {/* Top Slide Meta */}
+            <div>
+              <div className="flex items-center justify-between border-b border-black/[0.08] pb-4 mb-6 sm:mb-8">
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-sm font-bold text-[#FF0000] tracking-wider">
+                    {currentSlide.toString().padStart(2, "0")} / {totalSlides.toString().padStart(2, "0")}
+                  </span>
+                  <span className="text-black/30 font-mono">|</span>
+                  <span className="font-mono text-xs uppercase tracking-widest text-black/60 font-semibold">
+                    {getSlideCategory(currentSlide)}
+                  </span>
+                </div>
+                <span className="font-mono text-xs text-black/40 hidden sm:inline">
+                  Clear Skin Clinic • MightBeMedia Proposal
+                </span>
+              </div>
+
+              {/* Render Slide Content by Index */}
+              {renderSlideContent(currentSlide, () => setIsAiLabOpen(true))}
+            </div>
+
+            {/* Bottom Deck Navigation Controls */}
+            <div className="border-t border-black/[0.08] pt-4 mt-8 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setCurrentSlide((prev) => Math.max(1, prev - 1))}
+                disabled={currentSlide === 1}
+                className="px-4 py-2 rounded-lg border border-black/10 hover:border-black/30 font-mono text-xs uppercase tracking-wider font-bold text-black/80 hover:text-black disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center gap-2 cursor-pointer"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span>Previous</span>
+              </button>
+
+              {/* Progress Dots */}
+              <div className="flex items-center gap-1.5 overflow-x-auto max-w-[200px] sm:max-w-none px-2">
+                {Array.from({ length: totalSlides }, (_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setCurrentSlide(idx + 1)}
+                    className={`h-2 rounded-full transition-all cursor-pointer ${
+                      currentSlide === idx + 1
+                        ? "w-8 bg-[#FF0000]"
+                        : "w-2 bg-black/20 hover:bg-black/40"
+                    }`}
+                    title={`Go to slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setCurrentSlide((prev) => Math.min(totalSlides, prev + 1))}
+                disabled={currentSlide === totalSlides}
+                className="px-4 py-2 rounded-lg bg-[#0A0A0A] hover:bg-[#222222] font-mono text-xs uppercase tracking-wider font-bold text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center gap-2 cursor-pointer"
+              >
+                <span>Next</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          <div className="text-center font-mono text-[11px] text-black/40 mt-4">
+            Tip: Use keyboard [← / →] arrow keys to navigate slides
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          VIEW 2: Full Continuous Scroll Overview (Executive Document)
+      ════════════════════════════════════════════════════════════════════ */}
+      {viewMode === "scroll" && (
+        <div className="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-8 space-y-10 my-6">
+          {/* Executive Overview Banner */}
+          <div className="bg-[#0A0A0A] text-white p-8 sm:p-12 rounded-2xl relative overflow-hidden">
+            <div className="font-mono text-xs uppercase tracking-widest text-[#FF0000] font-bold mb-2">
+              EXECUTIVE PROPOSAL • CLEAR SKIN CLINIC
+            </div>
+            <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight">
+              We Don&apos;t Build Marketing Systems.
+              <br />
+              <span className="text-[#FF0000]">We Build Revenue Systems.</span>
+            </h1>
+            <p className="text-white/70 mt-3 text-base sm:text-lg max-w-2xl font-light leading-relaxed">
+              A customized, premium conversion infrastructure engineered for Dr. Nikita Baid and Clear Skin Clinic to transform social media attention into predictable patient bookings.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-8 border-t border-white/10 font-mono text-xs">
+              <div>
+                <div className="text-white/40 uppercase">Setup Investment</div>
+                <div className="text-[#FF0000] font-bold text-lg mt-0.5">₹20,000</div>
+              </div>
+              <div>
+                <div className="text-white/40 uppercase">Monthly Retainer</div>
+                <div className="text-white font-bold text-lg mt-0.5">₹10,000 / mo</div>
+              </div>
+              <div>
+                <div className="text-white/40 uppercase">Deployment Timeline</div>
+                <div className="text-white font-bold text-lg mt-0.5">14 Days</div>
+              </div>
+              <div>
+                <div className="text-white/40 uppercase">Technical Support</div>
+                <div className="text-white font-bold text-lg mt-0.5">3 Years Included</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Sequential 17 Slides Rendered */}
+          <div className="space-y-8">
+            {Array.from({ length: totalSlides }, (_, idx) => (
+              <section
+                key={idx}
+                id={`section-${idx + 1}`}
+                className="bg-[#FAFAFA] border border-black/[0.08] rounded-2xl p-6 sm:p-10 shadow-xs"
+              >
+                <div className="flex items-center justify-between border-b border-black/[0.08] pb-3 mb-6">
+                  <span className="font-mono text-xs font-bold text-[#FF0000] tracking-wider">
+                    SECTION { (idx + 1).toString().padStart(2, "0") } / {totalSlides.toString().padStart(2, "0")}
+                  </span>
+                  <span className="font-mono text-xs uppercase text-black/50 font-semibold">
+                    {getSlideCategory(idx + 1)}
+                  </span>
+                </div>
+                {renderSlideContent(idx + 1, () => setIsAiLabOpen(true))}
+              </section>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          Bottom Approval Action Deck
+      ════════════════════════════════════════════════════════════════════ */}
+      <footer className="border-t border-black/[0.08] bg-[#FAFAFA] px-4 sm:px-8 py-6">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <div className="font-display text-lg font-bold text-[#0A0A0A]">
+              Ready to deploy Clear Skin Clinic&apos;s Revenue System?
+            </div>
+            <div className="text-xs text-black/60 font-mono">
+              Setup: ₹20,000 (One-Time) • Growth Retainer: ₹10,000/mo • Delivery: 14 Days • 3-Year Support Included
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <a
+              href={`https://wa.me/918851872245?text=${whatsappMessage}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 sm:flex-initial bg-[#FF0000] hover:bg-[#CC0000] text-white px-6 py-3 rounded-xl font-mono text-xs uppercase tracking-wider font-bold transition-all hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>Approve & Start on WhatsApp</span>
+            </a>
+            <a
+              href="tel:+918851872245"
+              className="p-3 rounded-xl border border-black/10 hover:border-black/30 font-mono text-xs text-black/80 hover:text-black transition-colors hidden sm:flex items-center gap-1.5"
+              title="Call MightBeMedia"
+            >
+              <Phone className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      </footer>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          Interactive AI Lab Drawer (Patient Bot, Reel Script, Advisor)
+      ════════════════════════════════════════════════════════════════════ */}
       <div
-        className={`fixed top-0 right-0 h-full w-full max-w-[500px] bg-[#0c0c10] border-l border-white/15 shadow-2xl z-50 transform transition-transform duration-500 flex flex-col ${
-          o ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-0 right-0 h-full w-full max-w-[500px] bg-[#FFFFFF] border-l border-black/10 shadow-2xl z-50 transform transition-transform duration-500 flex flex-col ${
+          isAiLabOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
+        {/* Backdrop */}
         <div
           className={`fixed inset-0 bg-black/60 backdrop-blur-sm pointer-events-none transition-opacity duration-500 ${
-            o ? "opacity-100 pointer-events-auto" : "opacity-0"
+            isAiLabOpen ? "opacity-100 pointer-events-auto" : "opacity-0"
           }`}
-          onClick={() => i(false)}
+          onClick={() => setIsAiLabOpen(false)}
           style={{ zIndex: -1 }}
         />
-        <div className="p-3 sm:p-4 border-b border-white/10 flex items-center justify-between bg-[#0b0b0f] relative z-10 flex-shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#E8FF1C] animate-ping" />
+
+        {/* Drawer Header */}
+        <div className="p-4 border-b border-black/10 flex items-center justify-between bg-[#FAFAFA] flex-shrink-0">
+          <div className="flex items-center gap-2.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#FF0000] animate-pulse" />
             <div>
-              <h3 className="font-display font-bold text-xs sm:text-sm tracking-tight text-white flex items-center gap-1.5">
-                <i className="fa-solid fa-wand-magic-sparkles text-[#E8FF1C] text-xs" />{" "}
-                MBM AI Engine
+              <h3 className="font-display font-bold text-sm tracking-tight text-[#0A0A0A] flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-[#FF0000]" /> MightBeMedia AI Engine
               </h3>
-              <p className="text-[7px] sm:text-[8px] font-mono uppercase tracking-wider text-white/50">
+              <p className="text-[9px] font-mono uppercase tracking-wider text-black/50">
                 Live Interactive Skincare & Proposal Intelligence
               </p>
             </div>
           </div>
           <button
             type="button"
-            onClick={() => i(false)}
-            className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all"
+            onClick={() => setIsAiLabOpen(false)}
+            className="w-8 h-8 rounded-full bg-black/5 hover:bg-black/10 text-black flex items-center justify-center transition-all cursor-pointer"
           >
-            <i className="fa-solid fa-xmark text-sm" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="px-2 py-1.5 sm:py-2 border-b border-white/10 bg-[#08080c] flex gap-1 flex-shrink-0">
-          {["chatbot", "script", "proposal"].map((tab) => (
+        {/* Tab Controls */}
+        <div className="px-3 py-2 border-b border-black/10 bg-white flex gap-1.5 flex-shrink-0 font-mono text-xs">
+          {[
+            { id: "chatbot", label: "Patient Bot" },
+            { id: "script", label: "Reel Script" },
+            { id: "proposal", label: "Advisor" },
+          ].map((tab) => (
             <button
-              key={tab}
+              key={tab.id}
               type="button"
-              onClick={() => l(tab)}
-              className={`flex-1 py-1.5 px-1 rounded-lg text-[8px] sm:text-[9px] font-mono font-bold uppercase transition-all duration-300 flex items-center justify-center gap-1 ${
-                s === tab
-                  ? "bg-[#E8FF1C] text-black"
-                  : "text-white/70 hover:text-white bg-white/10 hover:bg-white/15"
+              onClick={() => setAiTab(tab.id as any)}
+              className={`flex-1 py-1.5 px-2 rounded-lg font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                aiTab === tab.id
+                  ? "bg-[#0A0A0A] text-white shadow-xs"
+                  : "text-black/60 hover:text-black bg-black/5"
               }`}
             >
-              <i
-                className={`fa-solid ${
-                  tab === "chatbot"
-                    ? "fa-comments"
-                    : tab === "script"
-                    ? "fa-video"
-                    : "fa-file-contract"
-                } text-[10px] sm:text-xs`}
-              />
-              <span className="hidden xs:inline">{tab}</span>
+              <span>{tab.label}</span>
             </button>
           ))}
         </div>
 
-        <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 bg-[#0c0c10] min-h-0">
-          {s === "chatbot" && (
+        {/* Tab Body */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#FAFAFA] min-h-0">
+          {aiTab === "chatbot" && (
             <div className="flex flex-col h-full space-y-3">
-              <div className="bg-white/5 border border-white/10 p-2.5 sm:p-3 rounded-xl flex-shrink-0">
-                <h4 className="font-display font-bold text-[10px] sm:text-xs text-[#E8FF1C] mb-0.5">
-                  Live Patient Bot Demo
+              <div className="bg-white border border-black/10 p-3 rounded-xl shadow-2xs">
+                <h4 className="font-display font-bold text-xs text-[#FF0000] mb-0.5">
+                  Live Patient Reception Bot Demo
                 </h4>
-                <p className="text-[8px] sm:text-[9px] text-white/60 leading-relaxed">
-                  Ask any skincare question to our AI receptionist.
+                <p className="text-[11px] text-black/70 leading-relaxed">
+                  Ask any skincare or treatment question to our AI assistant configured for Clear Skin Clinic.
                 </p>
               </div>
-              <div className="bg-[#121218] border border-white/10 rounded-xl flex-1 flex flex-col overflow-hidden min-h-[150px]">
-                <div className="flex-1 p-2 sm:p-3 overflow-y-auto space-y-2">
-                  {d.map((msg, idx) => (
+
+              <div className="bg-white border border-black/10 rounded-xl flex-1 flex flex-col overflow-hidden min-h-[180px] shadow-2xs">
+                <div className="flex-1 p-3 overflow-y-auto space-y-2.5">
+                  {chatMessages.map((msg, idx) => (
                     <div
                       key={idx}
-                      className={`flex items-start gap-2 ${
+                      className={`flex items-start gap-2.5 ${
                         msg.role === "user" ? "justify-end" : ""
                       }`}
                     >
                       <div
-                        className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[7px] sm:text-[8px] flex-shrink-0 ${
+                        className={`px-3 py-2 rounded-xl max-w-[85%] text-xs leading-relaxed ${
                           msg.role === "user"
-                            ? "bg-white/15 text-white order-2"
-                            : "bg-[#E8FF1C] text-black"
-                        }`}
-                      >
-                        <i
-                          className={`fa-solid ${
-                            msg.role === "user" ? "fa-user" : "fa-user-doctor"
-                          } text-[8px] sm:text-[10px]`}
-                        />
-                      </div>
-                      <div
-                        className={`px-2 py-1.5 rounded-xl max-w-[80%] leading-relaxed text-[10px] sm:text-xs ${
-                          msg.role === "user"
-                            ? "bg-[#E8FF1C]/15 border border-[#E8FF1C]/30 text-white rounded-l-xl rounded-br-xl font-medium"
-                            : "bg-[#1c1c24] border border-white/10 text-white rounded-r-xl rounded-bl-xl font-medium"
+                            ? "bg-[#0A0A0A] text-white rounded-br-xs font-medium"
+                            : "bg-black/5 text-[#0A0A0A] border border-black/[0.06] rounded-bl-xs font-medium"
                         }`}
                       >
                         {msg.content}
                       </div>
                     </div>
                   ))}
-                  {k && (
-                    <div className="flex items-start gap-2">
-                      <div className="w-5 h-5 rounded-full bg-[#E8FF1C] text-black flex items-center justify-center font-bold text-[7px] sm:text-[8px] flex-shrink-0">
-                        <i className="fa-solid fa-user-doctor text-[8px] sm:text-[10px]" />
-                      </div>
-                      <div className="bg-[#1c1c24] border border-white/10 px-2 py-1.5 rounded-r-xl rounded-bl-xl max-w-[80%] text-white text-[10px] sm:text-xs">
-                        <i className="fa-solid fa-spinner animate-spin" /> Thinking...
-                      </div>
+                  {isChatThinking && (
+                    <div className="text-xs text-black/50 font-mono italic animate-pulse">
+                      ClearSkin AI is analyzing...
                     </div>
                   )}
                 </div>
-                <div className="px-2 py-1.5 border-t border-white/10 bg-[#09090d] flex gap-1 overflow-x-auto whitespace-nowrap scrollbar-none flex-shrink-0">
+
+                {/* Quick Prompts */}
+                <div className="p-2 border-t border-black/[0.08] bg-[#FAFAFA] flex gap-1.5 overflow-x-auto">
                   <button
                     type="button"
                     onClick={() => {
-                      g("What treatment do you have for dark acne scars?");
-                      F();
+                      setChatInput("What treatment is best for acne scars?");
                     }}
-                    className="text-[7px] sm:text-[8px] bg-[#1a1a24] hover:bg-[#252533] border border-white/15 px-2 py-0.5 rounded-full transition-all text-white font-medium"
+                    className="text-[10px] font-mono bg-white hover:bg-black/5 border border-black/10 px-2.5 py-1 rounded-full text-black/80 whitespace-nowrap cursor-pointer"
                   >
-                    Acne scars
+                    Acne Scars
                   </button>
                   <button
                     type="button"
                     onClick={() => {
-                      g("Is laser safe for hyperpigmentation?");
-                      F();
+                      setChatInput("Is laser safe for hyperpigmentation?");
                     }}
-                    className="text-[7px] sm:text-[8px] bg-[#1a1a24] hover:bg-[#252533] border border-white/15 px-2 py-0.5 rounded-full transition-all text-white font-medium"
+                    className="text-[10px] font-mono bg-white hover:bg-black/5 border border-black/10 px-2.5 py-1 rounded-full text-black/80 whitespace-nowrap cursor-pointer"
                   >
                     Hyperpigmentation
                   </button>
                 </div>
               </div>
+
               <div className="flex gap-2 flex-shrink-0">
                 <input
                   type="text"
-                  value={h}
-                  onChange={(e) => g(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && F()}
-                  placeholder="Type your question..."
-                  className="flex-1 bg-[#161622] border border-white/20 rounded-xl px-3 py-2 text-[10px] sm:text-xs focus:outline-none focus:border-[#E8FF1C] text-white placeholder-white/40 min-h-[36px]"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSendChat()}
+                  placeholder="Ask a skincare question..."
+                  className="flex-1 bg-white border border-black/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#FF0000] text-black"
                 />
                 <button
                   type="button"
-                  onClick={F}
-                  className="bg-[#E8FF1C] text-black px-3 py-2 rounded-xl text-[10px] sm:text-xs font-bold hover:scale-102 transition-all flex items-center justify-center gap-1 flex-shrink-0 min-h-[36px]"
+                  onClick={handleSendChat}
+                  className="bg-[#FF0000] hover:bg-[#CC0000] text-white px-4 py-2 rounded-xl text-xs font-bold font-mono uppercase transition-all flex items-center justify-center gap-1 cursor-pointer"
                 >
-                  Send <i className="fa-regular fa-paper-plane" />
+                  <Send className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
           )}
 
-          {s === "script" && (
+          {aiTab === "script" && (
             <div className="flex flex-col h-full space-y-3">
-              <div className="bg-white/5 border border-white/10 p-2.5 sm:p-3 rounded-xl flex-shrink-0">
-                <h4 className="font-display font-bold text-[10px] sm:text-xs text-[#E8FF1C] mb-0.5">
-                  High-Retention Outline Builder
+              <div className="bg-white border border-black/10 p-3 rounded-xl shadow-2xs">
+                <h4 className="font-display font-bold text-xs text-[#FF0000] mb-0.5">
+                  High-Retention Reel Script Builder
                 </h4>
-                <p className="text-[8px] sm:text-[9px] text-white/60 leading-relaxed">
-                  Input a skincare topic to generate a 30-second script outline.
+                <p className="text-[11px] text-black/70 leading-relaxed">
+                  Generate high-conversion 30-second reel scripts driving patients directly to Clear Skin Clinic.
                 </p>
               </div>
-              <div className="space-y-2 flex-shrink-0">
-                <div>
-                  <label className="block text-[8px] sm:text-[9px] uppercase tracking-wider font-mono text-white/50 mb-0.5 font-bold">
-                    Skincare Topic
-                  </label>
-                  <input
-                    type="text"
-                    value={T}
-                    onChange={(e) => v(e.target.value)}
-                    placeholder="e.g., Hydrafacial vs Chemical Peel"
-                    className="w-full bg-[#161622] border border-white/20 rounded-xl px-3 py-2 text-[10px] sm:text-xs focus:outline-none focus:border-[#E8FF1C] text-white placeholder-white/40"
-                  />
-                </div>
+
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  value={scriptTopic}
+                  onChange={(e) => setScriptTopic(e.target.value)}
+                  placeholder="e.g. Chemical Peel vs Hydrafacial"
+                  className="w-full bg-white border border-black/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#FF0000] text-black"
+                />
                 <button
                   type="button"
-                  onClick={z}
-                  disabled={b}
-                  className="w-full bg-gradient-to-r from-[#E8FF1C] to-emerald-400 text-black py-2 rounded-xl text-[10px] sm:text-xs font-bold font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
+                  onClick={handleGenerateScript}
+                  disabled={isScriptGenerating}
+                  className="w-full bg-[#0A0A0A] hover:bg-[#222222] text-white py-2 rounded-xl text-xs font-bold font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
-                  <i className={`fa-solid fa-cube ${b ? "animate-spin" : ""}`} />
-                  {b ? "Generating..." : "Generate Reel Outline"}
+                  <Wand2 className="w-3.5 h-3.5 text-[#FF0000]" />
+                  {isScriptGenerating ? "Generating..." : "Generate Reel Outline"}
                 </button>
               </div>
-              {N && (
-                <div className="flex-1 flex flex-col space-y-2 min-h-0">
-                  <label className="block text-[8px] sm:text-[9px] uppercase tracking-wider font-mono text-white/50 font-bold flex-shrink-0">
-                    Generated outline
-                  </label>
-                  <div className="bg-[#121218] border border-white/10 rounded-xl p-3 text-[10px] sm:text-xs font-medium text-white leading-relaxed overflow-y-auto flex-1 min-h-[100px] whitespace-pre-wrap font-sans">
-                    {x}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => R(x)}
-                    className="w-full bg-white/10 hover:bg-white/15 border border-white/15 text-white py-1.5 rounded-xl text-[10px] sm:text-xs transition-all flex items-center justify-center gap-2 flex-shrink-0"
-                  >
-                    <i className="fa-solid fa-copy" /> Copy Script
-                  </button>
+
+              {generatedScript && (
+                <div className="bg-white border border-black/10 rounded-xl p-3.5 text-xs text-black/80 font-mono whitespace-pre-wrap leading-relaxed shadow-2xs">
+                  {generatedScript}
                 </div>
               )}
             </div>
           )}
 
-          {s === "proposal" && (
+          {aiTab === "proposal" && (
             <div className="flex flex-col h-full space-y-3">
-              <div className="bg-white/5 border border-white/10 p-2.5 sm:p-3 rounded-xl flex-shrink-0">
-                <h4 className="font-display font-bold text-[10px] sm:text-xs text-[#E8FF1C] mb-0.5">
-                  Proposal Advisor
+              <div className="bg-white border border-black/10 p-3 rounded-xl shadow-2xs">
+                <h4 className="font-display font-bold text-xs text-[#FF0000] mb-0.5">
+                  Proposal Advisor & Commercial Assistant
                 </h4>
-                <p className="text-[8px] sm:text-[9px] text-white/60 leading-relaxed">
-                  Ask about our packages, pricing, or support coverage.
+                <p className="text-[11px] text-black/70 leading-relaxed">
+                  Ask any question regarding setup pricing, 3-year support SLA, deliverables, or monthly scaling.
                 </p>
               </div>
-              <div className="bg-[#121218] border border-white/10 rounded-xl flex-1 flex flex-col overflow-hidden min-h-[150px]">
-                <div className="flex-1 p-2 sm:p-3 overflow-y-auto space-y-2">
-                  {p.map((msg, idx) => (
+
+              <div className="bg-white border border-black/10 rounded-xl flex-1 flex flex-col overflow-hidden min-h-[180px] shadow-2xs">
+                <div className="flex-1 p-3 overflow-y-auto space-y-2.5">
+                  {proposalMessages.map((msg, idx) => (
                     <div
                       key={idx}
-                      className={`flex items-start gap-2 ${
+                      className={`flex items-start gap-2.5 ${
                         msg.role === "user" ? "justify-end" : ""
                       }`}
                     >
                       <div
-                        className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[7px] sm:text-[8px] flex-shrink-0 ${
+                        className={`px-3 py-2 rounded-xl max-w-[85%] text-xs leading-relaxed ${
                           msg.role === "user"
-                            ? "bg-white/15 text-white order-2"
-                            : "bg-[#E8FF1C] text-black"
-                        }`}
-                      >
-                        <i
-                          className={`fa-solid ${
-                            msg.role === "user" ? "fa-user" : "fa-file-contract"
-                          } text-[8px] sm:text-[10px]`}
-                        />
-                      </div>
-                      <div
-                        className={`px-2 py-1.5 rounded-xl max-w-[80%] leading-relaxed text-[10px] sm:text-xs ${
-                          msg.role === "user"
-                            ? "bg-[#E8FF1C]/15 border border-[#E8FF1C]/30 text-white rounded-l-xl rounded-br-xl font-medium"
-                            : "bg-[#1c1c24] border border-white/10 text-white rounded-r-xl rounded-bl-xl font-medium"
+                            ? "bg-[#0A0A0A] text-white rounded-br-xs font-medium"
+                            : "bg-black/5 text-[#0A0A0A] border border-black/[0.06] rounded-bl-xs font-medium"
                         }`}
                       >
                         {msg.content}
                       </div>
                     </div>
                   ))}
-                  {k && (
-                    <div className="flex items-start gap-2">
-                      <div className="w-5 h-5 rounded-full bg-[#E8FF1C] text-black flex items-center justify-center font-bold text-[7px] sm:text-[8px] flex-shrink-0">
-                        <i className="fa-solid fa-file-contract text-[8px] sm:text-[10px]" />
-                      </div>
-                      <div className="bg-[#1c1c24] border border-white/10 px-2 py-1.5 rounded-r-xl rounded-bl-xl max-w-[80%] text-white text-[10px] sm:text-xs">
-                        <i className="fa-solid fa-spinner animate-spin" /> Thinking...
-                      </div>
+                  {isProposalThinking && (
+                    <div className="text-xs text-black/50 font-mono italic animate-pulse">
+                      Advisor is answering...
                     </div>
                   )}
                 </div>
-                <div className="px-2 py-1.5 border-t border-white/10 bg-[#09090d] flex gap-1 overflow-x-auto whitespace-nowrap scrollbar-none flex-shrink-0">
+
+                <div className="p-2 border-t border-black/[0.08] bg-[#FAFAFA] flex gap-1.5 overflow-x-auto">
                   <button
                     type="button"
                     onClick={() => {
-                      y("What does the ₹20,000 setup include?");
-                      V();
+                      setProposalInput("What does the ₹20,000 package include?");
                     }}
-                    className="text-[7px] sm:text-[8px] bg-[#1a1a24] hover:bg-[#252533] border border-white/15 px-2 py-0.5 rounded-full transition-all text-white font-medium"
+                    className="text-[10px] font-mono bg-white hover:bg-black/5 border border-black/10 px-2.5 py-1 rounded-full text-black/80 whitespace-nowrap cursor-pointer"
                   >
-                    Setup cost
+                    ₹20k Setup Details
                   </button>
                   <button
                     type="button"
                     onClick={() => {
-                      y("Tell me about the 3-year support.");
-                      V();
+                      setProposalInput("Tell me about the 3-year support SLA.");
                     }}
-                    className="text-[7px] sm:text-[8px] bg-[#1a1a24] hover:bg-[#252533] border border-white/15 px-2 py-0.5 rounded-full transition-all text-white font-medium"
+                    className="text-[10px] font-mono bg-white hover:bg-black/5 border border-black/10 px-2.5 py-1 rounded-full text-black/80 whitespace-nowrap cursor-pointer"
                   >
-                    3-Year support
+                    3-Year Support
                   </button>
                 </div>
               </div>
+
               <div className="flex gap-2 flex-shrink-0">
                 <input
                   type="text"
-                  value={w}
-                  onChange={(e) => y(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && V()}
-                  placeholder="Type proposal question..."
-                  className="flex-1 bg-[#161622] border border-white/20 rounded-xl px-3 py-2 text-[10px] sm:text-xs focus:outline-none focus:border-[#E8FF1C] text-white placeholder-white/40 min-h-[36px]"
+                  value={proposalInput}
+                  onChange={(e) => setProposalInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSendProposal()}
+                  placeholder="Ask a proposal question..."
+                  className="flex-1 bg-white border border-black/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#FF0000] text-black"
                 />
                 <button
                   type="button"
-                  onClick={V}
-                  className="bg-[#E8FF1C] text-black px-3 py-2 rounded-xl text-[10px] sm:text-xs font-bold hover:scale-102 transition-all flex items-center justify-center gap-1 flex-shrink-0 min-h-[36px]"
+                  onClick={handleSendProposal}
+                  className="bg-[#FF0000] hover:bg-[#CC0000] text-white px-4 py-2 rounded-xl text-xs font-bold font-mono uppercase transition-all flex items-center justify-center gap-1 cursor-pointer"
                 >
-                  Ask <i className="fa-regular fa-paper-plane" />
+                  <Send className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SLIDE CATEGORY HELPER
+════════════════════════════════════════════════════════════════════ */
+function getSlideCategory(slide: number): string {
+  switch (slide) {
+    case 1:
+      return "Executive Introduction";
+    case 2:
+      return "Who We Are";
+    case 3:
+      return "The System Bottleneck";
+    case 4:
+      return "Friction Flow Analysis";
+    case 5:
+      return "Revenue Leak Audit";
+    case 6:
+      return "Attention Analysis";
+    case 7:
+      return "Infrastructure Blueprint";
+    case 8:
+      return "Personalised Skincare Flagship";
+    case 9:
+      return "Guaranteed Continuity";
+    case 10:
+      return "Google Review QR Engine";
+    case 11:
+      return "AI Patient Receptionist";
+    case 12:
+      return "Social Media & Scripting";
+    case 13:
+      return "Performance Marketing";
+    case 14:
+      return "Local SEO Dominance";
+    case 15:
+      return "Investment & Pricing";
+    case 16:
+      return "Deliverables Matrix";
+    case 17:
+      return "Partnership Engagement";
+    default:
+      return "Proposal";
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SLIDE CONTENT RENDERER (V2 Editorial Aesthetic + Original Data)
+════════════════════════════════════════════════════════════════════ */
+function renderSlideContent(slide: number, openAiLab: () => void) {
+  switch (slide) {
+    /* ─── SLIDE 01: WELCOME & EXECUTIVE TITLE ─── */
+    case 1:
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-2">
+          <div className="lg:col-span-7 space-y-4">
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#FF0000] animate-pulse" />
+              <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-[#FF0000]">
+                We Don&apos;t Build Marketing Systems
+              </span>
+            </div>
+            <h1 className="font-display font-black text-3xl sm:text-5xl lg:text-6xl tracking-tight text-[#0A0A0A] leading-[1.05]">
+              We Build
+              <br />
+              <span className="text-[#FF0000]">Revenue Systems.</span>
+            </h1>
+            <p className="text-sm sm:text-base text-black/70 leading-relaxed font-normal max-w-xl">
+              A customized premium conversion infrastructure engineered for Clear Skin Clinic and Dr. Nikita Baid to transform clinic social media attention into predictable patient bookings.
+            </p>
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <div className="bg-black/5 border border-black/10 px-4 py-2 rounded-xl flex items-center gap-2.5 font-mono text-xs text-black/80 font-medium">
+                <ShieldCheck className="w-4 h-4 text-[#FF0000]" />
+                <span>Confidential Growth Proposal</span>
+              </div>
+              <div className="bg-[#FF0000]/10 border border-[#FF0000]/20 px-4 py-2 rounded-xl font-mono text-xs text-[#FF0000] font-bold">
+                SYSTEM: READY FOR DEPLOYMENT
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5 flex justify-center">
+            <div className="bg-white border border-black/10 p-6 rounded-2xl shadow-md w-full max-w-[360px] relative overflow-hidden">
+              <div className="relative aspect-4/3 rounded-xl overflow-hidden bg-black/5 mb-4 border border-black/[0.06]">
+                <Image
+                  src="/projects/clearskin.png"
+                  alt="Clear Skin Clinic Digital Flagship"
+                  fill
+                  className="object-cover object-top"
+                />
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t border-black/[0.08]">
+                <div>
+                  <span className="text-[9px] text-black/40 block font-mono uppercase tracking-wider">
+                    TARGET CLIENT
+                  </span>
+                  <span className="text-xs font-bold text-[#0A0A0A]">
+                    Clear Skin Clinic (Dr. Nikita Baid)
+                  </span>
+                </div>
+                <span className="font-mono text-[10px] text-[#FF0000] font-bold">
+                  2026 ARCHITECTURE
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 02: WHO WE ARE ─── */
+    case 2:
+      return (
+        <div className="space-y-6 py-2">
+          <div className="max-w-3xl">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block mb-3">
+              WHO WE ARE
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              Transforming Attention into Booked Patients
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 mt-2 leading-relaxed">
+              At MightBeMedia, we help clinics, doctors, healthcare brands, and local businesses transform their social media attention into predictable patient bookings. Most agencies focus entirely on cosmetic metrics like views. We focus single-mindedly on conversions and revenue.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+            <div className="bg-white p-5 rounded-xl border border-black/[0.08] shadow-2xs border-t-2 border-t-[#0A0A0A] hover:border-t-[#FF0000] transition-colors">
+              <span className="font-mono text-xs font-bold text-[#FF0000]">01</span>
+              <h4 className="font-display font-bold text-sm text-[#0A0A0A] mt-1 mb-1.5">
+                Generate Consultations
+              </h4>
+              <p className="text-xs text-black/70 leading-relaxed font-normal">
+                Turning casual social media viewers into verified booked appointments.
+              </p>
+            </div>
+
+            <div className="bg-white p-5 rounded-xl border border-black/[0.08] shadow-2xs border-t-2 border-t-[#0A0A0A] hover:border-t-[#FF0000] transition-colors">
+              <span className="font-mono text-xs font-bold text-[#FF0000]">02</span>
+              <h4 className="font-display font-bold text-sm text-[#0A0A0A] mt-1 mb-1.5">
+                Generate Clinical Trust
+              </h4>
+              <p className="text-xs text-black/70 leading-relaxed font-normal">
+                Structuring high-authority doctor credentials, verified reviews, and system proof loops.
+              </p>
+            </div>
+
+            <div className="bg-white p-5 rounded-xl border border-black/[0.08] shadow-2xs border-t-2 border-t-[#0A0A0A] hover:border-t-[#FF0000] transition-colors">
+              <span className="font-mono text-xs font-bold text-[#FF0000]">03</span>
+              <h4 className="font-display font-bold text-sm text-[#0A0A0A] mt-1 mb-1.5">
+                Generate Measurable Revenue
+              </h4>
+              <p className="text-xs text-black/70 leading-relaxed font-normal">
+                Direct, quantifiable impact on the clinic&apos;s monthly patient intake and balance sheet.
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 03: THE REAL PROBLEM ─── */
+    case 3:
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-2">
+          <div className="lg:col-span-7 space-y-4">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block">
+              THE SYSTEM BOTTLENECK
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              The Real Problem: The Virality Trap
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 leading-relaxed">
+              Clinics routinely exhaust resources creating and editing video content, thinking that virality solves patient acquisition. Thousands of views, but zero consultations.
+            </p>
+            <div className="bg-red-50 border-l-4 border-[#FF0000] p-4 rounded-r-xl">
+              <p className="text-xs sm:text-sm text-red-950 font-medium leading-relaxed">
+                The actual barrier isn&apos;t content reach. The real issue is the complete lack of an engineered Conversion System behind your social media attention.
+              </p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5 flex justify-center">
+            <div className="bg-[#0A0A0A] text-white p-6 sm:p-8 rounded-2xl w-full max-w-[380px] shadow-xl border border-white/10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-[#FF0000]/20 flex items-center justify-center text-[#FF0000] border border-[#FF0000]/30">
+                  <AlertTriangle className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="font-mono text-[9px] text-[#FF0000] uppercase font-bold tracking-widest block">
+                    THE VIRALITY TRAP
+                  </span>
+                  <h3 className="font-display text-sm font-bold">Misleading Metric Correlation</h3>
+                </div>
+              </div>
+              <blockquote className="font-display text-lg italic text-white/90 leading-snug border-l-2 border-[#FF0000] pl-3 my-4">
+                &ldquo;More Views automatically equals More Patients&rdquo;
+              </blockquote>
+              <div className="flex justify-between items-center text-[10px] font-mono text-white/50 pt-4 border-t border-white/10">
+                <span>REVENUE CONVERSION</span>
+                <span className="text-[#FF0000] font-bold">0% ACCELERATION</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 04: FRICTION FLOW ─── */
+    case 4:
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-2">
+          <div className="lg:col-span-5 space-y-4">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block">
+              FRICTION TUNNEL ANALYSIS
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              The Current Friction Flow
+            </h2>
+            <p className="text-sm text-black/70 leading-relaxed">
+              Your audience hits massive friction points on their way from discovery to clinic check-in. Without an automated bridge, prospective patients disappear.
+            </p>
+            <div className="bg-red-50 border border-red-200 p-4 rounded-xl flex items-start gap-3">
+              <TrendingUp className="w-5 h-5 text-[#FF0000] shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-display text-xs font-bold text-red-900">Massive Attention Decay</h4>
+                <p className="text-[11px] text-red-700 mt-0.5 leading-relaxed">
+                  With unoptimized pathways, over 98% of interested viewers drop off before ever booking an appointment.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-7 space-y-2.5">
+            {[
+              { phase: "Phase 01", count: "10k Views", label: "Discovery", width: "w-full", bg: "bg-[#0A0A0A] text-white" },
+              { phase: "Phase 02", count: "200 Likes", label: "Interest", width: "w-[85%]", bg: "bg-[#0A0A0A]/85 text-white" },
+              { phase: "Phase 03", count: "50 Visits", label: "Intention", width: "w-[70%]", bg: "bg-[#0A0A0A]/70 text-white" },
+              { phase: "Phase 04", count: "15 DMs", label: "Inquiry", width: "w-[55%]", bg: "bg-[#0A0A0A]/55 text-white" },
+              { phase: "Final Goal", count: "1-2 Patients", label: "Check-In", width: "w-[40%]", bg: "bg-[#FF0000] text-white font-bold" },
+            ].map((step, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <span className="w-20 text-right font-mono text-[10px] text-black/40 uppercase tracking-widest shrink-0">
+                  {step.phase}
+                </span>
+                <div className={`h-10 px-4 rounded-full flex justify-between items-center text-xs font-mono shadow-xs ${step.width} ${step.bg}`}>
+                  <span>{step.count}</span>
+                  <span className="text-[10px] uppercase font-bold tracking-wider">{step.label}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 05: HIDDEN REVENUE LEAK ─── */
+    case 5:
+      return (
+        <div className="space-y-6 py-2">
+          <div className="max-w-3xl">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block mb-3">
+              REVENUE AUDIT REPORT
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              The Hidden Revenue Leak
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 mt-1 leading-relaxed">
+              Why patient interest fails to translate into clinic appointments without an engineered bridge.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="bg-white p-6 rounded-2xl border border-black/[0.08] shadow-xs border-t-4 border-t-emerald-500">
+              <h3 className="font-display font-bold text-base text-[#0A0A0A] mb-2 flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600" /> What Patients Actually Do:
+              </h3>
+              <p className="text-xs font-mono uppercase text-emerald-700 font-bold mb-4">
+                They are ready for clinical skincare help, but...
+              </p>
+              <ul className="space-y-3 text-xs sm:text-sm text-black/70">
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-600 shrink-0" /> Watch your highly-engaging reel videos
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-600 shrink-0" /> Visit Dr. Nikita Baid&apos;s clinic social profile
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-600 shrink-0" /> Become actively interested in dermatological procedures
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-black/[0.08] shadow-xs border-t-4 border-t-[#FF0000]">
+              <h3 className="font-display font-bold text-base text-[#0A0A0A] mb-2 flex items-center gap-2">
+                <X className="w-5 h-5 text-[#FF0000]" /> Where the Process Breaks Down:
+              </h3>
+              <p className="text-xs font-mono uppercase text-[#FF0000] font-bold mb-4">
+                Critical structural friction points
+              </p>
+              <ul className="space-y-3 text-xs sm:text-sm text-black/70">
+                <li className="flex items-center gap-2.5">
+                  <X className="w-4 h-4 text-[#FF0000] shrink-0" /> No dedicated, high-speed clinic landing page
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <X className="w-4 h-4 text-[#FF0000] shrink-0" /> No instant automated guidance or response on profile
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <X className="w-4 h-4 text-[#FF0000] shrink-0" /> No streamlined 24/7 WhatsApp consultation intake
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <X className="w-4 h-4 text-[#FF0000] shrink-0" /> No automated trust-building reviews or follow-ups
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 06: ATTENTION IS NOT THE PROBLEM ─── */
+    case 6:
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-2">
+          <div className="lg:col-span-5 space-y-4">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block">
+              ATTENTION ANALYSIS
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              Attention Is Not The Problem
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 leading-relaxed font-normal">
+              Every month, thousands of local prospective patients with active skin conditions are watching your content, finding your clinic profile, and then drifting away because the bridge to booking is missing.
+            </p>
+          </div>
+
+          <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-black/[0.08] shadow-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center font-mono">
+              <div className="bg-[#FAFAFA] p-4 rounded-xl border border-black/[0.06]">
+                <span className="text-[10px] text-black/40">STEP 01</span>
+                <h4 className="font-display font-bold text-xs text-[#0A0A0A] mt-1">Raw Audience</h4>
+                <div className="text-[10px] text-black/60 mt-1">Reels & Views</div>
+              </div>
+              <div className="bg-[#FAFAFA] p-4 rounded-xl border border-black/[0.06]">
+                <span className="text-[10px] text-black/40">STEP 02</span>
+                <h4 className="font-display font-bold text-xs text-[#0A0A0A] mt-1">Active Interest</h4>
+                <div className="text-[10px] text-black/60 mt-1">Profile Visits</div>
+              </div>
+              <div className="bg-[#FF0000] text-white p-4 rounded-xl shadow-xs">
+                <span className="text-[9px] text-white/80 font-bold block uppercase">CRITICAL GAP</span>
+                <h4 className="font-display font-bold text-xs text-white mt-1">MISSING BRIDGE</h4>
+                <div className="text-[10px] text-white/80 mt-1">No System</div>
+              </div>
+              <div className="bg-[#0A0A0A] text-white p-4 rounded-xl">
+                <span className="text-[10px] text-white/50">STEP 03</span>
+                <h4 className="font-display font-bold text-xs text-[#FF0000] mt-1">Booked Patient</h4>
+                <div className="text-[10px] text-white/70 mt-1">Clinic Check-In</div>
+              </div>
+            </div>
+            <div className="text-center font-mono text-[11px] text-black/50 mt-4">
+              → Your End-Goal is directly solved by deploying the MightBeMedia Revenue Bridge
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 07: REVENUE SYSTEM BLUEPRINT ─── */
+    case 7:
+      return (
+        <div className="space-y-6 py-2">
+          <div className="text-center max-w-3xl mx-auto">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block mb-3">
+              INFRASTRUCTURE BLUEPRINT
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              The MightBeMedia Revenue System™
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 mt-2 leading-relaxed">
+              Instead of simply posting content and hoping for patient visits, we build a continuous 24/7 acquisition machine that systematically converts attention into booked clinic appointments.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-2">
+            <div
+              onClick={openAiLab}
+              className="bg-white p-6 rounded-2xl border border-black/[0.08] shadow-xs hover:border-[#FF0000] transition-all cursor-pointer group"
+            >
+              <div className="flex justify-between items-start mb-3">
+                <span className="font-mono text-xs text-black/40">MODULE 01</span>
+                <span className="font-mono text-[10px] font-bold bg-[#FF0000] text-white px-2 py-0.5 rounded-xs animate-pulse">
+                  TEST LIVE DEMO
+                </span>
+              </div>
+              <h4 className="font-display font-bold text-base text-[#0A0A0A] mb-1 group-hover:text-[#FF0000] transition-colors">
+                Convert Viewers
+              </h4>
+              <p className="text-xs text-black/70 leading-relaxed mb-4">
+                Instant interactive AI intake turning passive viewers into qualified inquiries.
+              </p>
+              <div className="bg-black/5 p-2 rounded-lg text-center font-mono text-xs text-black/80 font-semibold">
+                → Into Inquiries
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-black/[0.08] shadow-xs hover:border-black/30 transition-all">
+              <span className="font-mono text-xs text-black/40 block mb-3">MODULE 02</span>
+              <h4 className="font-display font-bold text-base text-[#0A0A0A] mb-1">
+                Nurture Inquiries
+              </h4>
+              <p className="text-xs text-black/70 leading-relaxed mb-4">
+                Automated WhatsApp follow-up & doctor trust proof converting inquiries into consultations.
+              </p>
+              <div className="bg-black/5 p-2 rounded-lg text-center font-mono text-xs text-black/80 font-semibold">
+                → Into Booked Consultations
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-black/[0.08] shadow-xs hover:border-black/30 transition-all">
+              <span className="font-mono text-xs text-black/40 block mb-3">MODULE 03</span>
+              <h4 className="font-display font-bold text-base text-[#0A0A0A] mb-1">
+                Deliver Services
+              </h4>
+              <p className="text-xs text-black/70 leading-relaxed mb-4">
+                In-clinic QR Google review stands multiplying social proof for compounding acquisition.
+              </p>
+              <div className="bg-black/5 p-2 rounded-lg text-center font-mono text-xs text-black/80 font-semibold">
+                → Complete Loop Integration
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 08: PERSONALISED PREMIUM WEBSITE ─── */
+    case 8:
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-2">
+          <div className="lg:col-span-6 space-y-4">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block">
+              PRODUCT SUITE
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              Personalised Premium Website
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 leading-relaxed font-normal">
+              A bespoke, high-performance skincare website for Clear Skin Clinic (Dr. Nikita Baid) structured from the ground up to rank on Google and convert visitors into booked patients.
+            </p>
+            <div className="grid grid-cols-2 gap-2.5 pt-2 font-mono text-xs">
+              <div className="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-black/[0.06]">
+                <Check className="w-4 h-4 text-[#FF0000]" /> Premium Medical Design
+              </div>
+              <div className="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-black/[0.06]">
+                <Check className="w-4 h-4 text-[#FF0000]" /> 1-Tap WhatsApp System
+              </div>
+              <div className="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-black/[0.06]">
+                <Check className="w-4 h-4 text-[#FF0000]" /> Clinical Treatment Pages
+              </div>
+              <div className="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-black/[0.06]">
+                <Check className="w-4 h-4 text-[#FF0000]" /> Local SEO Architecture
+              </div>
+              <div className="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-black/[0.06]">
+                <Check className="w-4 h-4 text-[#FF0000]" /> Before/After Showcase
+              </div>
+              <div className="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-black/[0.06]">
+                <Check className="w-4 h-4 text-[#FF0000]" /> Sub-Second Speed
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6">
+            <div className="bg-[#0A0A0A] p-4 rounded-2xl shadow-xl border border-white/10">
+              <div className="flex items-center justify-between pb-3 border-b border-white/10 text-[10px] font-mono text-white/50">
+                <span className="flex items-center gap-1.5">
+                  <Globe className="w-3.5 h-3.5 text-[#FF0000]" /> https://theclearskinclinic.com
+                </span>
+                <span className="text-[#FF0000] font-bold">DR. NIKITA BAID</span>
+              </div>
+              <div className="relative aspect-16/10 rounded-xl overflow-hidden mt-3 bg-white">
+                <Image
+                  src="/projects/clearskin.png"
+                  alt="Clear Skin Clinic Interface"
+                  fill
+                  className="object-cover object-top"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 09: 3 YEARS SUPPORT ─── */
+    case 9:
+      return (
+        <div className="space-y-6 py-2">
+          <div className="max-w-3xl">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block mb-3">
+              GUARANTEED CONTINUITY
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              3 Years Technical Support Included
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 mt-2 leading-relaxed">
+              Zero technical worry for Clear Skin Clinic. Websites require continuous updates, security patches, performance tuning, and server backups to avoid downtime. MightBeMedia manages the entire technical infrastructure behind the scenes so your team can focus 100% on clinical care.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+            <div className="bg-white p-5 rounded-xl border border-black/[0.08] shadow-2xs">
+              <ShieldCheck className="w-6 h-6 text-[#FF0000] mb-2" />
+              <h4 className="font-display font-bold text-sm text-[#0A0A0A]">Uptime & Hosting Maintenance</h4>
+              <p className="text-xs text-black/70 mt-1 leading-relaxed">
+                99.99% cloud uptime guarantee with automated daily encrypted backups.
+              </p>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-black/[0.08] shadow-2xs">
+              <Clock className="w-6 h-6 text-[#FF0000] mb-2" />
+              <h4 className="font-display font-bold text-sm text-[#0A0A0A]">Priority SLA Support</h4>
+              <p className="text-xs text-black/70 mt-1 leading-relaxed">
+                Direct WhatsApp access to engineering leads for rapid modifications.
+              </p>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-black/[0.08] shadow-2xs">
+              <TrendingUp className="w-6 h-6 text-[#FF0000] mb-2" />
+              <h4 className="font-display font-bold text-sm text-[#0A0A0A]">Continuous Performance Optimization</h4>
+              <p className="text-xs text-black/70 mt-1 leading-relaxed">
+                Maintaining sub-second mobile speeds and Core Web Vitals rankings.
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 10: GOOGLE REVIEW QR ENGINE ─── */
+    case 10:
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-2">
+          <div className="lg:col-span-7 space-y-4">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block">
+              REPUTATION ENGINE
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              Google Review Engine & QR Lobby Stands
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 leading-relaxed font-normal">
+              Turn satisfied in-clinic patients into 5-star Google reviews on autopilot. We design and deliver custom acrylic tabletop QR stands for the Clear Skin Clinic reception desk that open your direct 5-star review page in 1 single tap.
+            </p>
+            <div className="space-y-2 pt-2">
+              <div className="flex items-center gap-3 bg-white p-3 rounded-xl border border-black/[0.06]">
+                <Star className="w-4 h-4 text-[#FF0000] fill-[#FF0000]" />
+                <span className="text-xs sm:text-sm text-black/80 font-medium">Multiplies Google Map 5-star ratings exponentially</span>
+              </div>
+              <div className="flex items-center gap-3 bg-white p-3 rounded-xl border border-black/[0.06]">
+                <QrCode className="w-4 h-4 text-[#FF0000]" />
+                <span className="text-xs sm:text-sm text-black/80 font-medium">Zero-friction 1-tap QR scanning for patients in lobby</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5 flex justify-center">
+            <div className="bg-[#0A0A0A] text-white p-8 rounded-2xl text-center w-full max-w-[340px] border border-white/10 shadow-xl">
+              <div className="w-16 h-16 rounded-2xl bg-white/10 mx-auto flex items-center justify-center text-[#FF0000] mb-4">
+                <QrCode className="w-8 h-8" />
+              </div>
+              <h4 className="font-display font-bold text-base">Acrylic Lobby Stand</h4>
+              <p className="text-xs text-white/60 mt-1 font-mono">Custom Clear Skin Clinic Branding</p>
+              <div className="mt-4 pt-4 border-t border-white/10 font-mono text-xs text-[#FF0000] font-bold">
+                100% Turnkey Delivery
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 11: AI PATIENT CHATBOT ─── */
+    case 11:
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-2">
+          <div className="lg:col-span-6 space-y-4">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block">
+              INTELLIGENT RECEPTION
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              AI Patient Receptionist (24/7)
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 leading-relaxed font-normal">
+              An intelligent, clinically trained AI assistant built specifically for Clear Skin Clinic. Engages website visitors 24 hours a day, answers treatment questions, pre-qualifies concerns, and books appointments straight to WhatsApp.
+            </p>
+            <button
+              type="button"
+              onClick={openAiLab}
+              className="bg-[#0A0A0A] hover:bg-[#222222] text-white px-5 py-2.5 rounded-xl font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 cursor-pointer shadow-sm"
+            >
+              <Sparkles className="w-4 h-4 text-[#FF0000]" />
+              <span>Launch Live Interactive Demo</span>
+            </button>
+          </div>
+
+          <div className="lg:col-span-6 bg-white p-5 rounded-2xl border border-black/[0.08] shadow-xs space-y-3">
+            <div className="flex items-center gap-2.5 pb-3 border-b border-black/[0.08]">
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+              <span className="font-mono text-xs font-bold text-[#0A0A0A]">ClearSkin AI Receptionist</span>
+            </div>
+            <div className="bg-black/5 p-3 rounded-xl text-xs text-black/80 font-medium">
+              &ldquo;Hello! I&apos;m ClearSkin AI. Dr. Nikita Baid specializes in personalized clinical treatments for acne, pigmentation, and anti-aging. How can I assist you today?&rdquo;
+            </div>
+            <div className="bg-[#0A0A0A] text-white p-3 rounded-xl text-xs text-right font-medium">
+              &ldquo;I have dark acne scars on my cheeks. What treatment is recommended?&rdquo;
+            </div>
+            <div className="bg-black/5 p-3 rounded-xl text-xs text-black/80 font-medium">
+              &ldquo;For persistent acne scars, Dr. Nikita offers Fractional Microneedling and chemical rejuvenation. Would you like to schedule an assessment via WhatsApp?&rdquo;
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 12: SOCIAL MEDIA & SCRIPTING ─── */
+    case 12:
+      return (
+        <div className="space-y-6 py-2">
+          <div className="max-w-3xl">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block mb-3">
+              ORGANIC ACQUISITION
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              Social Media Content & Scripting Engine
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 mt-2 leading-relaxed">
+              Done-For-You reel scripts, high-retention hook architecture, and visual content systems engineered to position Dr. Nikita Baid as the top clinical skincare authority in Delhi NCR.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+            <div className="bg-white p-5 rounded-xl border border-black/[0.08] shadow-2xs">
+              <span className="font-mono text-xs font-bold text-[#FF0000]">01</span>
+              <h4 className="font-display font-bold text-sm text-[#0A0A0A] mt-1">High-Retention Hooks</h4>
+              <p className="text-xs text-black/70 mt-1 leading-relaxed">
+                First 3-second psychological triggers stopping the scroll on Instagram.
+              </p>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-black/[0.08] shadow-2xs">
+              <span className="font-mono text-xs font-bold text-[#FF0000]">02</span>
+              <h4 className="font-display font-bold text-sm text-[#0A0A0A] mt-1">Clinical Authority Framing</h4>
+              <p className="text-xs text-black/70 mt-1 leading-relaxed">
+                Educational breakdowns establishing deep medical credibility.
+              </p>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-black/[0.08] shadow-2xs">
+              <span className="font-mono text-xs font-bold text-[#FF0000]">03</span>
+              <h4 className="font-display font-bold text-sm text-[#0A0A0A] mt-1">Direct Bio Funnels</h4>
+              <p className="text-xs text-black/70 mt-1 leading-relaxed">
+                Strategic call-to-actions routing viewers directly to WhatsApp booking.
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 13: PERFORMANCE MARKETING / META ADS ─── */
+    case 13:
+      return (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-2">
+          <div className="lg:col-span-7 space-y-4">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block">
+              PAID ACQUISITION
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              Meta Ads & Patient Acquisition Funnel
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 leading-relaxed font-normal">
+              High-ROI targeted advertising across Instagram and Facebook engineered to reach affluent local patients in target Delhi NCR localities searching for advanced aesthetic skincare.
+            </p>
+            <div className="space-y-2 pt-2 font-mono text-xs">
+              <div className="flex items-center gap-2 bg-white p-3 rounded-xl border border-black/[0.06]">
+                <Target className="w-4 h-4 text-[#FF0000]" />
+                <span>Hyper-localized demographic radius targeting</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white p-3 rounded-xl border border-black/[0.06]">
+                <ShieldCheck className="w-4 h-4 text-[#FF0000]" />
+                <span>Meta Pixel & Conversions API (CAPI) server-side tracking</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5 flex justify-center">
+            <div className="bg-[#0A0A0A] text-white p-6 rounded-2xl w-full max-w-[340px] border border-white/10 shadow-xl space-y-3 font-mono text-xs">
+              <div className="flex justify-between items-center pb-2 border-b border-white/10">
+                <span className="text-white/50 uppercase">TARGET AUDIENCE</span>
+                <span className="text-[#FF0000] font-bold">Delhi NCR High-Intent</span>
+              </div>
+              <div className="flex justify-between items-center pb-2 border-b border-white/10">
+                <span className="text-white/50 uppercase">TRACKING</span>
+                <span className="text-white font-bold">Server-Side CAPI</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-white/50 uppercase">OBJECTIVE</span>
+                <span className="text-emerald-400 font-bold">Consultation Bookings</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 14: LOCAL SEO DOMINANCE ─── */
+    case 14:
+      return (
+        <div className="space-y-6 py-2">
+          <div className="max-w-3xl">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block mb-3">
+              ORGANIC DOMINANCE
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              Local SEO & Google Map Pack Dominance
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 mt-2 leading-relaxed">
+              When patients search &ldquo;dermatologist near me&rdquo; or &ldquo;best skin clinic in Delhi&rdquo;, your practice must appear in the top 3 Google map pack results. We implement structured medical schema and local citations to capture high-intent organic search volume.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 font-mono text-xs">
+            <div className="bg-white p-5 rounded-xl border border-black/[0.08] shadow-2xs">
+              <Search className="w-5 h-5 text-[#FF0000] mb-2" />
+              <h4 className="font-display font-bold text-sm text-[#0A0A0A]">Google Business Profile Sync</h4>
+              <p className="text-xs text-black/70 mt-1 leading-relaxed">
+                Category optimization, geo-tagged photography, and patient Q&A management.
+              </p>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-black/[0.08] shadow-2xs">
+              <CheckCircle2 className="w-5 h-5 text-[#FF0000] mb-2" />
+              <h4 className="font-display font-bold text-sm text-[#0A0A0A]">Medical JSON-LD Schema</h4>
+              <p className="text-xs text-black/70 mt-1 leading-relaxed">
+                Physician credentials, clinic services, and verified patient reviews schema.
+              </p>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-black/[0.08] shadow-2xs">
+              <TrendingUp className="w-5 h-5 text-[#FF0000] mb-2" />
+              <h4 className="font-display font-bold text-sm text-[#0A0A0A]">Zero Layout Shift Performance</h4>
+              <p className="text-xs text-black/70 mt-1 leading-relaxed">
+                95+ Core Web Vitals score maximizing search algorithm favoritism.
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 15: INVESTMENT & PRICING ─── */
+    case 15:
+      return (
+        <div className="space-y-6 py-2">
+          <div className="max-w-3xl">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block mb-3">
+              COMMERCIAL INVESTMENT
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              Transparent Investment Structure
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 mt-1 leading-relaxed">
+              Predictable, high-ROI commercial agreement with zero hidden fees and guaranteed 14-day delivery.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+            {/* Setup Card */}
+            <div className="bg-[#0A0A0A] text-white p-6 sm:p-8 rounded-2xl shadow-xl border border-white/10 flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between items-start mb-4">
+                  <span className="font-mono text-xs uppercase tracking-widest text-white/50">
+                    ONE-TIME COMPLETE SETUP
+                  </span>
+                  <span className="font-mono text-xs text-[#FF0000] font-bold bg-[#FF0000]/10 px-2 py-0.5 rounded">
+                    14 DAYS DELIVERY
+                  </span>
+                </div>
+                <div className="font-display text-4xl sm:text-5xl font-black text-white mb-2">
+                  ₹20,000
+                </div>
+                <p className="text-xs text-white/70 font-mono mb-6">
+                  Complete digital flagship + AI chatbot + Meta ads setup + QR review stands + 3 Years Technical Support.
+                </p>
+                <ul className="space-y-2.5 text-xs text-white/80">
+                  <li className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#FF0000]" /> Full Next.js Skincare Flagship Website
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#FF0000]" /> 24/7 AI Patient Chatbot Configured
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#FF0000]" /> Meta Ads Campaign & Pixel Architecture
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#FF0000]" /> Google Review Engine & Physical QR Lobby Stands
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#FF0000]" /> 3 Years Full Technical Support & Hosting Maintenance
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Retainer Card */}
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-black/10 flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between items-start mb-4">
+                  <span className="font-mono text-xs uppercase tracking-widest text-black/50 font-bold">
+                    MONTHLY GROWTH RETAINER
+                  </span>
+                  <span className="font-mono text-xs text-black/60 bg-black/5 px-2 py-0.5 rounded font-bold">
+                    EXPANSION
+                  </span>
+                </div>
+                <div className="font-display text-4xl sm:text-5xl font-black text-[#0A0A0A] mb-2">
+                  ₹10,000 <span className="text-sm font-normal text-black/50 font-mono">/ month</span>
+                </div>
+                <p className="text-xs text-black/70 font-mono mb-6">
+                  Ongoing social media maintenance, reels editing, script creation, Meta ads scaling, and funnel nurturing.
+                </p>
+                <ul className="space-y-2.5 text-xs text-black/80">
+                  <li className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-600" /> Done-For-You Reel Planning & Scripts
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-600" /> Meta Ads Audience Tuning & Creative Refinement
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-600" /> AI Chatbot Continuous Prompt Training
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-600" /> Monthly Consultation Analytics & Pipeline Review
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 16: COMPLETE DELIVERABLES MATRIX ─── */
+    case 16:
+      return (
+        <div className="space-y-6 py-2">
+          <div className="max-w-3xl">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-2.5 py-1 rounded-xs inline-block mb-3">
+              SCOPE SPECIFICATION
+            </span>
+            <h2 className="font-display font-bold text-2xl sm:text-4xl tracking-tight text-[#0A0A0A]">
+              Complete Deliverables Matrix
+            </h2>
+            <p className="text-sm sm:text-base text-black/70 mt-1 leading-relaxed">
+              Side-by-side scope breakdown between initial deployment and ongoing monthly growth partnership.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto bg-white rounded-2xl border border-black/[0.08] shadow-xs">
+            <table className="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr className="border-b border-black/[0.08] bg-black/[0.02]">
+                  <th className="p-4 font-mono text-xs uppercase font-bold text-black/80">Deliverable Item</th>
+                  <th className="p-4 font-mono text-xs uppercase font-bold text-[#FF0000]">Initial Setup (₹20,000)</th>
+                  <th className="p-4 font-mono text-xs uppercase font-bold text-black/80">Monthly Retainer (₹10,000/mo)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-black/[0.06] text-xs">
+                <tr>
+                  <td className="p-4 font-medium text-black">Bespoke Skincare Web Flagship</td>
+                  <td className="p-4 font-mono text-[#FF0000] font-bold">Included (Full Build)</td>
+                  <td className="p-4 font-mono text-black/70">Hosting & Uptime Maint.</td>
+                </tr>
+                <tr>
+                  <td className="p-4 font-medium text-black">AI Patient Chatbot Engine</td>
+                  <td className="p-4 font-mono text-[#FF0000] font-bold">Trained & Integrated</td>
+                  <td className="p-4 font-mono text-black/70">Continuous Prompt Tuning</td>
+                </tr>
+                <tr>
+                  <td className="p-4 font-medium text-black">Meta Pixel & CAPI Ad Setup</td>
+                  <td className="p-4 font-mono text-[#FF0000] font-bold">Full Campaign Build</td>
+                  <td className="p-4 font-mono text-black/70">Audience & Creative Scaling</td>
+                </tr>
+                <tr>
+                  <td className="p-4 font-medium text-black">Google Review QR Lobby Stands</td>
+                  <td className="p-4 font-mono text-[#FF0000] font-bold">Designed & Delivered</td>
+                  <td className="p-4 font-mono text-black/70">Reputation Monitoring</td>
+                </tr>
+                <tr>
+                  <td className="p-4 font-medium text-black">Local SEO & Map Pack Schema</td>
+                  <td className="p-4 font-mono text-[#FF0000] font-bold">Complete Setup</td>
+                  <td className="p-4 font-mono text-black/70">Rank Tracking & Updates</td>
+                </tr>
+                <tr>
+                  <td className="p-4 font-medium text-black">Technical Support & Peace of Mind</td>
+                  <td className="p-4 font-mono text-[#FF0000] font-bold">3 Years Included</td>
+                  <td className="p-4 font-mono text-black/70">Priority 24/7 SLA</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+
+    /* ─── SLIDE 17: PARTNERSHIP ENGAGEMENT & APPROVAL ─── */
+    case 17:
+      return (
+        <div className="space-y-6 py-2 text-center max-w-3xl mx-auto">
+          <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF0000] bg-[#FF0000]/10 px-3 py-1 rounded-full inline-block">
+            PARTNERSHIP ENGAGEMENT
+          </span>
+          <h1 className="font-display font-black text-3xl sm:text-5xl lg:text-6xl tracking-tight text-[#0A0A0A]">
+            Thank You
+          </h1>
+          <p className="text-sm sm:text-base text-black/70 leading-relaxed font-light">
+            We would be deeply honored to act as your digital growth and revenue partner for Clear Skin Clinic.
+          </p>
+
+          <div className="bg-[#0A0A0A] text-white p-6 rounded-2xl shadow-xl my-4">
+            <p className="text-xs sm:text-sm font-semibold tracking-wide italic text-white/90">
+              &ldquo;We Are Not A Service Provider.{" "}
+              <span className="text-[#FF0000] underline underline-offset-4 decoration-2">
+                We Are Your Revenue Growth Partner.
+              </span>&rdquo;
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 font-mono text-xs">
+            <div className="bg-white p-4 rounded-xl border border-black/[0.08] flex items-center justify-center gap-2 text-black/80">
+              <Globe className="w-4 h-4 text-[#FF0000]" />
+              <span>www.mightbemedia.in</span>
+            </div>
+            <div className="bg-white p-4 rounded-xl border border-black/[0.08] flex items-center justify-center gap-2 text-black/80">
+              <Mail className="w-4 h-4 text-[#FF0000]" />
+              <span>info@mightbemedia.in</span>
+            </div>
+          </div>
+        </div>
+      );
+
+    default:
+      return null;
+  }
 }
