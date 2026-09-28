@@ -10,9 +10,10 @@ export default function MarqueeSection() {
     "VIVA SKIN CARE",
     "MODULUS CLASSES",
     "SEM FITNESS",
-    "SHE & SOUL",
+    "CLEAR SKIN CLINIC",
     "PRIME SPORTS",
     "PASSION CRAFTED",
+    "THE CELEBRATION STORE",
   ];
 
   const clientsRow2 = [
@@ -21,9 +22,10 @@ export default function MarqueeSection() {
     "CLINICAL SYSTEMS",
     "COURSE FUNNELS",
     "PERFORMANCE BRANDS",
-    "HEALTHCARE SPACES",
+    "AESTHETIC HEALTHCARE",
     "ATHLETIC ACADEMIES",
     "E-COMMERCE ENGINES",
+    "B2B + B2C COMMERCE",
   ];
 
   return (

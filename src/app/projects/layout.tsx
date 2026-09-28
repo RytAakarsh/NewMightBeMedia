@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Selected Work & Case Studies | MightBeMedia",
   description:
-    "Explore 8 production case studies from MightBeMedia. Custom web applications, conversion funnels, and revenue systems engineered for high-growth businesses globally.",
+    "Explore 9 production case studies from MightBeMedia. Custom web applications, conversion funnels, and revenue systems engineered for high-growth businesses globally.",
   keywords: [
     "MightBeMedia projects",
     "case studies",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Selected Work & Case Studies | MightBeMedia",
     description:
-      "Explore 8 production case studies from MightBeMedia. Custom web applications, conversion funnels, and revenue systems.",
+      "Explore 9 production case studies from MightBeMedia. Custom web applications, conversion funnels, and revenue systems.",
     url: "https://mightbemedia.in/projects",
     siteName: "MightBeMedia",
     locale: "en_US",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Selected Work & Case Studies | MightBeMedia",
     description:
-      "Explore 8 production case studies from MightBeMedia. Custom web applications, conversion funnels, and revenue systems.",
+      "Explore 9 production case studies from MightBeMedia. Custom web applications, conversion funnels, and revenue systems.",
     images: ["/logos/MightBemedia_completeLOGO.png"],
   },
 };
@@ -51,7 +51,7 @@ export default function ProjectsLayout({
     name: "Selected Work & Case Studies",
     url: "https://mightbemedia.in/projects",
     description:
-      "Explore 8 production case studies from MightBeMedia. Custom web applications, conversion funnels, and revenue systems.",
+      "Explore 9 production case studies from MightBeMedia. Custom web applications, conversion funnels, and revenue systems.",
     publisher: {
       "@type": "Organization",
       name: "MightBeMedia",

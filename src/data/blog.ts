@@ -322,7 +322,7 @@ export const blogPosts: BlogPost[] = [
     publishedAt: "2026-01-20T08:00:00.000Z",
     updatedAt: "2026-02-05T16:00:00.000Z",
     readTime: "10 min read",
-    coverImage: "/projects/she&soul.png",
+    coverImage: "/projects/clearskin.png",
     coverAccent: "#FF0000",
     excerpt: "Practical, revenue-generating applications of artificial intelligence, automated lead triage, and custom internal tools for growing enterprises.",
     content: {

@@ -146,7 +146,7 @@ export default function ProjectsPage() {
 
             <div className="flex items-center gap-6 font-mono text-xs text-white/50">
               <div>
-                <span className="text-white font-bold text-lg block">08</span>
+                <span className="text-white font-bold text-lg block">09</span>
                 <span>PRODUCTION CASE STUDIES</span>
               </div>
               <div className="w-px h-8 bg-white/20" />

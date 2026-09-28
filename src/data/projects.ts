@@ -146,29 +146,29 @@ export const projects: Project[] = [
     deliverables: ["Performance Fitness Flagship", "Interactive Class Schedule Matrix", "Trainer Profile Funnels", "Trial Booking Automation"]
   },
   {
-    id: "she-and-soul",
+    id: "clear-skin-clinic",
     number: "06",
-    name: "She & Soul",
-    tag: "Women Healthcare",
-    category: "Wellness & Clinical Telehealth",
-    summary: "Empathetic, privacy-focused digital wellness platform designed for specialized women's health consultations and recurring wellness programs.",
-    preview: "/projects/she&soul.png",
-    url: "https://sheandsoul.co.in/",
-    liveUrl: "https://sheandsoul.co.in/",
-    technologies: ["Next.js", "Tailwind CSS", "HIPAA-Compliant Form Pipelines", "Razorpay", "TypeScript"],
+    name: "Clear Skin Clinic",
+    tag: "Aesthetic Healthcare",
+    category: "Skin & Aesthetic Clinic",
+    summary: "Clear Skin Clinic is a premium skin and aesthetic healthcare brand led by Dr. Nikita Baid. MightBeMedia is building its digital presence around doctor authority, treatment discovery, patient trust, and seamless consultation conversion.",
+    preview: "/projects/clearskin.png",
+    url: "https://theclearskinclinic.com/",
+    liveUrl: "https://theclearskinclinic.com/",
+    technologies: ["Next.js", "Tailwind CSS", "TypeScript", "Framer Motion", "SEO Architecture"],
     metrics: [
-      { label: "Telehealth Inquiries", value: "+145%" },
-      { label: "Patient Trust Score", value: "98%" },
-      { label: "Repeat Program Retention", value: "62%" }
+      { label: "Brand Leadership", value: "Dr. Nikita Baid" },
+      { label: "Focus", value: "Consultation Growth" },
+      { label: "Architecture", value: "High-Speed Next.js" }
     ],
-    challenge: "Sensitive medical topics required an extraordinarily reassuring, accessible, and confidential user interface.",
-    solution: "Designed a soothing editorial medical experience with anonymous symptom-checking flows and direct private physician booking.",
+    challenge: "Establishing a premium digital flagship that communicates medical authority, showcases treatments cleanly, and converts local search interest into booked consultations.",
+    solution: "Engineered a high-performance aesthetic medical experience with structured treatment pathways, doctor credentials, and 1-tap consultation scheduling.",
     results: [
-      "Increased remote telehealth consultation inquiries by 145%.",
-      "Achieved a 98% patient satisfaction and trust rating on initial onboarding.",
-      "Maintained 62% quarterly program retention through automated wellness check-ins."
+      "Positioned brand as a premier aesthetic clinic destination.",
+      "Structured seamless consultation intake workflows.",
+      "Engineered sub-second mobile performance and local SEO architecture."
     ],
-    deliverables: ["Confidential Telehealth Flagship", "Symptom Self-Assessment Funnel", "Integrated Payment Gateway", "Automated Patient Onboarding"]
+    deliverables: ["Aesthetic Healthcare Flagship", "Treatment Discovery Architecture", "Doctor Authority & Credentials Matrix", "Consultation Intake System"]
   },
   {
     id: "prime-sports",
@@ -219,5 +219,30 @@ export const projects: Project[] = [
       "Delivered an editorial shopping experience matching luxury retail standards."
     ],
     deliverables: ["Custom Headless E-Commerce Codebase", "High-Performance Product Gallery", "1-Tap Checkout Optimization", "Dynamic Inventory Integration"]
+  },
+  {
+    id: "the-celebration-store",
+    number: "09",
+    name: "The Celebration Store",
+    tag: "E-Commerce Engine",
+    category: "B2B + B2C E-Commerce",
+    summary: "The Celebration Store is a new celebration and party essentials brand being built from scratch by MightBeMedia, designed to serve both B2C customers and B2B buyers across India.",
+    preview: "/projects/thecelebrationstore.png",
+    url: "https://thecelebrationstore.in/",
+    liveUrl: "https://thecelebrationstore.in/",
+    technologies: ["Next.js", "E-Commerce Architecture", "Tailwind CSS", "TypeScript", "Catalog & Search Engine"],
+    metrics: [
+      { label: "Business Model", value: "B2B + B2C" },
+      { label: "Market", value: "All-India Scope" },
+      { label: "Brand Positioning", value: "Make Every Moment Special" }
+    ],
+    challenge: "Building a brand-new digital commerce presence from scratch that caters to individual celebration shoppers as well as bulk B2B event organizers.",
+    solution: "Architecting a unified, scalable e-commerce platform with categorized party essentials discovery, return gifts, German silver collections, and streamlined ordering.",
+    results: [
+      "Engineered modern 0-to-1 e-commerce foundation for nationwide reach.",
+      "Structured dual B2B bulk inquiry and B2C direct cart pathways.",
+      "Crafted vibrant, celebratory visual brand identity system."
+    ],
+    deliverables: ["Full-Stack E-Commerce Storefront", "Multi-Category Product Directory", "B2B Bulk Inquiry System", "Fast Mobile Checkout Flow"]
   }
 ];
